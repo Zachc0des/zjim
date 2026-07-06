@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROJ.ZERO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#0c0b0a;
+    --surface:#171514;
+    --surface-raised:#211e1c;
+    --line:#332e2a;
+    --text:#f3efe6;
+    --text-muted:#8f8880;
+    --ember:#ff3d1f;
+    --ember-dim:#7a2415;
+    --spark:#ffc72c;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--void);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  ::selection{background:var(--ember);color:var(--void);}
+
+  a{color:inherit;}
+
+  .noise{
+    position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    position:relative;
+    padding:56px 24px 40px;
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+  .hero-glow{
+    position:absolute; top:-140px; left:50%; transform:translateX(-50%);
+    width:640px; height:280px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,61,31,.35), transparent 70%);
+    filter:blur(10px); pointer-events:none;
+  }
+  .eyebrow{
+    position:relative;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--ember); font-weight:600; margin-bottom:14px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:'';width:8px;height:8px;background:var(--ember);border-radius:50%;box-shadow:0 0 12px var(--ember);}
+  h1.wordmark{
+    position:relative;
+    font-family:'Anton',sans-serif;
+    font-weight:400;
+    font-size:clamp(52px, 11vw, 108px);
+    line-height:.88;
+    letter-spacing:.01em;
+    margin:0 0 18px;
+    text-transform:uppercase;
+    color:var(--text);
+  }
+  h1.wordmark span{color:var(--ember);}
+  .hero-sub{
+    position:relative;
+    max-width:520px;
+    color:var(--text-muted);
+    font-size:16px; line-height:1.5;
+    margin-bottom:28px;
+  }
+  .hero-actions{position:relative; display:flex; flex-wrap:wrap; gap:12px; align-items:center;}
+  .tiktok-btn{
+    display:inline-flex; align-items:center; gap:10px;
+    background:var(--ember); color:var(--void); font-weight:700;
+    padding:13px 22px; border-radius:8px; text-decoration:none;
+    font-size:14px; letter-spacing:.02em;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .tiktok-btn:hover{transform:translateY(-2px); background:#ff5636;}
+  .tiktok-btn svg{width:18px;height:18px;flex-shrink:0;}
+  .handle-chip{
+    font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--text-muted);
+    border:1px solid var(--line); padding:12px 16px; border-radius:8px;
+  }
+  .handle-chip b{color:var(--text); font-weight:600;}
+
+  /* ---------- PLATE LOAD SIGNATURE ---------- */
+  .plate-rack{
+    position:relative; z-index:1;
+    display:flex; align-items:center; gap:0;
+    padding:22px 24px; background:var(--surface);
+    border-bottom:1px solid var(--line);
+    overflow-x:auto;
+  }
+  .bar-label{
+    font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-muted);
+    letter-spacing:.14em; text-transform:uppercase; white-space:nowrap; margin-right:18px;
+  }
+  .bar-label b{color:var(--spark); font-size:15px; display:block; font-family:'Anton',sans-serif; letter-spacing:.02em;}
+  .bar-track{flex:1; height:10px; background:var(--void); border-radius:5px; position:relative; min-width:80px; display:flex; align-items:center;}
+  .plates{display:flex; align-items:center; gap:3px; margin-left:-2px;}
+  .plate{
+    background:linear-gradient(180deg, var(--ember), var(--ember-dim));
+    border-radius:4px; flex-shrink:0;
+    box-shadow:0 0 0 1px rgba(0,0,0,.3);
+  }
+
+  /* ---------- FILTER NAV ---------- */
+  nav.filters{
+    position:sticky; top:0; z-index:5;
+    display:flex; gap:8px; padding:14px 24px;
+    background:rgba(12,11,10,.92); backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+    overflow-x:auto;
+  }
+  .filter-btn{
+    font-family:'Inter',sans-serif; font-weight:600; font-size:13px;
+    background:transparent; color:var(--text-muted); border:1px solid var(--line);
+    padding:8px 16px; border-radius:999px; cursor:pointer; white-space:nowrap;
+    transition:all .15s ease;
+  }
+  .filter-btn:hover{color:var(--text); border-color:#4a433d;}
+  .filter-btn.active{background:var(--text); color:var(--void); border-color:var(--text);}
+  .filter-spacer{flex:1;min-width:8px;}
+  .add-btn{
+    font-family:'Inter',sans-serif; font-weight:700; font-size:13px;
+    background:var(--ember); color:var(--void); border:none;
+    padding:9px 18px; border-radius:999px; cursor:pointer; white-space:nowrap;
+    display:flex; align-items:center; gap:6px;
+  }
+  .add-btn:hover{background:#ff5636;}
+
+  /* ---------- FEED ---------- */
+  main{padding:28px 24px 80px; position:relative; z-index:1;}
+  .feed{
+    columns:3 280px; column-gap:16px;
+  }
+  @media (max-width:640px){ .feed{columns:1 260px;} }
+  .card{
+    break-inside:avoid; margin-bottom:16px;
+    background:var(--surface); border:1px solid var(--line); border-radius:12px;
+    overflow:hidden; transition:border-color .15s ease;
+  }
+  .card:hover{border-color:#4a433d;}
+  .card-media{width:100%; display:block; background:var(--void);}
+  .card-media img, .card-media video{width:100%; display:block; max-height:520px; object-fit:cover;}
+  .card-body{padding:14px 16px 16px;}
+  .card-tag{
+    font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--ember); font-weight:600; margin-bottom:6px; display:block;
+  }
+  .card-caption{font-size:14px; line-height:1.45; color:var(--text); margin-bottom:8px;}
+  .card-meta{display:flex; justify-content:space-between; align-items:center; gap:10px;}
+  .card-source{font-size:12px; color:var(--text-muted); text-decoration:none; border-bottom:1px dotted var(--text-muted);}
+  .card-source:hover{color:var(--spark); border-color:var(--spark);}
+  .card-del{
+    background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:12px;
+    font-family:'JetBrains Mono',monospace; padding:4px;
+  }
+  .card-del:hover{color:var(--ember);}
+
+  .empty-state{
+    text-align:center; padding:80px 20px; color:var(--text-muted);
+  }
+  .empty-state .em-icon{font-size:40px; margin-bottom:14px;}
+  .empty-state h3{font-family:'Anton',sans-serif; font-weight:400; font-size:26px; color:var(--text); letter-spacing:.02em; margin:0 0 8px;}
+  .empty-state p{max-width:360px; margin:0 auto; font-size:14px; line-height:1.5;}
+
+  /* ---------- MODAL ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(8,7,6,.78); backdrop-filter:blur(3px);
+    display:none; align-items:flex-start; justify-content:center; z-index:50; padding:40px 16px; overflow-y:auto;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal{
+    background:var(--surface-raised); border:1px solid var(--line); border-radius:14px;
+    width:100%; max-width:460px; padding:26px; margin-top:10px;
+  }
+  .modal h2{font-family:'Anton',sans-serif; font-weight:400; font-size:26px; letter-spacing:.02em; margin:0 0 4px; text-transform:uppercase;}
+  .modal .modal-sub{color:var(--text-muted); font-size:13px; margin-bottom:20px;}
+  .field{margin-bottom:14px;}
+  .field label{
+    display:block; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--text-muted); margin-bottom:6px;
+  }
+  .field input, .field textarea, .field select{
+    width:100%; background:var(--void); border:1px solid var(--line); color:var(--text);
+    padding:10px 12px; border-radius:8px; font-family:'Inter',sans-serif; font-size:14px;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus{outline:2px solid var(--ember); outline-offset:1px; border-color:var(--ember);}
+  .field textarea{resize:vertical; min-height:60px;}
+  .radio-row{display:flex; gap:10px;}
+  .radio-row label{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
+    border:1px solid var(--line); border-radius:8px; padding:9px; cursor:pointer;
+    font-size:13px; font-weight:600; color:var(--text-muted); text-transform:none; letter-spacing:0; font-family:'Inter',sans-serif;
+  }
+  .radio-row input{width:auto; margin:0;}
+  .radio-row label:has(input:checked){border-color:var(--ember); color:var(--text); background:rgba(255,61,31,.08);}
+  .modal-actions{display:flex; gap:10px; margin-top:20px;}
+  .btn-primary{
+    flex:1; background:var(--ember); color:var(--void); border:none; font-weight:700;
+    padding:12px; border-radius:8px; cursor:pointer; font-size:14px;
+  }
+  .btn-primary:hover{background:#ff5636;}
+  .btn-ghost{
+    background:none; border:1px solid var(--line); color:var(--text-muted); font-weight:600;
+    padding:12px 18px; border-radius:8px; cursor:pointer; font-size:14px;
+  }
+  .btn-ghost:hover{color:var(--text); border-color:#4a433d;}
+  .form-error{font-size:12px; color:var(--ember); margin-top:-6px; margin-bottom:12px; display:none;}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top:1px solid var(--line); padding:28px 24px; position:relative; z-index:1;
+    display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between;
+  }
+  footer .foot-brand{font-family:'Anton',sans-serif; font-size:18px; letter-spacing:.03em; text-transform:uppercase;}
+  footer .foot-tiktok{
+    display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace;
+    font-size:13px; color:var(--text-muted); text-decoration:none;
+  }
+  footer .foot-tiktok:hover{color:var(--spark);}
+  footer .foot-tiktok svg{width:15px;height:15px;}
+</style>
+</head>
+<body>
+<div class="noise"></div>
+
+<header class="hero">
+  <div class="hero-glow"></div>
+  <div class="eyebrow">Training log &amp; content vault</div>
+  <h1 class="wordmark">PROJ<span>.</span>ZERO</h1>
+  <p class="hero-sub">Everything I lift, film, and steal from Pinterest lives here. Gym pics, form breakdowns, and the guides actually worth saving.</p>
+  <div class="hero-actions">
+    <a class="tiktok-btn" href="https://www.tiktok.com/@proj.zero1" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82a4.28 4.28 0 0 1-.34-.62A5 5 0 0 1 15.8 3h-3.4v13.5a2.7 2.7 0 1 1-2.16-2.65V9.9a6.24 6.24 0 1 0 5.56 6.2V9.14a7.7 7.7 0 0 0 4.5 1.43V7.13a4.29 4.29 0 0 1-3.7-1.31z"/></svg>
+      Follow on TikTok
+    </a>
+    <span class="handle-chip">@<b>proj.zero1</b></span>
+  </div>
+</header>
+
+<div class="plate-rack">
+  <div class="bar-label">Loaded<b id="plateCount">0</b></div>
+  <div class="bar-track">
+    <div class="plates" id="plates"></div>
+  </div>
+</div>
+
+<nav class="filters">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="gym">Gym Pics</button>
+  <button class="filter-btn" data-filter="video">Videos</button>
+  <button class="filter-btn" data-filter="guide">Guides &amp; Tutorials</button>
+  <button class="filter-btn" data-filter="pinterest">Pinterest Finds</button>
+  <div class="filter-spacer"></div>
+  <button class="add-btn" id="openModal">+ Add Post</button>
+</nav>
+
+<main>
+  <div class="feed" id="feed"></div>
+  <div class="empty-state" id="emptyState" style="display:none;">
+    <div class="em-icon">🏋️</div>
+    <h3>Rack's empty</h3>
+    <p>Add your first gym pic, video, or Pinterest find to start loading the bar.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="foot-brand">PROJ<span style="color:var(--ember)">.</span>ZERO</div>
+  <a class="foot-tiktok" href="https://www.tiktok.com/@proj.zero1" target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82a4.28 4.28 0 0 1-.34-.62A5 5 0 0 1 15.8 3h-3.4v13.5a2.7 2.7 0 1 1-2.16-2.65V9.9a6.24 6.24 0 1 0 5.56 6.2V9.14a7.7 7.7 0 0 0 4.5 1.43V7.13a4.29 4.29 0 0 1-3.7-1.31z"/></svg>
+    @proj.zero1
+  </a>
+</footer>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2>Add to the rack</h2>
+    <p class="modal-sub">Drop a pic, video, or guide you want saved.</p>
+    <div class="field">
+      <label>Media URL</label>
+      <input type="url" id="fUrl" placeholder="https://... image or .mp4 link">
+    </div>
+    <div class="field">
+      <label>Media type</label>
+      <div class="radio-row">
+        <label><input type="radio" name="mtype" value="image" checked> Image</label>
+        <label><input type="radio" name="mtype" value="video"> Video</label>
+      </div>
+    </div>
+    <div class="field">
+      <label>Caption</label>
+      <textarea id="fCaption" placeholder="Leg day. Squats felt off today, form check needed."></textarea>
+    </div>
+    <div class="field">
+      <label>Category</label>
+      <select id="fCategory">
+        <option value="gym">Gym Pics</option>
+        <option value="guide">Guides &amp; Tutorials</option>
+        <option value="pinterest">Pinterest Find</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Source link (optional — credit Pinterest/original)</label>
+      <input type="url" id="fSource" placeholder="https://pinterest.com/...">
+    </div>
+    <p class="form-error" id="formError">Add a media URL first.</p>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="cancelModal">Cancel</button>
+      <button class="btn-primary" id="savePost">Load it in</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const feedEl = document.getElementById('feed');
+  const emptyEl = document.getElementById('emptyState');
+  const plateCountEl = document.getElementById('plateCount');
+  const platesEl = document.getElementById('plates');
+  const STORAGE_KEY = 'proj-zero-posts';
+  let posts = [];
+  let activeFilter = 'all';
+
+  const overlay = document.getElementById('modalOverlay');
+  const openBtn = document.getElementById('openModal');
+  const cancelBtn = document.getElementById('cancelModal');
+  const saveBtn = document.getElementById('savePost');
+  const errorEl = document.getElementById('formError');
+
+  function openModal(){ overlay.classList.add('open'); errorEl.style.display='none'; }
+  function closeModal(){
+    overlay.classList.remove('open');
+    document.getElementById('fUrl').value='';
+    document.getElementById('fCaption').value='';
+    document.getElementById('fSource').value='';
+    document.getElementById('fCategory').value='gym';
+    document.querySelector('input[name="mtype"][value="image"]').checked = true;
+  }
+  openBtn.addEventListener('click', openModal);
+  cancelBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e)=>{ if(e.target === overlay) closeModal(); });
+
+  async function loadPosts(){
+    try{
+      const res = await window.storage.get(STORAGE_KEY, false);
+      posts = res && res.value ? JSON.parse(res.value) : [];
+    }catch(e){
+      posts = [];
+    }
+    render();
+  }
+
+  async function persist(){
+    try{
+      await window.storage.set(STORAGE_KEY, JSON.stringify(posts), false);
+    }catch(e){
+      console.error('Could not save posts', e);
+    }
+  }
+
+  function escapeHtml(str){
+    const d = document.createElement('div');
+    d.innerText = str;
+    return d.innerHTML;
+  }
+
+  function tagLabel(cat, type){
+    if(type === 'video') return 'Video';
+    if(cat === 'guide') return 'Guide';
+    if(cat === 'pinterest') return 'Pinterest Find';
+    return 'Gym Pic';
+  }
+
+  function render(){
+    const filtered = posts.filter(p=>{
+      if(activeFilter === 'all') return true;
+      if(activeFilter === 'video') return p.type === 'video';
+      return p.category === activeFilter;
+    });
+
+    feedEl.innerHTML = '';
+    emptyEl.style.display = filtered.length ? 'none' : 'block';
+
+    filtered.slice().reverse().forEach(p=>{
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      let mediaHtml = '';
+      if(p.type === 'video'){
+        mediaHtml = `<div class="card-media"><video src="${escapeHtml(p.url)}" controls playsinline></video></div>`;
+      }else{
+        mediaHtml = `<div class="card-media"><img src="${escapeHtml(p.url)}" alt="" loading="lazy" onerror="this.parentElement.style.display='none'"></div>`;
+      }
+
+      const sourceHtml = p.source
+        ? `<a class="card-source" href="${escapeHtml(p.source)}" target="_blank" rel="noopener">source ↗</a>`
+        : `<span></span>`;
+
+      card.innerHTML = `
+        ${mediaHtml}
+        <div class="card-body">
+          <span class="card-tag">${tagLabel(p.category, p.type)}</span>
+          ${p.caption ? `<div class="card-caption">${escapeHtml(p.caption)}</div>` : ''}
+          <div class="card-meta">
+            ${sourceHtml}
+            <button class="card-del" data-id="${p.id}">remove</button>
+          </div>
+        </div>
+      `;
+      feedEl.appendChild(card);
+    });
+
+    document.querySelectorAll('.card-del').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        posts = posts.filter(p=>String(p.id) !== btn.dataset.id);
+        persist();
+        render();
+      });
+    });
+
+    renderPlates();
+  }
+
+  function renderPlates(){
+    const count = posts.length;
+    plateCountEl.textContent = count;
+    platesEl.innerHTML = '';
+    const shown = Math.min(count, 24);
+    for(let i=0;i<shown;i++){
+      const p = document.createElement('div');
+      p.className = 'plate';
+      const h = 24 + (i % 3) * 4;
+      p.style.width = '7px';
+      p.style.height = h + 'px';
+      platesEl.appendChild(p);
+    }
+    if(count > 24){
+      const overflow = document.createElement('div');
+      overflow.style.cssText = 'font-family:JetBrains Mono,monospace;font-size:11px;color:var(--text-muted);margin-left:8px;white-space:nowrap;';
+      overflow.textContent = '+' + (count - 24) + ' more';
+      platesEl.appendChild(overflow);
+    }
+  }
+
+  document.querySelectorAll('.filter-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      render();
+    });
+  });
+
+  saveBtn.addEventListener('click', ()=>{
+    const url = document.getElementById('fUrl').value.trim();
+    if(!url){
+      errorEl.style.display = 'block';
+      return;
+    }
+    const type = document.querySelector('input[name="mtype"]:checked').value;
+    const caption = document.getElementById('fCaption').value.trim();
+    const category = document.getElementById('fCategory').value;
+    const source = document.getElementById('fSource').value.trim();
+
+    posts.push({
+      id: Date.now(),
+      url, type, caption, category, source,
+      createdAt: new Date().toISOString()
+    });
+    persist();
+    closeModal();
+    render();
+  });
+
+  loadPosts();
+})();
+</script>
+</body>
+</html>
