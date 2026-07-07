@@ -151,15 +151,6 @@
   }
   .filter-btn:hover{color:var(--navy); border-color:var(--cobalt);}
   .filter-btn.active{background:var(--navy); color:#fff; border-color:var(--navy);}
-  .filter-spacer{flex:1;min-width:8px;}
-  .add-btn{
-    font-family:'Inter',sans-serif; font-weight:700; font-size:13px;
-    background:var(--cobalt); color:#fff; border:none;
-    padding:9px 18px; border-radius:999px; cursor:pointer; white-space:nowrap;
-    display:flex; align-items:center; gap:6px;
-  }
-  .add-btn:hover{background:var(--electric);}
-
   .panel{display:none;}
   .panel.active{display:block;}
 
@@ -184,11 +175,6 @@
   .card-meta{display:flex; justify-content:space-between; align-items:center; gap:10px;}
   .card-source{font-size:12px; color:var(--steel); text-decoration:none; border-bottom:1px dotted var(--steel);}
   .card-source:hover{color:var(--cobalt); border-color:var(--cobalt);}
-  .card-del{
-    background:none; border:none; color:var(--steel); cursor:pointer; font-size:12px;
-    font-family:'JetBrains Mono',monospace; padding:4px;
-  }
-  .card-del:hover{color:var(--cobalt);}
 
   /* corner registration marks — blueprint signature */
   .card::before, .card::after{
@@ -249,50 +235,6 @@
   }
   .section-header p{color:var(--steel); font-size:13.5px; margin:0; max-width:480px;}
 
-  /* ---------- MODAL ---------- */
-  .modal-overlay{
-    position:fixed; inset:0; background:rgba(8,16,41,.55); backdrop-filter:blur(3px);
-    display:none; align-items:flex-start; justify-content:center; z-index:50; padding:40px 16px; overflow-y:auto;
-  }
-  .modal-overlay.open{display:flex;}
-  .modal{
-    background:var(--paper-raised); border:1px solid var(--line); border-radius:14px;
-    width:100%; max-width:460px; padding:26px; margin-top:10px;
-  }
-  .modal h2{font-family:'Anton',sans-serif; font-weight:400; font-size:26px; letter-spacing:.02em; margin:0 0 4px; text-transform:uppercase; color:var(--navy);}
-  .modal .modal-sub{color:var(--steel); font-size:13px; margin-bottom:20px;}
-  .field{margin-bottom:14px;}
-  .field label{
-    display:block; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.08em;
-    text-transform:uppercase; color:var(--steel); margin-bottom:6px;
-  }
-  .field input, .field textarea, .field select{
-    width:100%; background:var(--paper); border:1px solid var(--line-strong); color:var(--ink);
-    padding:10px 12px; border-radius:8px; font-family:'Inter',sans-serif; font-size:14px;
-  }
-  .field input:focus, .field textarea:focus, .field select:focus{outline:2px solid var(--cobalt); outline-offset:1px; border-color:var(--cobalt);}
-  .field textarea{resize:vertical; min-height:60px;}
-  .radio-row{display:flex; gap:10px;}
-  .radio-row label{
-    flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
-    border:1px solid var(--line-strong); border-radius:8px; padding:9px; cursor:pointer;
-    font-size:13px; font-weight:600; color:var(--steel); text-transform:none; letter-spacing:0; font-family:'Inter',sans-serif;
-  }
-  .radio-row input{width:auto; margin:0;}
-  .radio-row label:has(input:checked){border-color:var(--cobalt); color:var(--navy); background:var(--ice);}
-  .modal-actions{display:flex; gap:10px; margin-top:20px;}
-  .btn-primary{
-    flex:1; background:var(--cobalt); color:#fff; border:none; font-weight:700;
-    padding:12px; border-radius:8px; cursor:pointer; font-size:14px;
-  }
-  .btn-primary:hover{background:var(--electric);}
-  .btn-ghost{
-    background:none; border:1px solid var(--line-strong); color:var(--steel); font-weight:600;
-    padding:12px 18px; border-radius:8px; cursor:pointer; font-size:14px;
-  }
-  .btn-ghost:hover{color:var(--navy); border-color:var(--cobalt);}
-  .form-error{font-size:12px; color:var(--cobalt); margin-top:-6px; margin-bottom:12px; display:none;}
-
   /* ---------- FOOTER ---------- */
   footer{
     border-top:1px solid var(--line); padding:28px 24px; position:relative; z-index:1;
@@ -340,6 +282,7 @@
   <button class="tab-btn" data-section="apps">Apps</button>
   <button class="tab-btn" data-section="gear">Gear</button>
   <button class="tab-btn" data-section="fuel">Fuel</button>
+  <button class="tab-btn" data-section="recovery">Recovery</button>
 </nav>
 
 <!-- ===================== FEED PANEL ===================== -->
@@ -350,8 +293,6 @@
     <button class="filter-btn" data-filter="video">Videos</button>
     <button class="filter-btn" data-filter="guide">Guides &amp; Tutorials</button>
     <button class="filter-btn" data-filter="pinterest">Pinterest Finds</button>
-    <div class="filter-spacer"></div>
-    <button class="add-btn" id="openPostModal">+ Add Post</button>
   </nav>
   <main>
     <div class="feed" id="feed"></div>
@@ -371,8 +312,6 @@
     <button class="filter-btn" data-filter="nutrition">Nutrition</button>
     <button class="filter-btn" data-filter="recovery">Recovery</button>
     <button class="filter-btn" data-filter="mindset">Mindset</button>
-    <div class="filter-spacer"></div>
-    <button class="add-btn" id="openAppModal">+ Add App</button>
   </nav>
   <main>
     <div class="section-header">
@@ -396,8 +335,6 @@
     <button class="filter-btn" data-filter="recovery">Recovery</button>
     <button class="filter-btn" data-filter="apparel">Apparel</button>
     <button class="filter-btn" data-filter="tech">Tech</button>
-    <div class="filter-spacer"></div>
-    <button class="add-btn" id="openGearModal">+ Add Gear</button>
   </nav>
   <main>
     <div class="section-header">
@@ -421,8 +358,6 @@
     <button class="filter-btn" data-filter="recipe">Recipes</button>
     <button class="filter-btn" data-filter="guide">Nutrition Guides</button>
     <button class="filter-btn" data-filter="supplement">Supplements</button>
-    <div class="filter-spacer"></div>
-    <button class="add-btn" id="openFuelModal">+ Add Item</button>
   </nav>
   <main>
     <div class="section-header">
@@ -438,6 +373,29 @@
   </main>
 </div>
 
+<!-- ===================== RECOVERY PANEL ===================== -->
+<div class="panel" data-panel="recovery">
+  <nav class="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="yoga">Yoga</button>
+    <button class="filter-btn" data-filter="mobility">Stretching &amp; Mobility</button>
+    <button class="filter-btn" data-filter="sleep">Sleep</button>
+    <button class="filter-btn" data-filter="active">Active Recovery</button>
+  </nav>
+  <main>
+    <div class="section-header">
+      <h2>Recovery Process</h2>
+      <p>The unglamorous half of training — yoga flows, mobility work, sleep habits, and easy-day movement that actually lets the gains happen.</p>
+    </div>
+    <div class="item-grid" id="recoveryGrid"></div>
+    <div class="empty-state" id="emptyRecovery" style="display:none;">
+      <div class="em-icon">🧘</div>
+      <h3>Nothing logged yet</h3>
+      <p>Add a yoga flow, mobility routine, sleep habit, or active recovery idea worth sharing.</p>
+    </div>
+  </main>
+</div>
+
 <footer>
   <div class="foot-brand">PROJ<span style="color:#7d95ff">.</span>ZERO</div>
   <a class="foot-tiktok" href="https://www.tiktok.com/@proj.zero1" target="_blank" rel="noopener">
@@ -446,201 +404,61 @@
   </a>
 </footer>
 
-<!-- ===================== POST MODAL ===================== -->
-<div class="modal-overlay" id="postModalOverlay">
-  <div class="modal">
-    <h2>Add to the rack</h2>
-    <p class="modal-sub">Drop a pic, video, or guide you want saved.</p>
-    <div class="field">
-      <label>Media URL</label>
-      <input type="url" id="fUrl" placeholder="https://... image or .mp4 link">
-    </div>
-    <div class="field">
-      <label>Media type</label>
-      <div class="radio-row">
-        <label><input type="radio" name="mtype" value="image" checked> Image</label>
-        <label><input type="radio" name="mtype" value="video"> Video</label>
-      </div>
-    </div>
-    <div class="field">
-      <label>Caption</label>
-      <textarea id="fCaption" placeholder="Leg day. Squats felt off today, form check needed."></textarea>
-    </div>
-    <div class="field">
-      <label>Category</label>
-      <select id="fCategory">
-        <option value="gym">Gym Pics</option>
-        <option value="guide">Guides &amp; Tutorials</option>
-        <option value="pinterest">Pinterest Find</option>
-      </select>
-    </div>
-    <div class="field">
-      <label>Source link (optional — credit Pinterest/original)</label>
-      <input type="url" id="fSource" placeholder="https://pinterest.com/...">
-    </div>
-    <p class="form-error" id="postFormError">Add a media URL first.</p>
-    <div class="modal-actions">
-      <button class="btn-ghost" id="cancelPostModal">Cancel</button>
-      <button class="btn-primary" id="savePost">Load it in</button>
-    </div>
-  </div>
-</div>
-
-<!-- ===================== APP MODAL ===================== -->
-<div class="modal-overlay" id="appModalOverlay">
-  <div class="modal">
-    <h2>Add an app</h2>
-    <p class="modal-sub">Something you actually use — training, food, or headspace.</p>
-    <div class="field">
-      <label>App name</label>
-      <input type="text" id="aName" placeholder="e.g. Strong">
-    </div>
-    <div class="field">
-      <label>Icon (emoji)</label>
-      <input type="text" id="aIcon" placeholder="📱" maxlength="4">
-    </div>
-    <div class="field">
-      <label>Category</label>
-      <select id="aCategory">
-        <option value="training">Training</option>
-        <option value="nutrition">Nutrition</option>
-        <option value="recovery">Recovery</option>
-        <option value="mindset">Mindset</option>
-      </select>
-    </div>
-    <div class="field">
-      <label>Why it's worth it</label>
-      <textarea id="aDesc" placeholder="What it does and why you'd recommend it."></textarea>
-    </div>
-    <div class="field">
-      <label>Link (optional)</label>
-      <input type="url" id="aLink" placeholder="App Store / Play Store / site link">
-    </div>
-    <p class="form-error" id="appFormError">Add an app name first.</p>
-    <div class="modal-actions">
-      <button class="btn-ghost" id="cancelAppModal">Cancel</button>
-      <button class="btn-primary" id="saveApp">Save app</button>
-    </div>
-  </div>
-</div>
-
-<!-- ===================== GEAR MODAL ===================== -->
-<div class="modal-overlay" id="gearModalOverlay">
-  <div class="modal">
-    <h2>Add gear</h2>
-    <p class="modal-sub">Equipment or apparel worth recommending.</p>
-    <div class="field">
-      <label>Item name</label>
-      <input type="text" id="gName" placeholder="e.g. Adjustable dumbbells">
-    </div>
-    <div class="field">
-      <label>Image URL (optional)</label>
-      <input type="url" id="gImage" placeholder="https://... product photo">
-    </div>
-    <div class="field">
-      <label>Category</label>
-      <select id="gCategory">
-        <option value="home-gym">Home Gym</option>
-        <option value="recovery">Recovery</option>
-        <option value="apparel">Apparel</option>
-        <option value="tech">Tech</option>
-      </select>
-    </div>
-    <div class="field">
-      <label>Why it's worth it</label>
-      <textarea id="gDesc" placeholder="What it's good for and who it's for."></textarea>
-    </div>
-    <div class="field">
-      <label>Link (optional)</label>
-      <input type="url" id="gLink" placeholder="Where to get it">
-    </div>
-    <p class="form-error" id="gearFormError">Add an item name first.</p>
-    <div class="modal-actions">
-      <button class="btn-ghost" id="cancelGearModal">Cancel</button>
-      <button class="btn-primary" id="saveGear">Save gear</button>
-    </div>
-  </div>
-</div>
-
-<!-- ===================== FUEL MODAL ===================== -->
-<div class="modal-overlay" id="fuelModalOverlay">
-  <div class="modal">
-    <h2>Add to the kitchen</h2>
-    <p class="modal-sub">A meal prep routine, recipe, guide, or supplement worth recommending.</p>
-    <div class="field">
-      <label>Item name</label>
-      <input type="text" id="fnName" placeholder="e.g. Sunday chicken &amp; rice prep">
-    </div>
-    <div class="field">
-      <label>Image URL (optional)</label>
-      <input type="url" id="fnImage" placeholder="https://... photo">
-    </div>
-    <div class="field">
-      <label>Category</label>
-      <select id="fnCategory">
-        <option value="meal-prep">Meal Prep</option>
-        <option value="recipe">Recipe</option>
-        <option value="guide">Nutrition Guide</option>
-        <option value="supplement">Supplement</option>
-      </select>
-    </div>
-    <div class="field">
-      <label>Why it's worth it</label>
-      <textarea id="fnDesc" placeholder="What it is, macros/dosage notes, why you'd recommend it."></textarea>
-    </div>
-    <div class="field">
-      <label>Link (optional)</label>
-      <input type="url" id="fnLink" placeholder="Recipe link, guide, or where to buy">
-    </div>
-    <p class="form-error" id="fuelFormError">Add an item name first.</p>
-    <div class="modal-actions">
-      <button class="btn-ghost" id="cancelFuelModal">Cancel</button>
-      <button class="btn-primary" id="saveFuel">Save item</button>
-    </div>
-  </div>
-</div>
-
 <script>
 (function(){
-  const KEYS = { post:'proj-zero-posts', app:'proj-zero-apps', gear:'proj-zero-gear', fuel:'proj-zero-fuel' };
+  /* =================================================================
+     STATIC CONTENT — edit these arrays directly in the code to add,
+     remove, or change what appears on the site. There is no on-page
+     "add" or "remove" UI; this file is the single source of truth.
+     Copy an existing entry, tweak the fields, done.
+     ================================================================= */
 
-  const SEED_APPS = [
-    { id:'seed-a1', name:'Strong', icon:'💪', category:'training', desc:'Dead-simple workout logger — plates, reps, and rest timers without the social-feed noise.', link:'https://www.strong.app/' },
-    { id:'seed-a2', name:'MyFitnessPal', icon:'🍽️', category:'nutrition', desc:'Food logging that actually has a barcode scanner people use. Good for dialing in a first cut or bulk.', link:'https://www.myfitnesspal.com/' },
-    { id:'seed-a3', name:'Insight Timer', icon:'🧘', category:'mindset', desc:'Free guided breathing and grounding sessions — solid for pre-gym nerves or slowing down after a bad set.', link:'https://insighttimer.com/' },
-    { id:'seed-a4', name:'Hevy', icon:'📊', category:'recovery', desc:'Tracks volume trends over time so you can actually see when it\'s time to deload.', link:'https://www.hevyapp.com/' }
-  ];
-  const SEED_GEAR = [
-    { id:'seed-g1', name:'Resistance bands set', image:'', category:'home-gym', desc:'Zero-intimidation entry point — warm up, add tension, or train a full session at home with no rack required.', link:'' },
-    { id:'seed-g2', name:'Lifting straps', image:'', category:'home-gym', desc:'Grip gives out before your back does. Straps let you actually finish the pull.', link:'' },
-    { id:'seed-g3', name:'Foam roller', image:'', category:'recovery', desc:'Cheapest recovery tool that actually works. Ten minutes before bed on a heavy leg day.', link:'' },
-    { id:'seed-g4', name:'Moisture-wicking tee', image:'', category:'apparel', desc:'Boring but true: a shirt that doesn\'t stick to you makes it easier to actually show up.', link:'' }
-  ];
-  const SEED_FUEL = [
-    { id:'seed-f1', name:'Sunday chicken, rice &amp; veg prep', image:'', category:'meal-prep', desc:'Five containers, one hour. Chicken thighs, jasmine rice, roasted broccoli — boring on purpose so you actually eat it all week.', link:'' },
-    { id:'seed-f2', name:'High-protein overnight oats', image:'', category:'recipe', desc:'Oats, protein powder, chia, milk of choice — mix at night, eat before the gym. No cooking required.', link:'' },
-    { id:'seed-f3', name:'How to read a nutrition label', image:'', category:'guide', desc:'The basics that actually matter — serving size tricks, added sugar, and why "protein per calorie" beats total protein.', link:'' },
-    { id:'seed-f4', name:'Creatine monohydrate', image:'', category:'supplement', desc:'Cheapest, most-studied supplement out there. 5g a day, no loading phase needed, no timing games.', link:'' }
+  // FEED — gym pics, videos, guides, Pinterest finds
+  const POSTS = [
+    // { id:1, url:'https://...jpg', type:'image', caption:'Leg day.', category:'gym', source:'' },
+    // { id:2, url:'https://...mp4', type:'video', caption:'Form check.', category:'guide', source:'' },
   ];
 
-  function loadArr(key, seed){
-    try{
-      const raw = localStorage.getItem(key);
-      if(raw) return JSON.parse(raw);
-    }catch(e){}
-    if(seed) localStorage.setItem(key, JSON.stringify(seed));
-    return seed ? seed.slice() : [];
-  }
-  function saveArr(key, arr){
-    try{ localStorage.setItem(key, JSON.stringify(arr)); }catch(e){ console.error('Could not save', key, e); }
-  }
+  // APPS — category: training | nutrition | recovery | mindset
+  const APPS = [
+    { id:'a1', name:'Strong', icon:'💪', category:'training', desc:'Dead-simple workout logger — plates, reps, and rest timers without the social-feed noise.', link:'https://www.strong.app/' },
+    { id:'a2', name:'MyFitnessPal', icon:'🍽️', category:'nutrition', desc:'Food logging that actually has a barcode scanner people use. Good for dialing in a first cut or bulk.', link:'https://www.myfitnesspal.com/' },
+    { id:'a3', name:'Insight Timer', icon:'🧘', category:'mindset', desc:'Free guided breathing and grounding sessions — solid for pre-gym nerves or slowing down after a bad set.', link:'https://insighttimer.com/' },
+    { id:'a4', name:'Hevy', icon:'📊', category:'recovery', desc:'Tracks volume trends over time so you can actually see when it\'s time to deload.', link:'https://www.hevyapp.com/' }
+  ];
 
-  let posts = loadArr(KEYS.post, []);
-  let apps  = loadArr(KEYS.app, SEED_APPS);
-  let gear  = loadArr(KEYS.gear, SEED_GEAR);
-  let fuel  = loadArr(KEYS.fuel, SEED_FUEL);
+  // GEAR — category: home-gym | recovery | apparel | tech
+  const GEAR = [
+    { id:'g1', name:'Resistance bands set', image:'', category:'home-gym', desc:'Zero-intimidation entry point — warm up, add tension, or train a full session at home with no rack required.', link:'' },
+    { id:'g2', name:'Lifting straps', image:'', category:'home-gym', desc:'Grip gives out before your back does. Straps let you actually finish the pull.', link:'' },
+    { id:'g3', name:'Foam roller', image:'', category:'recovery', desc:'Cheapest recovery tool that actually works. Ten minutes before bed on a heavy leg day.', link:'' },
+    { id:'g4', name:'Moisture-wicking tee', image:'', category:'apparel', desc:'Boring but true: a shirt that doesn\'t stick to you makes it easier to actually show up.', link:'' }
+  ];
 
-  let activeFilter = { feed:'all', apps:'all', gear:'all', fuel:'all' };
+  // FUEL — category: meal-prep | recipe | guide | supplement
+  const FUEL = [
+    { id:'f1', name:'Sunday chicken, rice &amp; veg prep', image:'', category:'meal-prep', desc:'Five containers, one hour. Chicken thighs, jasmine rice, roasted broccoli — boring on purpose so you actually eat it all week.', link:'' },
+    { id:'f2', name:'High-protein overnight oats', image:'', category:'recipe', desc:'Oats, protein powder, chia, milk of choice — mix at night, eat before the gym. No cooking required.', link:'' },
+    { id:'f3', name:'How to read a nutrition label', image:'', category:'guide', desc:'The basics that actually matter — serving size tricks, added sugar, and why "protein per calorie" beats total protein.', link:'' },
+    { id:'f4', name:'Creatine monohydrate', image:'', category:'supplement', desc:'Cheapest, most-studied supplement out there. 5g a day, no loading phase needed, no timing games.', link:'' }
+  ];
+
+  // RECOVERY — category: yoga | mobility | sleep | active
+  const RECOVERY = [
+    { id:'r1', name:'15-min post-leg-day yoga flow', image:'', category:'yoga', desc:'Slow hip openers and forward folds to unlock everything squats just tightened up. No experience needed, just a mat and the floor.', link:'' },
+    { id:'r2', name:'Morning yoga for gym anxiety', image:'', category:'yoga', desc:'A short breath-led flow before you even think about the gym. Settles the nervous system before it has a chance to spiral.', link:'' },
+    { id:'r3', name:'Hip &amp; ankle mobility routine', image:'', category:'mobility', desc:'Five minutes a day fixes squat depth faster than any amount of extra sets. Do it on rest days, do it every day.', link:'' },
+    { id:'r4', name:'Sleep hygiene basics', image:'', category:'sleep', desc:'Consistent wake time, no screens the last 30 minutes, cool dark room. Recovery happens here more than anywhere in the gym.', link:'' },
+    { id:'r5', name:'Active recovery walk', image:'', category:'active', desc:'20–30 minutes at an easy pace on off days. Gets blood moving without adding fatigue on top of fatigue.', link:'' }
+  ];
+
+  const posts = POSTS;
+  const apps  = APPS;
+  const gear  = GEAR;
+  const fuel  = FUEL;
+  const recovery = RECOVERY;
+
+  let activeFilter = { feed:'all', apps:'all', gear:'all', fuel:'all', recovery:'all' };
   let activeSection = 'feed';
 
   function escapeHtml(str){
@@ -673,6 +491,7 @@
         if(section === 'apps') renderApps();
         if(section === 'gear') renderGear();
         if(section === 'fuel') renderFuel();
+        if(section === 'recovery') renderRecovery();
       });
     });
   });
@@ -723,19 +542,10 @@
           ${p.caption ? `<div class="card-caption">${escapeHtml(p.caption)}</div>` : ''}
           <div class="card-meta">
             ${sourceHtml}
-            <button class="card-del" data-id="${p.id}">remove</button>
           </div>
         </div>
       `;
       feedEl.appendChild(card);
-    });
-
-    feedEl.querySelectorAll('.card-del').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        posts = posts.filter(p=>String(p.id) !== btn.dataset.id);
-        saveArr(KEYS.post, posts);
-        renderFeed();
-      });
     });
 
     renderPlates();
@@ -790,18 +600,9 @@
         ${a.desc ? `<div class="item-desc">${escapeHtml(a.desc)}</div>` : ''}
         <div class="item-meta">
           ${linkHtml}
-          <button class="card-del" data-id="${a.id}">remove</button>
         </div>
       `;
       appsGrid.appendChild(card);
-    });
-
-    appsGrid.querySelectorAll('.card-del').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        apps = apps.filter(a=>String(a.id) !== btn.dataset.id);
-        saveArr(KEYS.app, apps);
-        renderApps();
-      });
     });
   }
 
@@ -836,18 +637,9 @@
         ${g.desc ? `<div class="item-desc">${escapeHtml(g.desc)}</div>` : ''}
         <div class="item-meta">
           ${linkHtml}
-          <button class="card-del" data-id="${g.id}">remove</button>
         </div>
       `;
       gearGrid.appendChild(card);
-    });
-
-    gearGrid.querySelectorAll('.card-del').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        gear = gear.filter(g=>String(g.id) !== btn.dataset.id);
-        saveArr(KEYS.gear, gear);
-        renderGear();
-      });
     });
   }
 
@@ -882,141 +674,54 @@
         ${x.desc ? `<div class="item-desc">${escapeHtml(x.desc)}</div>` : ''}
         <div class="item-meta">
           ${linkHtml}
-          <button class="card-del" data-id="${x.id}">remove</button>
         </div>
       `;
       fuelGrid.appendChild(card);
     });
+  }
 
-    fuelGrid.querySelectorAll('.card-del').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        fuel = fuel.filter(x=>String(x.id) !== btn.dataset.id);
-        saveArr(KEYS.fuel, fuel);
-        renderFuel();
-      });
+  /* ---------- RECOVERY ---------- */
+  const recoveryGrid = document.getElementById('recoveryGrid');
+  const emptyRecoveryEl = document.getElementById('emptyRecovery');
+  const recoveryTagLabels = { yoga:'Yoga', mobility:'Stretching & Mobility', sleep:'Sleep', active:'Active Recovery' };
+
+  function renderRecovery(){
+    const f = activeFilter.recovery;
+    const filtered = recovery.filter(x => f === 'all' || x.category === f);
+    recoveryGrid.innerHTML = '';
+    emptyRecoveryEl.style.display = filtered.length ? 'none' : 'block';
+
+    filtered.slice().reverse().forEach(x=>{
+      const card = document.createElement('div');
+      card.className = 'item-card';
+      const thumbHtml = x.image
+        ? `<img class="item-thumb" src="${escapeHtml(x.image)}" alt="" loading="lazy" onerror="this.style.display='none'">`
+        : '';
+      const linkHtml = x.link
+        ? `<a class="item-link" href="${escapeHtml(x.link)}" target="_blank" rel="noopener">Open ↗</a>`
+        : `<span></span>`;
+      card.innerHTML = `
+        ${thumbHtml}
+        <div class="item-top">
+          <div>
+            <div class="item-name">${escapeHtml(x.name)}</div>
+            <span class="item-tag">${recoveryTagLabels[x.category] || x.category}</span>
+          </div>
+        </div>
+        ${x.desc ? `<div class="item-desc">${escapeHtml(x.desc)}</div>` : ''}
+        <div class="item-meta">
+          ${linkHtml}
+        </div>
+      `;
+      recoveryGrid.appendChild(card);
     });
   }
-
-  /* ---------- POST MODAL ---------- */
-  const postOverlay = document.getElementById('postModalOverlay');
-  document.getElementById('openPostModal').addEventListener('click', ()=>{
-    postOverlay.classList.add('open');
-    document.getElementById('postFormError').style.display='none';
-  });
-  function closePostModal(){
-    postOverlay.classList.remove('open');
-    document.getElementById('fUrl').value='';
-    document.getElementById('fCaption').value='';
-    document.getElementById('fSource').value='';
-    document.getElementById('fCategory').value='gym';
-    document.querySelector('input[name="mtype"][value="image"]').checked = true;
-  }
-  document.getElementById('cancelPostModal').addEventListener('click', closePostModal);
-  postOverlay.addEventListener('click', (e)=>{ if(e.target === postOverlay) closePostModal(); });
-  document.getElementById('savePost').addEventListener('click', ()=>{
-    const url = document.getElementById('fUrl').value.trim();
-    if(!url){ document.getElementById('postFormError').style.display='block'; return; }
-    const type = document.querySelector('input[name="mtype"]:checked').value;
-    const caption = document.getElementById('fCaption').value.trim();
-    const category = document.getElementById('fCategory').value;
-    const source = document.getElementById('fSource').value.trim();
-    posts.push({ id:Date.now(), url, type, caption, category, source, createdAt:new Date().toISOString() });
-    saveArr(KEYS.post, posts);
-    closePostModal();
-    renderFeed();
-  });
-
-  /* ---------- APP MODAL ---------- */
-  const appOverlay = document.getElementById('appModalOverlay');
-  document.getElementById('openAppModal').addEventListener('click', ()=>{
-    appOverlay.classList.add('open');
-    document.getElementById('appFormError').style.display='none';
-  });
-  function closeAppModal(){
-    appOverlay.classList.remove('open');
-    document.getElementById('aName').value='';
-    document.getElementById('aIcon').value='';
-    document.getElementById('aDesc').value='';
-    document.getElementById('aLink').value='';
-    document.getElementById('aCategory').value='training';
-  }
-  document.getElementById('cancelAppModal').addEventListener('click', closeAppModal);
-  appOverlay.addEventListener('click', (e)=>{ if(e.target === appOverlay) closeAppModal(); });
-  document.getElementById('saveApp').addEventListener('click', ()=>{
-    const name = document.getElementById('aName').value.trim();
-    if(!name){ document.getElementById('appFormError').style.display='block'; return; }
-    const icon = document.getElementById('aIcon').value.trim();
-    const category = document.getElementById('aCategory').value;
-    const desc = document.getElementById('aDesc').value.trim();
-    const link = document.getElementById('aLink').value.trim();
-    apps.push({ id:Date.now(), name, icon, category, desc, link });
-    saveArr(KEYS.app, apps);
-    closeAppModal();
-    renderApps();
-  });
-
-  /* ---------- GEAR MODAL ---------- */
-  const gearOverlay = document.getElementById('gearModalOverlay');
-  document.getElementById('openGearModal').addEventListener('click', ()=>{
-    gearOverlay.classList.add('open');
-    document.getElementById('gearFormError').style.display='none';
-  });
-  function closeGearModal(){
-    gearOverlay.classList.remove('open');
-    document.getElementById('gName').value='';
-    document.getElementById('gImage').value='';
-    document.getElementById('gDesc').value='';
-    document.getElementById('gLink').value='';
-    document.getElementById('gCategory').value='home-gym';
-  }
-  document.getElementById('cancelGearModal').addEventListener('click', closeGearModal);
-  gearOverlay.addEventListener('click', (e)=>{ if(e.target === gearOverlay) closeGearModal(); });
-  document.getElementById('saveGear').addEventListener('click', ()=>{
-    const name = document.getElementById('gName').value.trim();
-    if(!name){ document.getElementById('gearFormError').style.display='block'; return; }
-    const image = document.getElementById('gImage').value.trim();
-    const category = document.getElementById('gCategory').value;
-    const desc = document.getElementById('gDesc').value.trim();
-    const link = document.getElementById('gLink').value.trim();
-    gear.push({ id:Date.now(), name, image, category, desc, link });
-    saveArr(KEYS.gear, gear);
-    closeGearModal();
-    renderGear();
-  });
-
-  /* ---------- FUEL MODAL ---------- */
-  const fuelOverlay = document.getElementById('fuelModalOverlay');
-  document.getElementById('openFuelModal').addEventListener('click', ()=>{
-    fuelOverlay.classList.add('open');
-    document.getElementById('fuelFormError').style.display='none';
-  });
-  function closeFuelModal(){
-    fuelOverlay.classList.remove('open');
-    document.getElementById('fnName').value='';
-    document.getElementById('fnImage').value='';
-    document.getElementById('fnDesc').value='';
-    document.getElementById('fnLink').value='';
-    document.getElementById('fnCategory').value='meal-prep';
-  }
-  document.getElementById('cancelFuelModal').addEventListener('click', closeFuelModal);
-  fuelOverlay.addEventListener('click', (e)=>{ if(e.target === fuelOverlay) closeFuelModal(); });
-  document.getElementById('saveFuel').addEventListener('click', ()=>{
-    const name = document.getElementById('fnName').value.trim();
-    if(!name){ document.getElementById('fuelFormError').style.display='block'; return; }
-    const image = document.getElementById('fnImage').value.trim();
-    const category = document.getElementById('fnCategory').value;
-    const desc = document.getElementById('fnDesc').value.trim();
-    const link = document.getElementById('fnLink').value.trim();
-    fuel.push({ id:Date.now(), name, image, category, desc, link });
-    saveArr(KEYS.fuel, fuel);
-    closeFuelModal();
-    renderFuel();
-  });
 
   renderFeed();
   renderApps();
   renderGear();
   renderFuel();
+  renderRecovery();
 })();
 </script>
 </body>
