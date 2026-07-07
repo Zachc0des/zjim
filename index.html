@@ -339,6 +339,7 @@
   <button class="tab-btn active" data-section="feed">Feed</button>
   <button class="tab-btn" data-section="apps">Apps</button>
   <button class="tab-btn" data-section="gear">Gear</button>
+  <button class="tab-btn" data-section="fuel">Fuel</button>
 </nav>
 
 <!-- ===================== FEED PANEL ===================== -->
@@ -408,6 +409,31 @@
       <div class="em-icon">🏋️‍♂️</div>
       <h3>No gear saved yet</h3>
       <p>Add the equipment or apparel you'd actually recommend.</p>
+    </div>
+  </main>
+</div>
+
+<!-- ===================== FUEL PANEL ===================== -->
+<div class="panel" data-panel="fuel">
+  <nav class="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="meal-prep">Meal Prep</button>
+    <button class="filter-btn" data-filter="recipe">Recipes</button>
+    <button class="filter-btn" data-filter="guide">Nutrition Guides</button>
+    <button class="filter-btn" data-filter="supplement">Supplements</button>
+    <div class="filter-spacer"></div>
+    <button class="add-btn" id="openFuelModal">+ Add Item</button>
+  </nav>
+  <main>
+    <div class="section-header">
+      <h2>Diet &amp; Fuel</h2>
+      <p>Meal prep that actually happens, nutrition guides worth reading twice, and the supplements that earned a spot in the cabinet.</p>
+    </div>
+    <div class="item-grid" id="fuelGrid"></div>
+    <div class="empty-state" id="emptyFuel" style="display:none;">
+      <div class="em-icon">🥗</div>
+      <h3>Kitchen's empty</h3>
+      <p>Add a meal prep routine, recipe, nutrition guide, or supplement worth recommending.</p>
     </div>
   </main>
 </div>
@@ -536,9 +562,47 @@
   </div>
 </div>
 
+<!-- ===================== FUEL MODAL ===================== -->
+<div class="modal-overlay" id="fuelModalOverlay">
+  <div class="modal">
+    <h2>Add to the kitchen</h2>
+    <p class="modal-sub">A meal prep routine, recipe, guide, or supplement worth recommending.</p>
+    <div class="field">
+      <label>Item name</label>
+      <input type="text" id="fnName" placeholder="e.g. Sunday chicken &amp; rice prep">
+    </div>
+    <div class="field">
+      <label>Image URL (optional)</label>
+      <input type="url" id="fnImage" placeholder="https://... photo">
+    </div>
+    <div class="field">
+      <label>Category</label>
+      <select id="fnCategory">
+        <option value="meal-prep">Meal Prep</option>
+        <option value="recipe">Recipe</option>
+        <option value="guide">Nutrition Guide</option>
+        <option value="supplement">Supplement</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Why it's worth it</label>
+      <textarea id="fnDesc" placeholder="What it is, macros/dosage notes, why you'd recommend it."></textarea>
+    </div>
+    <div class="field">
+      <label>Link (optional)</label>
+      <input type="url" id="fnLink" placeholder="Recipe link, guide, or where to buy">
+    </div>
+    <p class="form-error" id="fuelFormError">Add an item name first.</p>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="cancelFuelModal">Cancel</button>
+      <button class="btn-primary" id="saveFuel">Save item</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (function(){
-  const KEYS = { post:'proj-zero-posts', app:'proj-zero-apps', gear:'proj-zero-gear' };
+  const KEYS = { post:'proj-zero-posts', app:'proj-zero-apps', gear:'proj-zero-gear', fuel:'proj-zero-fuel' };
 
   const SEED_APPS = [
     { id:'seed-a1', name:'Strong', icon:'💪', category:'training', desc:'Dead-simple workout logger — plates, reps, and rest timers without the social-feed noise.', link:'https://www.strong.app/' },
@@ -551,6 +615,12 @@
     { id:'seed-g2', name:'Lifting straps', image:'', category:'home-gym', desc:'Grip gives out before your back does. Straps let you actually finish the pull.', link:'' },
     { id:'seed-g3', name:'Foam roller', image:'', category:'recovery', desc:'Cheapest recovery tool that actually works. Ten minutes before bed on a heavy leg day.', link:'' },
     { id:'seed-g4', name:'Moisture-wicking tee', image:'', category:'apparel', desc:'Boring but true: a shirt that doesn\'t stick to you makes it easier to actually show up.', link:'' }
+  ];
+  const SEED_FUEL = [
+    { id:'seed-f1', name:'Sunday chicken, rice &amp; veg prep', image:'', category:'meal-prep', desc:'Five containers, one hour. Chicken thighs, jasmine rice, roasted broccoli — boring on purpose so you actually eat it all week.', link:'' },
+    { id:'seed-f2', name:'High-protein overnight oats', image:'', category:'recipe', desc:'Oats, protein powder, chia, milk of choice — mix at night, eat before the gym. No cooking required.', link:'' },
+    { id:'seed-f3', name:'How to read a nutrition label', image:'', category:'guide', desc:'The basics that actually matter — serving size tricks, added sugar, and why "protein per calorie" beats total protein.', link:'' },
+    { id:'seed-f4', name:'Creatine monohydrate', image:'', category:'supplement', desc:'Cheapest, most-studied supplement out there. 5g a day, no loading phase needed, no timing games.', link:'' }
   ];
 
   function loadArr(key, seed){
@@ -568,8 +638,9 @@
   let posts = loadArr(KEYS.post, []);
   let apps  = loadArr(KEYS.app, SEED_APPS);
   let gear  = loadArr(KEYS.gear, SEED_GEAR);
+  let fuel  = loadArr(KEYS.fuel, SEED_FUEL);
 
-  let activeFilter = { feed:'all', apps:'all', gear:'all' };
+  let activeFilter = { feed:'all', apps:'all', gear:'all', fuel:'all' };
   let activeSection = 'feed';
 
   function escapeHtml(str){
@@ -601,6 +672,7 @@
         if(section === 'feed') renderFeed();
         if(section === 'apps') renderApps();
         if(section === 'gear') renderGear();
+        if(section === 'fuel') renderFuel();
       });
     });
   });
@@ -779,6 +851,52 @@
     });
   }
 
+  /* ---------- FUEL ---------- */
+  const fuelGrid = document.getElementById('fuelGrid');
+  const emptyFuelEl = document.getElementById('emptyFuel');
+  const fuelTagLabels = { 'meal-prep':'Meal Prep', recipe:'Recipe', guide:'Nutrition Guide', supplement:'Supplement' };
+
+  function renderFuel(){
+    const f = activeFilter.fuel;
+    const filtered = fuel.filter(x => f === 'all' || x.category === f);
+    fuelGrid.innerHTML = '';
+    emptyFuelEl.style.display = filtered.length ? 'none' : 'block';
+
+    filtered.slice().reverse().forEach(x=>{
+      const card = document.createElement('div');
+      card.className = 'item-card';
+      const thumbHtml = x.image
+        ? `<img class="item-thumb" src="${escapeHtml(x.image)}" alt="" loading="lazy" onerror="this.style.display='none'">`
+        : '';
+      const linkHtml = x.link
+        ? `<a class="item-link" href="${escapeHtml(x.link)}" target="_blank" rel="noopener">Open ↗</a>`
+        : `<span></span>`;
+      card.innerHTML = `
+        ${thumbHtml}
+        <div class="item-top">
+          <div>
+            <div class="item-name">${escapeHtml(x.name)}</div>
+            <span class="item-tag">${fuelTagLabels[x.category] || x.category}</span>
+          </div>
+        </div>
+        ${x.desc ? `<div class="item-desc">${escapeHtml(x.desc)}</div>` : ''}
+        <div class="item-meta">
+          ${linkHtml}
+          <button class="card-del" data-id="${x.id}">remove</button>
+        </div>
+      `;
+      fuelGrid.appendChild(card);
+    });
+
+    fuelGrid.querySelectorAll('.card-del').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        fuel = fuel.filter(x=>String(x.id) !== btn.dataset.id);
+        saveArr(KEYS.fuel, fuel);
+        renderFuel();
+      });
+    });
+  }
+
   /* ---------- POST MODAL ---------- */
   const postOverlay = document.getElementById('postModalOverlay');
   document.getElementById('openPostModal').addEventListener('click', ()=>{
@@ -866,9 +984,39 @@
     renderGear();
   });
 
+  /* ---------- FUEL MODAL ---------- */
+  const fuelOverlay = document.getElementById('fuelModalOverlay');
+  document.getElementById('openFuelModal').addEventListener('click', ()=>{
+    fuelOverlay.classList.add('open');
+    document.getElementById('fuelFormError').style.display='none';
+  });
+  function closeFuelModal(){
+    fuelOverlay.classList.remove('open');
+    document.getElementById('fnName').value='';
+    document.getElementById('fnImage').value='';
+    document.getElementById('fnDesc').value='';
+    document.getElementById('fnLink').value='';
+    document.getElementById('fnCategory').value='meal-prep';
+  }
+  document.getElementById('cancelFuelModal').addEventListener('click', closeFuelModal);
+  fuelOverlay.addEventListener('click', (e)=>{ if(e.target === fuelOverlay) closeFuelModal(); });
+  document.getElementById('saveFuel').addEventListener('click', ()=>{
+    const name = document.getElementById('fnName').value.trim();
+    if(!name){ document.getElementById('fuelFormError').style.display='block'; return; }
+    const image = document.getElementById('fnImage').value.trim();
+    const category = document.getElementById('fnCategory').value;
+    const desc = document.getElementById('fnDesc').value.trim();
+    const link = document.getElementById('fnLink').value.trim();
+    fuel.push({ id:Date.now(), name, image, category, desc, link });
+    saveArr(KEYS.fuel, fuel);
+    closeFuelModal();
+    renderFuel();
+  });
+
   renderFeed();
   renderApps();
   renderGear();
+  renderFuel();
 })();
 </script>
 </body>
