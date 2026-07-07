@@ -9,238 +9,316 @@
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --void:#0c0b0a;
-    --surface:#171514;
-    --surface-raised:#211e1c;
-    --line:#332e2a;
-    --text:#f3efe6;
-    --text-muted:#8f8880;
-    --ember:#ff3d1f;
-    --ember-dim:#7a2415;
-    --spark:#ffc72c;
+    --paper:#eef2f9;
+    --paper-raised:#ffffff;
+    --ink:#0c1b3d;
+    --navy:#101d42;
+    --navy-deep:#081029;
+    --cobalt:#2745d6;
+    --cobalt-dim:#1a2e94;
+    --electric:#3f5bff;
+    --steel:#5c6a92;
+    --line:#ccd6ec;
+    --line-strong:#aebbe0;
+    --ice:#dde7fb;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
-    background:var(--void);
-    color:var(--text);
+    background:var(--paper);
+    color:var(--ink);
     font-family:'Inter',sans-serif;
     -webkit-font-smoothing:antialiased;
     min-height:100vh;
   }
-  ::selection{background:var(--ember);color:var(--void);}
-
+  ::selection{background:var(--cobalt);color:#fff;}
   a{color:inherit;}
 
-  .noise{
-    position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.035;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  .grid-bg{
+    position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:38px 38px;
+    opacity:.35;
+    mask-image:radial-gradient(ellipse 100% 60% at 50% 0%, black 30%, transparent 85%);
   }
 
   /* ---------- HERO ---------- */
   header.hero{
     position:relative;
-    padding:56px 24px 40px;
+    padding:52px 24px 36px;
     border-bottom:1px solid var(--line);
     overflow:hidden;
   }
-  .hero-glow{
-    position:absolute; top:-140px; left:50%; transform:translateX(-50%);
-    width:640px; height:280px; border-radius:50%;
-    background:radial-gradient(circle, rgba(255,61,31,.35), transparent 70%);
-    filter:blur(10px); pointer-events:none;
+  .hero-wave{
+    position:absolute; right:-40px; top:-20px; width:340px; height:340px;
+    opacity:.14; pointer-events:none; color:var(--cobalt);
   }
   .eyebrow{
     position:relative;
     font-family:'JetBrains Mono',monospace;
-    font-size:12px; letter-spacing:.18em; text-transform:uppercase;
-    color:var(--ember); font-weight:600; margin-bottom:14px;
+    font-size:12px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--cobalt); font-weight:600; margin-bottom:16px;
     display:flex; align-items:center; gap:10px;
   }
-  .eyebrow::before{content:'';width:8px;height:8px;background:var(--ember);border-radius:50%;box-shadow:0 0 12px var(--ember);}
+  .eyebrow::before{content:'';width:8px;height:8px;background:var(--cobalt);border-radius:1px;transform:rotate(45deg);}
   h1.wordmark{
     position:relative;
     font-family:'Anton',sans-serif;
     font-weight:400;
     font-size:clamp(52px, 11vw, 108px);
-    line-height:.88;
+    line-height:.86;
     letter-spacing:.01em;
     margin:0 0 18px;
     text-transform:uppercase;
-    color:var(--text);
+    color:var(--navy);
   }
-  h1.wordmark span{color:var(--ember);}
+  h1.wordmark span{color:var(--cobalt);}
   .hero-sub{
     position:relative;
     max-width:520px;
-    color:var(--text-muted);
-    font-size:16px; line-height:1.5;
+    color:var(--steel);
+    font-size:16px; line-height:1.55;
     margin-bottom:28px;
   }
   .hero-actions{position:relative; display:flex; flex-wrap:wrap; gap:12px; align-items:center;}
   .tiktok-btn{
     display:inline-flex; align-items:center; gap:10px;
-    background:var(--ember); color:var(--void); font-weight:700;
+    background:var(--cobalt); color:#fff; font-weight:700;
     padding:13px 22px; border-radius:8px; text-decoration:none;
     font-size:14px; letter-spacing:.02em;
     transition:transform .15s ease, background .15s ease;
   }
-  .tiktok-btn:hover{transform:translateY(-2px); background:#ff5636;}
+  .tiktok-btn:hover{transform:translateY(-2px); background:var(--electric);}
   .tiktok-btn svg{width:18px;height:18px;flex-shrink:0;}
   .handle-chip{
-    font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--text-muted);
-    border:1px solid var(--line); padding:12px 16px; border-radius:8px;
+    font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--steel);
+    border:1px solid var(--line-strong); padding:12px 16px; border-radius:8px;
+    background:var(--paper-raised);
   }
-  .handle-chip b{color:var(--text); font-weight:600;}
+  .handle-chip b{color:var(--navy); font-weight:600;}
 
-  /* ---------- PLATE LOAD SIGNATURE ---------- */
+  /* ---------- STAT BAR ---------- */
   .plate-rack{
     position:relative; z-index:1;
     display:flex; align-items:center; gap:0;
-    padding:22px 24px; background:var(--surface);
+    padding:18px 24px; background:var(--paper-raised);
     border-bottom:1px solid var(--line);
     overflow-x:auto;
   }
   .bar-label{
-    font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-muted);
+    font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--steel);
     letter-spacing:.14em; text-transform:uppercase; white-space:nowrap; margin-right:18px;
   }
-  .bar-label b{color:var(--spark); font-size:15px; display:block; font-family:'Anton',sans-serif; letter-spacing:.02em;}
-  .bar-track{flex:1; height:10px; background:var(--void); border-radius:5px; position:relative; min-width:80px; display:flex; align-items:center;}
-  .plates{display:flex; align-items:center; gap:3px; margin-left:-2px;}
+  .bar-label b{color:var(--cobalt); font-size:15px; display:block; font-family:'Anton',sans-serif; letter-spacing:.02em;}
+  .bar-track{flex:1; height:10px; background:var(--paper); border:1px solid var(--line); border-radius:5px; position:relative; min-width:80px; display:flex; align-items:center;}
+  .plates{display:flex; align-items:center; gap:3px; margin-left:-1px;}
   .plate{
-    background:linear-gradient(180deg, var(--ember), var(--ember-dim));
-    border-radius:4px; flex-shrink:0;
-    box-shadow:0 0 0 1px rgba(0,0,0,.3);
+    background:linear-gradient(180deg, var(--electric), var(--cobalt-dim));
+    border-radius:2px; flex-shrink:0;
   }
+
+  /* ---------- SECTION TABS ---------- */
+  nav.section-tabs{
+    position:sticky; top:0; z-index:6;
+    display:flex; gap:6px; padding:14px 24px 0;
+    background:rgba(238,242,249,.94); backdrop-filter:blur(8px);
+    overflow-x:auto;
+  }
+  .tab-btn{
+    font-family:'Anton',sans-serif; font-weight:400; letter-spacing:.02em;
+    font-size:15px; text-transform:uppercase;
+    background:transparent; color:var(--steel); border:none; border-bottom:3px solid transparent;
+    padding:10px 16px 12px; cursor:pointer; white-space:nowrap;
+  }
+  .tab-btn:hover{color:var(--navy);}
+  .tab-btn.active{color:var(--navy); border-color:var(--cobalt);}
 
   /* ---------- FILTER NAV ---------- */
   nav.filters{
-    position:sticky; top:0; z-index:5;
-    display:flex; gap:8px; padding:14px 24px;
-    background:rgba(12,11,10,.92); backdrop-filter:blur(8px);
+    position:sticky; top:41px; z-index:5;
+    display:flex; gap:8px; padding:12px 24px;
+    background:rgba(238,242,249,.94); backdrop-filter:blur(8px);
     border-bottom:1px solid var(--line);
     overflow-x:auto;
   }
   .filter-btn{
     font-family:'Inter',sans-serif; font-weight:600; font-size:13px;
-    background:transparent; color:var(--text-muted); border:1px solid var(--line);
+    background:var(--paper-raised); color:var(--steel); border:1px solid var(--line-strong);
     padding:8px 16px; border-radius:999px; cursor:pointer; white-space:nowrap;
     transition:all .15s ease;
   }
-  .filter-btn:hover{color:var(--text); border-color:#4a433d;}
-  .filter-btn.active{background:var(--text); color:var(--void); border-color:var(--text);}
+  .filter-btn:hover{color:var(--navy); border-color:var(--cobalt);}
+  .filter-btn.active{background:var(--navy); color:#fff; border-color:var(--navy);}
   .filter-spacer{flex:1;min-width:8px;}
   .add-btn{
     font-family:'Inter',sans-serif; font-weight:700; font-size:13px;
-    background:var(--ember); color:var(--void); border:none;
+    background:var(--cobalt); color:#fff; border:none;
     padding:9px 18px; border-radius:999px; cursor:pointer; white-space:nowrap;
     display:flex; align-items:center; gap:6px;
   }
-  .add-btn:hover{background:#ff5636;}
+  .add-btn:hover{background:var(--electric);}
+
+  .panel{display:none;}
+  .panel.active{display:block;}
 
   /* ---------- FEED ---------- */
   main{padding:28px 24px 80px; position:relative; z-index:1;}
-  .feed{
-    columns:3 280px; column-gap:16px;
-  }
+  .feed{columns:3 280px; column-gap:16px;}
   @media (max-width:640px){ .feed{columns:1 260px;} }
   .card{
-    break-inside:avoid; margin-bottom:16px;
-    background:var(--surface); border:1px solid var(--line); border-radius:12px;
-    overflow:hidden; transition:border-color .15s ease;
+    break-inside:avoid; margin-bottom:16px; position:relative;
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:12px;
+    overflow:hidden; transition:border-color .15s ease, box-shadow .15s ease;
   }
-  .card:hover{border-color:#4a433d;}
-  .card-media{width:100%; display:block; background:var(--void);}
+  .card:hover{border-color:var(--cobalt); box-shadow:0 4px 18px rgba(39,69,214,.1);}
+  .card-media{width:100%; display:block; background:var(--ice);}
   .card-media img, .card-media video{width:100%; display:block; max-height:520px; object-fit:cover;}
   .card-body{padding:14px 16px 16px;}
   .card-tag{
     font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.1em;
-    text-transform:uppercase; color:var(--ember); font-weight:600; margin-bottom:6px; display:block;
+    text-transform:uppercase; color:var(--cobalt); font-weight:600; margin-bottom:6px; display:block;
   }
-  .card-caption{font-size:14px; line-height:1.45; color:var(--text); margin-bottom:8px;}
+  .card-caption{font-size:14px; line-height:1.45; color:var(--ink); margin-bottom:8px;}
   .card-meta{display:flex; justify-content:space-between; align-items:center; gap:10px;}
-  .card-source{font-size:12px; color:var(--text-muted); text-decoration:none; border-bottom:1px dotted var(--text-muted);}
-  .card-source:hover{color:var(--spark); border-color:var(--spark);}
+  .card-source{font-size:12px; color:var(--steel); text-decoration:none; border-bottom:1px dotted var(--steel);}
+  .card-source:hover{color:var(--cobalt); border-color:var(--cobalt);}
   .card-del{
-    background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:12px;
+    background:none; border:none; color:var(--steel); cursor:pointer; font-size:12px;
     font-family:'JetBrains Mono',monospace; padding:4px;
   }
-  .card-del:hover{color:var(--ember);}
+  .card-del:hover{color:var(--cobalt);}
 
-  .empty-state{
-    text-align:center; padding:80px 20px; color:var(--text-muted);
+  /* corner registration marks — blueprint signature */
+  .card::before, .card::after{
+    content:''; position:absolute; width:8px; height:8px; z-index:2; pointer-events:none;
+    border-top:1.5px solid var(--line-strong); border-left:1.5px solid var(--line-strong);
+    top:6px; left:6px;
   }
-  .empty-state .em-icon{font-size:40px; margin-bottom:14px;}
-  .empty-state h3{font-family:'Anton',sans-serif; font-weight:400; font-size:26px; color:var(--text); letter-spacing:.02em; margin:0 0 8px;}
+  .card::after{ left:auto; right:6px; border-left:none; border-right:1.5px solid var(--line-strong); }
+
+  /* ---------- GRID PANELS (apps / gear) ---------- */
+  .item-grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(240px,1fr)); gap:16px;
+  }
+  .item-card{
+    position:relative;
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:12px;
+    padding:18px; transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  .item-card:hover{border-color:var(--cobalt); box-shadow:0 4px 18px rgba(39,69,214,.1);}
+  .item-card::before, .item-card::after{
+    content:''; position:absolute; width:8px; height:8px; z-index:2; pointer-events:none;
+    border-top:1.5px solid var(--line-strong); border-left:1.5px solid var(--line-strong);
+    top:6px; left:6px;
+  }
+  .item-card::after{ left:auto; right:6px; border-left:none; border-right:1.5px solid var(--line-strong); }
+  .item-thumb{
+    width:100%; max-height:160px; object-fit:cover; border-radius:8px; margin-bottom:12px;
+    background:var(--ice); display:block;
+  }
+  .item-top{display:flex; align-items:center; gap:12px; margin-bottom:10px;}
+  .item-icon{
+    width:42px; height:42px; border-radius:10px; background:var(--ice); color:var(--cobalt);
+    display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0;
+  }
+  .item-name{font-family:'Anton',sans-serif; font-weight:400; font-size:18px; letter-spacing:.01em; color:var(--navy); text-transform:uppercase;}
+  .item-tag{
+    font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--cobalt); font-weight:600; display:block; margin-top:2px;
+  }
+  .item-desc{font-size:13.5px; line-height:1.5; color:var(--steel); margin-bottom:12px;}
+  .item-meta{display:flex; justify-content:space-between; align-items:center; gap:10px;}
+  .item-link{
+    font-size:12.5px; font-weight:600; color:var(--cobalt); text-decoration:none;
+    border-bottom:1px dotted var(--cobalt);
+  }
+  .item-link:hover{color:var(--electric); border-color:var(--electric);}
+
+  .empty-state{ text-align:center; padding:70px 20px; color:var(--steel); }
+  .empty-state .em-icon{font-size:38px; margin-bottom:14px;}
+  .empty-state h3{font-family:'Anton',sans-serif; font-weight:400; font-size:24px; color:var(--navy); letter-spacing:.02em; margin:0 0 8px; text-transform:uppercase;}
   .empty-state p{max-width:360px; margin:0 auto; font-size:14px; line-height:1.5;}
+
+  /* section divider — wave signature */
+  .section-header{padding:8px 0 18px;}
+  .section-header h2{
+    font-family:'Anton',sans-serif; font-weight:400; font-size:clamp(24px,4vw,34px);
+    color:var(--navy); text-transform:uppercase; letter-spacing:.01em; margin:0 0 4px;
+  }
+  .section-header p{color:var(--steel); font-size:13.5px; margin:0; max-width:480px;}
 
   /* ---------- MODAL ---------- */
   .modal-overlay{
-    position:fixed; inset:0; background:rgba(8,7,6,.78); backdrop-filter:blur(3px);
+    position:fixed; inset:0; background:rgba(8,16,41,.55); backdrop-filter:blur(3px);
     display:none; align-items:flex-start; justify-content:center; z-index:50; padding:40px 16px; overflow-y:auto;
   }
   .modal-overlay.open{display:flex;}
   .modal{
-    background:var(--surface-raised); border:1px solid var(--line); border-radius:14px;
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:14px;
     width:100%; max-width:460px; padding:26px; margin-top:10px;
   }
-  .modal h2{font-family:'Anton',sans-serif; font-weight:400; font-size:26px; letter-spacing:.02em; margin:0 0 4px; text-transform:uppercase;}
-  .modal .modal-sub{color:var(--text-muted); font-size:13px; margin-bottom:20px;}
+  .modal h2{font-family:'Anton',sans-serif; font-weight:400; font-size:26px; letter-spacing:.02em; margin:0 0 4px; text-transform:uppercase; color:var(--navy);}
+  .modal .modal-sub{color:var(--steel); font-size:13px; margin-bottom:20px;}
   .field{margin-bottom:14px;}
   .field label{
     display:block; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.08em;
-    text-transform:uppercase; color:var(--text-muted); margin-bottom:6px;
+    text-transform:uppercase; color:var(--steel); margin-bottom:6px;
   }
   .field input, .field textarea, .field select{
-    width:100%; background:var(--void); border:1px solid var(--line); color:var(--text);
+    width:100%; background:var(--paper); border:1px solid var(--line-strong); color:var(--ink);
     padding:10px 12px; border-radius:8px; font-family:'Inter',sans-serif; font-size:14px;
   }
-  .field input:focus, .field textarea:focus, .field select:focus{outline:2px solid var(--ember); outline-offset:1px; border-color:var(--ember);}
+  .field input:focus, .field textarea:focus, .field select:focus{outline:2px solid var(--cobalt); outline-offset:1px; border-color:var(--cobalt);}
   .field textarea{resize:vertical; min-height:60px;}
   .radio-row{display:flex; gap:10px;}
   .radio-row label{
     flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
-    border:1px solid var(--line); border-radius:8px; padding:9px; cursor:pointer;
-    font-size:13px; font-weight:600; color:var(--text-muted); text-transform:none; letter-spacing:0; font-family:'Inter',sans-serif;
+    border:1px solid var(--line-strong); border-radius:8px; padding:9px; cursor:pointer;
+    font-size:13px; font-weight:600; color:var(--steel); text-transform:none; letter-spacing:0; font-family:'Inter',sans-serif;
   }
   .radio-row input{width:auto; margin:0;}
-  .radio-row label:has(input:checked){border-color:var(--ember); color:var(--text); background:rgba(255,61,31,.08);}
+  .radio-row label:has(input:checked){border-color:var(--cobalt); color:var(--navy); background:var(--ice);}
   .modal-actions{display:flex; gap:10px; margin-top:20px;}
   .btn-primary{
-    flex:1; background:var(--ember); color:var(--void); border:none; font-weight:700;
+    flex:1; background:var(--cobalt); color:#fff; border:none; font-weight:700;
     padding:12px; border-radius:8px; cursor:pointer; font-size:14px;
   }
-  .btn-primary:hover{background:#ff5636;}
+  .btn-primary:hover{background:var(--electric);}
   .btn-ghost{
-    background:none; border:1px solid var(--line); color:var(--text-muted); font-weight:600;
+    background:none; border:1px solid var(--line-strong); color:var(--steel); font-weight:600;
     padding:12px 18px; border-radius:8px; cursor:pointer; font-size:14px;
   }
-  .btn-ghost:hover{color:var(--text); border-color:#4a433d;}
-  .form-error{font-size:12px; color:var(--ember); margin-top:-6px; margin-bottom:12px; display:none;}
+  .btn-ghost:hover{color:var(--navy); border-color:var(--cobalt);}
+  .form-error{font-size:12px; color:var(--cobalt); margin-top:-6px; margin-bottom:12px; display:none;}
 
   /* ---------- FOOTER ---------- */
   footer{
     border-top:1px solid var(--line); padding:28px 24px; position:relative; z-index:1;
     display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between;
+    background:var(--navy); color:#fff;
   }
   footer .foot-brand{font-family:'Anton',sans-serif; font-size:18px; letter-spacing:.03em; text-transform:uppercase;}
   footer .foot-tiktok{
     display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace;
-    font-size:13px; color:var(--text-muted); text-decoration:none;
+    font-size:13px; color:#b9c6ec; text-decoration:none;
   }
-  footer .foot-tiktok:hover{color:var(--spark);}
+  footer .foot-tiktok:hover{color:#fff;}
   footer .foot-tiktok svg{width:15px;height:15px;}
 </style>
 </head>
 <body>
-<div class="noise"></div>
+<div class="grid-bg"></div>
 
 <header class="hero">
-  <div class="hero-glow"></div>
+  <svg class="hero-wave" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10 140 C 40 100, 60 180, 90 130 S 140 90, 170 140 S 190 60, 190 20" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+    <path d="M-10 170 C 20 130, 40 200, 70 160 S 120 120, 150 170 S 180 100, 210 60" stroke="currentColor" stroke-width="6" stroke-linecap="round" opacity=".6"/>
+  </svg>
   <div class="eyebrow">Training log &amp; content vault</div>
   <h1 class="wordmark">PROJ<span>.</span>ZERO</h1>
-  <p class="hero-sub">Everything I lift, film, and steal from Pinterest lives here. Gym pics, form breakdowns, and the guides actually worth saving.</p>
+  <p class="hero-sub">Everything I lift, film, and steal from Pinterest lives here — gym pics, form breakdowns, the apps I actually use, and the gear worth buying.</p>
   <div class="hero-actions">
     <a class="tiktok-btn" href="https://www.tiktok.com/@proj.zero1" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82a4.28 4.28 0 0 1-.34-.62A5 5 0 0 1 15.8 3h-3.4v13.5a2.7 2.7 0 1 1-2.16-2.65V9.9a6.24 6.24 0 1 0 5.56 6.2V9.14a7.7 7.7 0 0 0 4.5 1.43V7.13a4.29 4.29 0 0 1-3.7-1.31z"/></svg>
@@ -251,40 +329,99 @@
 </header>
 
 <div class="plate-rack">
-  <div class="bar-label">Loaded<b id="plateCount">0</b></div>
+  <div class="bar-label">Logged<b id="plateCount">0</b></div>
   <div class="bar-track">
     <div class="plates" id="plates"></div>
   </div>
 </div>
 
-<nav class="filters">
-  <button class="filter-btn active" data-filter="all">All</button>
-  <button class="filter-btn" data-filter="gym">Gym Pics</button>
-  <button class="filter-btn" data-filter="video">Videos</button>
-  <button class="filter-btn" data-filter="guide">Guides &amp; Tutorials</button>
-  <button class="filter-btn" data-filter="pinterest">Pinterest Finds</button>
-  <div class="filter-spacer"></div>
-  <button class="add-btn" id="openModal">+ Add Post</button>
+<nav class="section-tabs">
+  <button class="tab-btn active" data-section="feed">Feed</button>
+  <button class="tab-btn" data-section="apps">Apps</button>
+  <button class="tab-btn" data-section="gear">Gear</button>
 </nav>
 
-<main>
-  <div class="feed" id="feed"></div>
-  <div class="empty-state" id="emptyState" style="display:none;">
-    <div class="em-icon">🏋️</div>
-    <h3>Rack's empty</h3>
-    <p>Add your first gym pic, video, or Pinterest find to start loading the bar.</p>
-  </div>
-</main>
+<!-- ===================== FEED PANEL ===================== -->
+<div class="panel active" data-panel="feed">
+  <nav class="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="gym">Gym Pics</button>
+    <button class="filter-btn" data-filter="video">Videos</button>
+    <button class="filter-btn" data-filter="guide">Guides &amp; Tutorials</button>
+    <button class="filter-btn" data-filter="pinterest">Pinterest Finds</button>
+    <div class="filter-spacer"></div>
+    <button class="add-btn" id="openPostModal">+ Add Post</button>
+  </nav>
+  <main>
+    <div class="feed" id="feed"></div>
+    <div class="empty-state" id="emptyFeed" style="display:none;">
+      <div class="em-icon">🏋️</div>
+      <h3>Rack's empty</h3>
+      <p>Add your first gym pic, video, or Pinterest find to start loading the bar.</p>
+    </div>
+  </main>
+</div>
+
+<!-- ===================== APPS PANEL ===================== -->
+<div class="panel" data-panel="apps">
+  <nav class="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="training">Training</button>
+    <button class="filter-btn" data-filter="nutrition">Nutrition</button>
+    <button class="filter-btn" data-filter="recovery">Recovery</button>
+    <button class="filter-btn" data-filter="mindset">Mindset</button>
+    <div class="filter-spacer"></div>
+    <button class="add-btn" id="openAppModal">+ Add App</button>
+  </nav>
+  <main>
+    <div class="section-header">
+      <h2>App Recommendations</h2>
+      <p>What's actually on my phone — logging workouts, keeping food honest, and taking the edge off gym anxiety.</p>
+    </div>
+    <div class="item-grid" id="appsGrid"></div>
+    <div class="empty-state" id="emptyApps" style="display:none;">
+      <div class="em-icon">📱</div>
+      <h3>No apps saved yet</h3>
+      <p>Add the apps you actually use for training, food, or recovery.</p>
+    </div>
+  </main>
+</div>
+
+<!-- ===================== GEAR PANEL ===================== -->
+<div class="panel" data-panel="gear">
+  <nav class="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="home-gym">Home Gym</button>
+    <button class="filter-btn" data-filter="recovery">Recovery</button>
+    <button class="filter-btn" data-filter="apparel">Apparel</button>
+    <button class="filter-btn" data-filter="tech">Tech</button>
+    <div class="filter-spacer"></div>
+    <button class="add-btn" id="openGearModal">+ Add Gear</button>
+  </nav>
+  <main>
+    <div class="section-header">
+      <h2>Equipment</h2>
+      <p>The stuff worth buying — low-anxiety home gym essentials up to what's on my actual wishlist.</p>
+    </div>
+    <div class="item-grid" id="gearGrid"></div>
+    <div class="empty-state" id="emptyGear" style="display:none;">
+      <div class="em-icon">🏋️‍♂️</div>
+      <h3>No gear saved yet</h3>
+      <p>Add the equipment or apparel you'd actually recommend.</p>
+    </div>
+  </main>
+</div>
 
 <footer>
-  <div class="foot-brand">PROJ<span style="color:var(--ember)">.</span>ZERO</div>
+  <div class="foot-brand">PROJ<span style="color:#7d95ff">.</span>ZERO</div>
   <a class="foot-tiktok" href="https://www.tiktok.com/@proj.zero1" target="_blank" rel="noopener">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82a4.28 4.28 0 0 1-.34-.62A5 5 0 0 1 15.8 3h-3.4v13.5a2.7 2.7 0 1 1-2.16-2.65V9.9a6.24 6.24 0 1 0 5.56 6.2V9.14a7.7 7.7 0 0 0 4.5 1.43V7.13a4.29 4.29 0 0 1-3.7-1.31z"/></svg>
     @proj.zero1
   </a>
 </footer>
 
-<div class="modal-overlay" id="modalOverlay">
+<!-- ===================== POST MODAL ===================== -->
+<div class="modal-overlay" id="postModalOverlay">
   <div class="modal">
     <h2>Add to the rack</h2>
     <p class="modal-sub">Drop a pic, video, or guide you want saved.</p>
@@ -315,66 +452,164 @@
       <label>Source link (optional — credit Pinterest/original)</label>
       <input type="url" id="fSource" placeholder="https://pinterest.com/...">
     </div>
-    <p class="form-error" id="formError">Add a media URL first.</p>
+    <p class="form-error" id="postFormError">Add a media URL first.</p>
     <div class="modal-actions">
-      <button class="btn-ghost" id="cancelModal">Cancel</button>
+      <button class="btn-ghost" id="cancelPostModal">Cancel</button>
       <button class="btn-primary" id="savePost">Load it in</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== APP MODAL ===================== -->
+<div class="modal-overlay" id="appModalOverlay">
+  <div class="modal">
+    <h2>Add an app</h2>
+    <p class="modal-sub">Something you actually use — training, food, or headspace.</p>
+    <div class="field">
+      <label>App name</label>
+      <input type="text" id="aName" placeholder="e.g. Strong">
+    </div>
+    <div class="field">
+      <label>Icon (emoji)</label>
+      <input type="text" id="aIcon" placeholder="📱" maxlength="4">
+    </div>
+    <div class="field">
+      <label>Category</label>
+      <select id="aCategory">
+        <option value="training">Training</option>
+        <option value="nutrition">Nutrition</option>
+        <option value="recovery">Recovery</option>
+        <option value="mindset">Mindset</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Why it's worth it</label>
+      <textarea id="aDesc" placeholder="What it does and why you'd recommend it."></textarea>
+    </div>
+    <div class="field">
+      <label>Link (optional)</label>
+      <input type="url" id="aLink" placeholder="App Store / Play Store / site link">
+    </div>
+    <p class="form-error" id="appFormError">Add an app name first.</p>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="cancelAppModal">Cancel</button>
+      <button class="btn-primary" id="saveApp">Save app</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== GEAR MODAL ===================== -->
+<div class="modal-overlay" id="gearModalOverlay">
+  <div class="modal">
+    <h2>Add gear</h2>
+    <p class="modal-sub">Equipment or apparel worth recommending.</p>
+    <div class="field">
+      <label>Item name</label>
+      <input type="text" id="gName" placeholder="e.g. Adjustable dumbbells">
+    </div>
+    <div class="field">
+      <label>Image URL (optional)</label>
+      <input type="url" id="gImage" placeholder="https://... product photo">
+    </div>
+    <div class="field">
+      <label>Category</label>
+      <select id="gCategory">
+        <option value="home-gym">Home Gym</option>
+        <option value="recovery">Recovery</option>
+        <option value="apparel">Apparel</option>
+        <option value="tech">Tech</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Why it's worth it</label>
+      <textarea id="gDesc" placeholder="What it's good for and who it's for."></textarea>
+    </div>
+    <div class="field">
+      <label>Link (optional)</label>
+      <input type="url" id="gLink" placeholder="Where to get it">
+    </div>
+    <p class="form-error" id="gearFormError">Add an item name first.</p>
+    <div class="modal-actions">
+      <button class="btn-ghost" id="cancelGearModal">Cancel</button>
+      <button class="btn-primary" id="saveGear">Save gear</button>
     </div>
   </div>
 </div>
 
 <script>
 (function(){
-  const feedEl = document.getElementById('feed');
-  const emptyEl = document.getElementById('emptyState');
-  const plateCountEl = document.getElementById('plateCount');
-  const platesEl = document.getElementById('plates');
-  const STORAGE_KEY = 'proj-zero-posts';
-  let posts = [];
-  let activeFilter = 'all';
+  const KEYS = { post:'proj-zero-posts', app:'proj-zero-apps', gear:'proj-zero-gear' };
 
-  const overlay = document.getElementById('modalOverlay');
-  const openBtn = document.getElementById('openModal');
-  const cancelBtn = document.getElementById('cancelModal');
-  const saveBtn = document.getElementById('savePost');
-  const errorEl = document.getElementById('formError');
+  const SEED_APPS = [
+    { id:'seed-a1', name:'Strong', icon:'💪', category:'training', desc:'Dead-simple workout logger — plates, reps, and rest timers without the social-feed noise.', link:'https://www.strong.app/' },
+    { id:'seed-a2', name:'MyFitnessPal', icon:'🍽️', category:'nutrition', desc:'Food logging that actually has a barcode scanner people use. Good for dialing in a first cut or bulk.', link:'https://www.myfitnesspal.com/' },
+    { id:'seed-a3', name:'Insight Timer', icon:'🧘', category:'mindset', desc:'Free guided breathing and grounding sessions — solid for pre-gym nerves or slowing down after a bad set.', link:'https://insighttimer.com/' },
+    { id:'seed-a4', name:'Hevy', icon:'📊', category:'recovery', desc:'Tracks volume trends over time so you can actually see when it\'s time to deload.', link:'https://www.hevyapp.com/' }
+  ];
+  const SEED_GEAR = [
+    { id:'seed-g1', name:'Resistance bands set', image:'', category:'home-gym', desc:'Zero-intimidation entry point — warm up, add tension, or train a full session at home with no rack required.', link:'' },
+    { id:'seed-g2', name:'Lifting straps', image:'', category:'home-gym', desc:'Grip gives out before your back does. Straps let you actually finish the pull.', link:'' },
+    { id:'seed-g3', name:'Foam roller', image:'', category:'recovery', desc:'Cheapest recovery tool that actually works. Ten minutes before bed on a heavy leg day.', link:'' },
+    { id:'seed-g4', name:'Moisture-wicking tee', image:'', category:'apparel', desc:'Boring but true: a shirt that doesn\'t stick to you makes it easier to actually show up.', link:'' }
+  ];
 
-  function openModal(){ overlay.classList.add('open'); errorEl.style.display='none'; }
-  function closeModal(){
-    overlay.classList.remove('open');
-    document.getElementById('fUrl').value='';
-    document.getElementById('fCaption').value='';
-    document.getElementById('fSource').value='';
-    document.getElementById('fCategory').value='gym';
-    document.querySelector('input[name="mtype"][value="image"]').checked = true;
-  }
-  openBtn.addEventListener('click', openModal);
-  cancelBtn.addEventListener('click', closeModal);
-  overlay.addEventListener('click', (e)=>{ if(e.target === overlay) closeModal(); });
-
-  async function loadPosts(){
+  function loadArr(key, seed){
     try{
-      const res = await window.storage.get(STORAGE_KEY, false);
-      posts = res && res.value ? JSON.parse(res.value) : [];
-    }catch(e){
-      posts = [];
-    }
-    render();
+      const raw = localStorage.getItem(key);
+      if(raw) return JSON.parse(raw);
+    }catch(e){}
+    if(seed) localStorage.setItem(key, JSON.stringify(seed));
+    return seed ? seed.slice() : [];
+  }
+  function saveArr(key, arr){
+    try{ localStorage.setItem(key, JSON.stringify(arr)); }catch(e){ console.error('Could not save', key, e); }
   }
 
-  async function persist(){
-    try{
-      await window.storage.set(STORAGE_KEY, JSON.stringify(posts), false);
-    }catch(e){
-      console.error('Could not save posts', e);
-    }
-  }
+  let posts = loadArr(KEYS.post, []);
+  let apps  = loadArr(KEYS.app, SEED_APPS);
+  let gear  = loadArr(KEYS.gear, SEED_GEAR);
+
+  let activeFilter = { feed:'all', apps:'all', gear:'all' };
+  let activeSection = 'feed';
 
   function escapeHtml(str){
     const d = document.createElement('div');
-    d.innerText = str;
+    d.innerText = str == null ? '' : str;
     return d.innerHTML;
   }
+
+  /* ---------- SECTION TABS ---------- */
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      activeSection = btn.dataset.section;
+      document.querySelectorAll('.panel').forEach(p=>{
+        p.classList.toggle('active', p.dataset.panel === activeSection);
+      });
+    });
+  });
+
+  /* ---------- FILTER CHIPS (scoped per panel) ---------- */
+  document.querySelectorAll('.panel').forEach(panel=>{
+    const section = panel.dataset.panel;
+    panel.querySelectorAll('.filter-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        panel.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter[section] = btn.dataset.filter;
+        if(section === 'feed') renderFeed();
+        if(section === 'apps') renderApps();
+        if(section === 'gear') renderGear();
+      });
+    });
+  });
+
+  /* ---------- FEED ---------- */
+  const feedEl = document.getElementById('feed');
+  const emptyFeedEl = document.getElementById('emptyFeed');
+  const plateCountEl = document.getElementById('plateCount');
+  const platesEl = document.getElementById('plates');
 
   function tagLabel(cat, type){
     if(type === 'video') return 'Video';
@@ -383,15 +618,16 @@
     return 'Gym Pic';
   }
 
-  function render(){
+  function renderFeed(){
+    const f = activeFilter.feed;
     const filtered = posts.filter(p=>{
-      if(activeFilter === 'all') return true;
-      if(activeFilter === 'video') return p.type === 'video';
-      return p.category === activeFilter;
+      if(f === 'all') return true;
+      if(f === 'video') return p.type === 'video';
+      return p.category === f;
     });
 
     feedEl.innerHTML = '';
-    emptyEl.style.display = filtered.length ? 'none' : 'block';
+    emptyFeedEl.style.display = filtered.length ? 'none' : 'block';
 
     filtered.slice().reverse().forEach(p=>{
       const card = document.createElement('div');
@@ -422,11 +658,11 @@
       feedEl.appendChild(card);
     });
 
-    document.querySelectorAll('.card-del').forEach(btn=>{
+    feedEl.querySelectorAll('.card-del').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         posts = posts.filter(p=>String(p.id) !== btn.dataset.id);
-        persist();
-        render();
+        saveArr(KEYS.post, posts);
+        renderFeed();
       });
     });
 
@@ -448,43 +684,191 @@
     }
     if(count > 24){
       const overflow = document.createElement('div');
-      overflow.style.cssText = 'font-family:JetBrains Mono,monospace;font-size:11px;color:var(--text-muted);margin-left:8px;white-space:nowrap;';
+      overflow.style.cssText = 'font-family:JetBrains Mono,monospace;font-size:11px;color:var(--steel);margin-left:8px;white-space:nowrap;';
       overflow.textContent = '+' + (count - 24) + ' more';
       platesEl.appendChild(overflow);
     }
   }
 
-  document.querySelectorAll('.filter-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      activeFilter = btn.dataset.filter;
-      render();
-    });
-  });
+  /* ---------- APPS ---------- */
+  const appsGrid = document.getElementById('appsGrid');
+  const emptyAppsEl = document.getElementById('emptyApps');
+  const appTagLabels = { training:'Training', nutrition:'Nutrition', recovery:'Recovery', mindset:'Mindset' };
 
-  saveBtn.addEventListener('click', ()=>{
+  function renderApps(){
+    const f = activeFilter.apps;
+    const filtered = apps.filter(a => f === 'all' || a.category === f);
+    appsGrid.innerHTML = '';
+    emptyAppsEl.style.display = filtered.length ? 'none' : 'block';
+
+    filtered.slice().reverse().forEach(a=>{
+      const card = document.createElement('div');
+      card.className = 'item-card';
+      const linkHtml = a.link
+        ? `<a class="item-link" href="${escapeHtml(a.link)}" target="_blank" rel="noopener">Open ↗</a>`
+        : `<span></span>`;
+      card.innerHTML = `
+        <div class="item-top">
+          <div class="item-icon">${escapeHtml(a.icon || '📱')}</div>
+          <div>
+            <div class="item-name">${escapeHtml(a.name)}</div>
+            <span class="item-tag">${appTagLabels[a.category] || a.category}</span>
+          </div>
+        </div>
+        ${a.desc ? `<div class="item-desc">${escapeHtml(a.desc)}</div>` : ''}
+        <div class="item-meta">
+          ${linkHtml}
+          <button class="card-del" data-id="${a.id}">remove</button>
+        </div>
+      `;
+      appsGrid.appendChild(card);
+    });
+
+    appsGrid.querySelectorAll('.card-del').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        apps = apps.filter(a=>String(a.id) !== btn.dataset.id);
+        saveArr(KEYS.app, apps);
+        renderApps();
+      });
+    });
+  }
+
+  /* ---------- GEAR ---------- */
+  const gearGrid = document.getElementById('gearGrid');
+  const emptyGearEl = document.getElementById('emptyGear');
+  const gearTagLabels = { 'home-gym':'Home Gym', recovery:'Recovery', apparel:'Apparel', tech:'Tech' };
+
+  function renderGear(){
+    const f = activeFilter.gear;
+    const filtered = gear.filter(g => f === 'all' || g.category === f);
+    gearGrid.innerHTML = '';
+    emptyGearEl.style.display = filtered.length ? 'none' : 'block';
+
+    filtered.slice().reverse().forEach(g=>{
+      const card = document.createElement('div');
+      card.className = 'item-card';
+      const thumbHtml = g.image
+        ? `<img class="item-thumb" src="${escapeHtml(g.image)}" alt="" loading="lazy" onerror="this.style.display='none'">`
+        : '';
+      const linkHtml = g.link
+        ? `<a class="item-link" href="${escapeHtml(g.link)}" target="_blank" rel="noopener">Where to get it ↗</a>`
+        : `<span></span>`;
+      card.innerHTML = `
+        ${thumbHtml}
+        <div class="item-top">
+          <div>
+            <div class="item-name">${escapeHtml(g.name)}</div>
+            <span class="item-tag">${gearTagLabels[g.category] || g.category}</span>
+          </div>
+        </div>
+        ${g.desc ? `<div class="item-desc">${escapeHtml(g.desc)}</div>` : ''}
+        <div class="item-meta">
+          ${linkHtml}
+          <button class="card-del" data-id="${g.id}">remove</button>
+        </div>
+      `;
+      gearGrid.appendChild(card);
+    });
+
+    gearGrid.querySelectorAll('.card-del').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        gear = gear.filter(g=>String(g.id) !== btn.dataset.id);
+        saveArr(KEYS.gear, gear);
+        renderGear();
+      });
+    });
+  }
+
+  /* ---------- POST MODAL ---------- */
+  const postOverlay = document.getElementById('postModalOverlay');
+  document.getElementById('openPostModal').addEventListener('click', ()=>{
+    postOverlay.classList.add('open');
+    document.getElementById('postFormError').style.display='none';
+  });
+  function closePostModal(){
+    postOverlay.classList.remove('open');
+    document.getElementById('fUrl').value='';
+    document.getElementById('fCaption').value='';
+    document.getElementById('fSource').value='';
+    document.getElementById('fCategory').value='gym';
+    document.querySelector('input[name="mtype"][value="image"]').checked = true;
+  }
+  document.getElementById('cancelPostModal').addEventListener('click', closePostModal);
+  postOverlay.addEventListener('click', (e)=>{ if(e.target === postOverlay) closePostModal(); });
+  document.getElementById('savePost').addEventListener('click', ()=>{
     const url = document.getElementById('fUrl').value.trim();
-    if(!url){
-      errorEl.style.display = 'block';
-      return;
-    }
+    if(!url){ document.getElementById('postFormError').style.display='block'; return; }
     const type = document.querySelector('input[name="mtype"]:checked').value;
     const caption = document.getElementById('fCaption').value.trim();
     const category = document.getElementById('fCategory').value;
     const source = document.getElementById('fSource').value.trim();
-
-    posts.push({
-      id: Date.now(),
-      url, type, caption, category, source,
-      createdAt: new Date().toISOString()
-    });
-    persist();
-    closeModal();
-    render();
+    posts.push({ id:Date.now(), url, type, caption, category, source, createdAt:new Date().toISOString() });
+    saveArr(KEYS.post, posts);
+    closePostModal();
+    renderFeed();
   });
 
-  loadPosts();
+  /* ---------- APP MODAL ---------- */
+  const appOverlay = document.getElementById('appModalOverlay');
+  document.getElementById('openAppModal').addEventListener('click', ()=>{
+    appOverlay.classList.add('open');
+    document.getElementById('appFormError').style.display='none';
+  });
+  function closeAppModal(){
+    appOverlay.classList.remove('open');
+    document.getElementById('aName').value='';
+    document.getElementById('aIcon').value='';
+    document.getElementById('aDesc').value='';
+    document.getElementById('aLink').value='';
+    document.getElementById('aCategory').value='training';
+  }
+  document.getElementById('cancelAppModal').addEventListener('click', closeAppModal);
+  appOverlay.addEventListener('click', (e)=>{ if(e.target === appOverlay) closeAppModal(); });
+  document.getElementById('saveApp').addEventListener('click', ()=>{
+    const name = document.getElementById('aName').value.trim();
+    if(!name){ document.getElementById('appFormError').style.display='block'; return; }
+    const icon = document.getElementById('aIcon').value.trim();
+    const category = document.getElementById('aCategory').value;
+    const desc = document.getElementById('aDesc').value.trim();
+    const link = document.getElementById('aLink').value.trim();
+    apps.push({ id:Date.now(), name, icon, category, desc, link });
+    saveArr(KEYS.app, apps);
+    closeAppModal();
+    renderApps();
+  });
+
+  /* ---------- GEAR MODAL ---------- */
+  const gearOverlay = document.getElementById('gearModalOverlay');
+  document.getElementById('openGearModal').addEventListener('click', ()=>{
+    gearOverlay.classList.add('open');
+    document.getElementById('gearFormError').style.display='none';
+  });
+  function closeGearModal(){
+    gearOverlay.classList.remove('open');
+    document.getElementById('gName').value='';
+    document.getElementById('gImage').value='';
+    document.getElementById('gDesc').value='';
+    document.getElementById('gLink').value='';
+    document.getElementById('gCategory').value='home-gym';
+  }
+  document.getElementById('cancelGearModal').addEventListener('click', closeGearModal);
+  gearOverlay.addEventListener('click', (e)=>{ if(e.target === gearOverlay) closeGearModal(); });
+  document.getElementById('saveGear').addEventListener('click', ()=>{
+    const name = document.getElementById('gName').value.trim();
+    if(!name){ document.getElementById('gearFormError').style.display='block'; return; }
+    const image = document.getElementById('gImage').value.trim();
+    const category = document.getElementById('gCategory').value;
+    const desc = document.getElementById('gDesc').value.trim();
+    const link = document.getElementById('gLink').value.trim();
+    gear.push({ id:Date.now(), name, image, category, desc, link });
+    saveArr(KEYS.gear, gear);
+    closeGearModal();
+    renderGear();
+  });
+
+  renderFeed();
+  renderApps();
+  renderGear();
 })();
 </script>
 </body>
