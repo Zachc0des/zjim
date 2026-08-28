@@ -3,302 +3,461 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="PROJ.ZERO — training log & content vault. Gym pics, form breakdowns, the apps I actually use, and the gear worth buying.">
+<meta name="theme-color" content="#0a0910">
 <title>PROJ.ZERO</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
+  /* =========================================================
+     PROJ.ZERO
+     Palette : OBSIDIAN / BONE / CHROME / PLASMA
+     Type    : Cormorant Garamond (display) + Share Tech Mono (data)
+     Graphics: hand-drawn cyber-sigilism line work (inline SVG)
+     ========================================================= */
   :root{
-    --paper:#eef2f9;
-    --paper-raised:#ffffff;
-    --ink:#0c1b3d;
-    --navy:#101d42;
-    --navy-deep:#081029;
-    --cobalt:#2745d6;
-    --cobalt-dim:#1a2e94;
-    --electric:#3f5bff;
-    --steel:#5c6a92;
-    --line:#ccd6ec;
-    --line-strong:#aebbe0;
-    --ice:#dde7fb;
+    --void:#0a0910;
+    --ash:#12101c;
+    --ash-2:#191625;
+    --bone:#ece9f4;
+    --chrome:#8b88a4;
+    --chrome-dim:#5e5b78;
+    --sigil:#a97bff;
+    --sigil-hot:#c9a4ff;
+    --line:rgba(236,233,244,.13);
+    --line-strong:rgba(236,233,244,.30);
+    --glow:rgba(169,123,255,.20);
+    --shadow:rgba(0,0,0,.6);
+    --ink:var(--bone);
   }
+  body.day{
+    --void:#e9e7ee;
+    --ash:#f7f6fa;
+    --ash-2:#efedf4;
+    --bone:#120f1b;
+    --chrome:#57546d;
+    --chrome-dim:#8a879f;
+    --sigil:#5c2fd6;
+    --sigil-hot:#7c4dff;
+    --line:rgba(18,15,27,.15);
+    --line-strong:rgba(18,15,27,.34);
+    --glow:rgba(92,47,214,.12);
+    --shadow:rgba(30,20,60,.12);
+  }
+
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
-    background:var(--paper);
-    color:var(--ink);
-    font-family:'Inter',sans-serif;
+    background:var(--void);
+    color:var(--bone);
+    font-family:'Cormorant Garamond',Georgia,serif;
+    font-size:17px;
     -webkit-font-smoothing:antialiased;
     min-height:100vh;
+    overflow-x:hidden;
+    transition:background .4s ease, color .4s ease;
   }
-  ::selection{background:var(--cobalt);color:#fff;}
+  ::selection{background:var(--sigil);color:var(--void);}
   a{color:inherit;}
+  img,video{max-width:100%;}
+  :focus-visible{outline:2px solid var(--sigil-hot); outline-offset:3px;}
 
-  .grid-bg{
-    position:fixed; inset:0; pointer-events:none; z-index:0;
-    background-image:
-      linear-gradient(var(--line) 1px, transparent 1px),
-      linear-gradient(90deg, var(--line) 1px, transparent 1px);
-    background-size:38px 38px;
-    opacity:.35;
-    mask-image:radial-gradient(ellipse 100% 60% at 50% 0%, black 30%, transparent 85%);
+  /* ---------- ATMOSPHERE ---------- */
+  .grain{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    opacity:.32; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .bloom{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:radial-gradient(ellipse 80% 50% at 62% -8%, var(--glow), transparent 68%);
+  }
+  .lattice{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    color:var(--bone); opacity:.07;
   }
 
   /* ---------- HERO ---------- */
   header.hero{
-    position:relative;
-    padding:52px 24px 36px;
-    border-bottom:1px solid var(--line);
-    overflow:hidden;
-  }
-  .hero-wave{
-    position:absolute; right:-40px; top:-20px; width:340px; height:340px;
-    opacity:.14; pointer-events:none; color:var(--cobalt);
-  }
-  .eyebrow{
-    position:relative;
-    font-family:'JetBrains Mono',monospace;
-    font-size:12px; letter-spacing:.16em; text-transform:uppercase;
-    color:var(--cobalt); font-weight:600; margin-bottom:16px;
-    display:flex; align-items:center; gap:10px;
-  }
-  .eyebrow::before{content:'';width:8px;height:8px;background:var(--cobalt);border-radius:1px;transform:rotate(45deg);}
-  h1.wordmark{
-    position:relative;
-    font-family:'Anton',sans-serif;
-    font-weight:400;
-    font-size:clamp(52px, 11vw, 108px);
-    line-height:.86;
-    letter-spacing:.01em;
-    margin:0 0 18px;
-    text-transform:uppercase;
-    color:var(--navy);
-  }
-  h1.wordmark span{color:var(--cobalt);}
-  .hero-sub{
-    position:relative;
-    max-width:520px;
-    color:var(--steel);
-    font-size:16px; line-height:1.55;
-    margin-bottom:28px;
-  }
-  .hero-actions{position:relative; display:flex; flex-wrap:wrap; gap:12px; align-items:center;}
-  .tiktok-btn{
-    display:inline-flex; align-items:center; gap:10px;
-    background:var(--cobalt); color:#fff; font-weight:700;
-    padding:13px 22px; border-radius:8px; text-decoration:none;
-    font-size:14px; letter-spacing:.02em;
-    transition:transform .15s ease, background .15s ease;
-  }
-  .tiktok-btn:hover{transform:translateY(-2px); background:var(--electric);}
-  .tiktok-btn svg{width:18px;height:18px;flex-shrink:0;}
-  .handle-chip{
-    font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--steel);
-    border:1px solid var(--line-strong); padding:12px 16px; border-radius:8px;
-    background:var(--paper-raised);
-  }
-  .handle-chip b{color:var(--navy); font-weight:600;}
-
-  /* ---------- STAT BAR ---------- */
-  .plate-rack{
     position:relative; z-index:1;
-    display:flex; align-items:center; gap:0;
-    padding:18px 24px; background:var(--paper-raised);
+    padding:70px 24px 46px;
     border-bottom:1px solid var(--line);
-    overflow-x:auto;
   }
-  .bar-label{
-    font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--steel);
-    letter-spacing:.14em; text-transform:uppercase; white-space:nowrap; margin-right:18px;
+  .hero-inner{max-width:1180px; margin:0 auto; position:relative;}
+  .eyebrow{
+    font-family:'Share Tech Mono',monospace;
+    font-size:11.5px; letter-spacing:.3em; text-transform:uppercase;
+    color:var(--sigil); margin-bottom:28px;
+    display:flex; align-items:center; gap:12px;
   }
-  .bar-label b{color:var(--cobalt); font-size:15px; display:block; font-family:'Anton',sans-serif; letter-spacing:.02em;}
-  .bar-track{flex:1; height:10px; background:var(--paper); border:1px solid var(--line); border-radius:5px; position:relative; min-width:80px; display:flex; align-items:center;}
-  .plates{display:flex; align-items:center; gap:3px; margin-left:-1px;}
-  .plate{
-    background:linear-gradient(180deg, var(--electric), var(--cobalt-dim));
-    border-radius:2px; flex-shrink:0;
+  .eyebrow .barb{width:44px; height:12px; flex-shrink:0;}
+  h1.wordmark{
+    font-weight:300;
+    font-size:clamp(60px,15vw,152px);
+    line-height:.82; letter-spacing:.02em;
+    margin:0; text-transform:uppercase;
   }
+  h1.wordmark em{
+    font-style:italic; font-weight:400; color:var(--sigil);
+    text-shadow:0 0 34px var(--glow);
+  }
+  .hero-rule{display:block; width:100%; max-width:660px; height:18px; color:var(--line-strong); margin:24px 0 24px;}
+  .hero-sub{
+    max-width:560px; color:var(--chrome);
+    font-size:19.5px; line-height:1.6; font-weight:300; margin:0 0 32px;
+  }
+  .hero-sub b{color:var(--bone); font-weight:600;}
+  .index-strip{
+    display:flex; flex-wrap:wrap; gap:0;
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    max-width:660px;
+  }
+  .index-cell{
+    padding:14px 22px 13px; border-right:1px solid var(--line);
+    font-family:'Share Tech Mono',monospace;
+    font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--chrome-dim);
+    line-height:1.9;
+  }
+  .index-cell:last-child{border-right:none;}
+  .index-cell b{
+    display:block; font-family:'Cormorant Garamond',serif; font-weight:600;
+    font-size:24px; letter-spacing:0; color:var(--bone); line-height:1;
+  }
+
+  /* hero sigil */
+  .sigil-mark{
+    position:absolute; right:0; top:-30px;
+    width:min(280px,40vw); height:auto; color:var(--bone);
+    opacity:.5; pointer-events:none;
+    animation:breathe 11s ease-in-out infinite;
+  }
+  .sigil-mark .halo{color:var(--sigil);}
+  @keyframes breathe{
+    0%,100%{opacity:.42; transform:scale(1);}
+    50%{opacity:.6; transform:scale(1.03);}
+  }
+  @media (max-width:820px){
+    .sigil-mark{width:210px; right:-46px; top:auto; bottom:-40px; opacity:.16;}
+  }
+
+  /* ---------- LOAD RACK ---------- */
+  .rack{position:relative; z-index:1; background:var(--ash); border-bottom:1px solid var(--line);}
+  .rack-inner{max-width:1180px; margin:0 auto; padding:16px 24px; display:flex; align-items:center; gap:22px;}
+  .rack-label{
+    font-family:'Share Tech Mono',monospace; font-size:10px; color:var(--chrome-dim);
+    letter-spacing:.24em; text-transform:uppercase; white-space:nowrap; line-height:1.8;
+  }
+  .rack-label b{
+    color:var(--sigil); font-family:'Cormorant Garamond',serif;
+    font-size:27px; font-weight:600; letter-spacing:0; display:block; line-height:1;
+  }
+  .rack-track{
+    flex:1; min-width:60px; height:28px; display:flex; align-items:center; gap:5px;
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    padding:4px 0; overflow:hidden;
+  }
+  .tooth{width:10px; color:var(--sigil); flex-shrink:0;}
+  .rack-over{font-family:'Share Tech Mono',monospace; font-size:10px; color:var(--chrome-dim); white-space:nowrap; letter-spacing:.14em;}
 
   /* ---------- SECTION TABS ---------- */
   nav.section-tabs{
-    position:sticky; top:0; z-index:6;
-    display:flex; gap:6px; padding:14px 24px 0;
-    background:rgba(238,242,249,.94); backdrop-filter:blur(8px);
-    overflow-x:auto;
-  }
-  .tab-btn{
-    font-family:'Anton',sans-serif; font-weight:400; letter-spacing:.02em;
-    font-size:15px; text-transform:uppercase;
-    background:transparent; color:var(--steel); border:none; border-bottom:3px solid transparent;
-    padding:10px 16px 12px; cursor:pointer; white-space:nowrap;
-  }
-  .tab-btn:hover{color:var(--navy);}
-  .tab-btn.active{color:var(--navy); border-color:var(--cobalt);}
-
-  /* ---------- FILTER NAV ---------- */
-  nav.filters{
-    position:sticky; top:41px; z-index:5;
-    display:flex; gap:8px; padding:12px 24px;
-    background:rgba(238,242,249,.94); backdrop-filter:blur(8px);
+    position:sticky; top:0; z-index:8;
+    background:color-mix(in srgb, var(--void) 90%, transparent);
+    backdrop-filter:blur(10px);
     border-bottom:1px solid var(--line);
-    overflow-x:auto;
   }
-  .filter-btn{
-    font-family:'Inter',sans-serif; font-weight:600; font-size:13px;
-    background:var(--paper-raised); color:var(--steel); border:1px solid var(--line-strong);
-    padding:8px 16px; border-radius:999px; cursor:pointer; white-space:nowrap;
-    transition:all .15s ease;
+  .tabs-inner{
+    max-width:1180px; margin:0 auto; display:flex; align-items:center; gap:2px;
+    padding:0 24px; overflow-x:auto; scrollbar-width:none;
   }
-  .filter-btn:hover{color:var(--navy); border-color:var(--cobalt);}
-  .filter-btn.active{background:var(--navy); color:#fff; border-color:var(--navy);}
+  .tabs-inner::-webkit-scrollbar{display:none;}
+  .tab-btn{
+    font-family:'Share Tech Mono',monospace; font-size:12px;
+    letter-spacing:.2em; text-transform:uppercase;
+    background:none; color:var(--chrome-dim); border:none;
+    border-bottom:2px solid transparent;
+    padding:16px 16px 14px; cursor:pointer; white-space:nowrap;
+    transition:color .18s ease;
+  }
+  .tab-btn span{color:var(--line-strong); margin-right:8px;}
+  .tab-btn:hover{color:var(--bone);}
+  .tab-btn.active{color:var(--bone); border-color:var(--sigil);}
+  .tab-btn.active span{color:var(--sigil);}
+  .mode-toggle{
+    margin-left:auto; background:none; border:1px solid var(--line-strong);
+    color:var(--chrome); font-family:'Share Tech Mono',monospace;
+    font-size:10.5px; letter-spacing:.18em; text-transform:uppercase;
+    padding:8px 14px; cursor:pointer; white-space:nowrap;
+    clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px);
+    transition:color .18s ease, border-color .18s ease;
+  }
+  .mode-toggle:hover{color:var(--sigil); border-color:var(--sigil);}
+
+  /* ---------- FILTERS ---------- */
   .panel{display:none;}
   .panel.active{display:block;}
+  nav.filters{
+    position:sticky; top:47px; z-index:7;
+    background:color-mix(in srgb, var(--void) 90%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .filters-inner{
+    max-width:1180px; margin:0 auto; display:flex; gap:8px;
+    padding:12px 24px; overflow-x:auto; scrollbar-width:none;
+  }
+  .filters-inner::-webkit-scrollbar{display:none;}
+  .filter-btn{
+    font-family:'Share Tech Mono',monospace; font-size:11px;
+    letter-spacing:.14em; text-transform:uppercase;
+    background:transparent; color:var(--chrome); border:1px solid var(--line-strong);
+    padding:8px 15px; cursor:pointer; white-space:nowrap;
+    clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px);
+    transition:all .18s ease;
+  }
+  .filter-btn:hover{color:var(--bone); border-color:var(--sigil);}
+  .filter-btn.active{background:var(--sigil); color:#0a0910; border-color:var(--sigil);}
+  body.day .filter-btn.active{color:#f7f6fa;}
+
+  /* ---------- LAYOUT ---------- */
+  main{max-width:1180px; margin:0 auto; padding:36px 24px 96px; position:relative; z-index:1;}
+  .section-header{margin:0 0 28px;}
+  .section-header .idx{
+    font-family:'Share Tech Mono',monospace; font-size:11px; letter-spacing:.26em;
+    text-transform:uppercase; color:var(--sigil);
+    display:flex; align-items:center; gap:10px; margin-bottom:12px;
+  }
+  .section-header .idx .glyph{width:11px; height:22px; flex-shrink:0;}
+  .section-header h2{
+    font-weight:300; font-size:clamp(30px,5.5vw,46px); line-height:1.05;
+    margin:0 0 10px; letter-spacing:.01em;
+  }
+  .section-header h2 em{font-style:italic; color:var(--sigil); font-weight:400;}
+  .section-header p{color:var(--chrome); font-size:17.5px; line-height:1.6; font-weight:300; margin:0; max-width:580px;}
+  .section-header .thorn-rule{display:block; width:100%; max-width:580px; height:18px; color:var(--line-strong); margin-top:20px;}
 
   /* ---------- FEED ---------- */
-  main{padding:28px 24px 80px; position:relative; z-index:1;}
-  .feed{columns:3 200px; column-gap:14px;}
-  @media (max-width:640px){ .feed{columns:1 260px;} }
+  .feed{columns:3 230px; column-gap:16px;}
+  @media (max-width:640px){ .feed{columns:1;} }
   .card{
     break-inside:avoid; margin-bottom:16px; position:relative;
-    background:var(--paper-raised); border:1px solid var(--line); border-radius:12px;
-    overflow:hidden; transition:border-color .15s ease, box-shadow .15s ease;
+    background:var(--ash); border:1px solid var(--line);
+    transition:border-color .2s ease, box-shadow .2s ease, transform .2s ease;
   }
-  .card:hover{border-color:var(--cobalt); box-shadow:0 4px 18px rgba(39,69,214,.1);}
-  .card-media{width:100%; aspect-ratio:9/16; overflow:hidden; background:var(--ice);}
-  .card-media img, .card-media video{width:100%; height:100%; display:block; object-fit:cover;}
-  .card-body{padding:14px 16px 16px;}
+  .card:hover{border-color:var(--line-strong); box-shadow:0 12px 36px var(--shadow), 0 0 0 1px var(--glow); transform:translateY(-2px);}
+  .card-media{width:100%; aspect-ratio:9/16; overflow:hidden; background:var(--ash-2);}
+  .card-media img,.card-media video{width:100%; height:100%; display:block; object-fit:cover;}
+  .card-body{padding:16px 18px 18px;}
   .card-tag{
-    font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.1em;
-    text-transform:uppercase; color:var(--cobalt); font-weight:600; margin-bottom:6px; display:block;
+    font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--sigil);
+    display:flex; align-items:center; gap:7px; margin-bottom:9px;
   }
-  .card-caption{font-size:14px; line-height:1.45; color:var(--ink); margin-bottom:8px;}
-  .card-meta{display:flex; justify-content:space-between; align-items:center; gap:10px;}
-  .card-source{font-size:12px; color:var(--steel); text-decoration:none; border-bottom:1px dotted var(--steel);}
-  .card-source:hover{color:var(--cobalt); border-color:var(--cobalt);}
+  .card-tag .glyph, .item-tag .glyph{width:9px; height:9px; flex-shrink:0;}
+  .card-caption{font-size:19px; line-height:1.35; font-weight:400; margin-bottom:10px;}
+  .card-meta{display:flex; justify-content:space-between; align-items:center; gap:10px; min-height:16px;}
+  .card-source{
+    font-family:'Share Tech Mono',monospace; font-size:10.5px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--chrome); text-decoration:none;
+    border-bottom:1px solid var(--line-strong);
+  }
+  .card-source:hover{color:var(--sigil); border-color:var(--sigil);}
 
-  /* corner registration marks — blueprint signature */
-  .card::before, .card::after{
-    content:''; position:absolute; width:8px; height:8px; z-index:2; pointer-events:none;
-    border-top:1.5px solid var(--line-strong); border-left:1.5px solid var(--line-strong);
-    top:6px; left:6px;
+  /* barbed registration marks */
+  .card::before,.card::after,.item-card::before,.item-card::after{
+    content:''; position:absolute; width:11px; height:11px; z-index:2; pointer-events:none;
+    border-top:1px solid var(--line-strong); border-left:1px solid var(--line-strong);
+    top:-1px; left:-1px; transition:width .22s ease, height .22s ease, border-color .22s ease;
   }
-  .card::after{ left:auto; right:6px; border-left:none; border-right:1.5px solid var(--line-strong); }
+  .card::after,.item-card::after{
+    top:auto; left:auto; right:-1px; bottom:-1px;
+    border-top:none; border-left:none;
+    border-bottom:1px solid var(--line-strong); border-right:1px solid var(--line-strong);
+  }
+  .card:hover::before,.card:hover::after,
+  .item-card:hover::before,.item-card:hover::after{width:22px; height:22px; border-color:var(--sigil);}
 
-  /* ---------- GRID PANELS (apps / gear) ---------- */
-  .item-grid{
-    display:grid; grid-template-columns:repeat(auto-fill, minmax(240px,1fr)); gap:16px;
-  }
+  /* ---------- ITEM GRIDS ---------- */
+  .item-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:16px;}
   .item-card{
-    position:relative;
-    background:var(--paper-raised); border:1px solid var(--line); border-radius:12px;
-    padding:18px; transition:border-color .15s ease, box-shadow .15s ease;
+    position:relative; background:var(--ash); border:1px solid var(--line);
+    padding:22px; display:flex; flex-direction:column;
+    transition:border-color .2s ease, box-shadow .2s ease, transform .2s ease;
   }
-  .item-card:hover{border-color:var(--cobalt); box-shadow:0 4px 18px rgba(39,69,214,.1);}
-  .item-card::before, .item-card::after{
-    content:''; position:absolute; width:8px; height:8px; z-index:2; pointer-events:none;
-    border-top:1.5px solid var(--line-strong); border-left:1.5px solid var(--line-strong);
-    top:6px; left:6px;
-  }
-  .item-card::after{ left:auto; right:6px; border-left:none; border-right:1.5px solid var(--line-strong); }
+  .item-card:hover{border-color:var(--line-strong); box-shadow:0 12px 36px var(--shadow), 0 0 0 1px var(--glow); transform:translateY(-2px);}
   .item-thumb{
-    width:100%; max-height:160px; object-fit:cover; border-radius:8px; margin-bottom:12px;
-    background:var(--ice); display:block;
+    width:100%; max-height:170px; object-fit:cover; margin-bottom:16px;
+    background:var(--ash-2); display:block; border:1px solid var(--line);
   }
-  .item-top{display:flex; align-items:center; gap:12px; margin-bottom:10px;}
+  .item-top{display:flex; align-items:flex-start; gap:14px; margin-bottom:12px;}
   .item-icon{
-    width:42px; height:42px; border-radius:10px; background:var(--ice); color:var(--cobalt);
-    display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0;
+    width:46px; height:46px; flex-shrink:0; font-size:19px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--ash-2); border:1px solid var(--line-strong);
+    clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
   }
-  .item-name{font-family:'Anton',sans-serif; font-weight:400; font-size:18px; letter-spacing:.01em; color:var(--navy); text-transform:uppercase;}
+  .item-name{font-size:23px; font-weight:400; line-height:1.15; letter-spacing:.01em;}
   .item-tag{
-    font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.09em; text-transform:uppercase;
-    color:var(--cobalt); font-weight:600; display:block; margin-top:2px;
+    font-family:'Share Tech Mono',monospace; font-size:9.5px; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--sigil);
+    display:flex; align-items:center; gap:7px; margin-top:7px;
   }
-  .item-desc{font-size:13.5px; line-height:1.5; color:var(--steel); margin-bottom:12px;}
-  .item-meta{display:flex; justify-content:space-between; align-items:center; gap:10px;}
+  .item-desc{font-size:17px; line-height:1.55; color:var(--chrome); font-weight:300; margin-bottom:16px;}
+  .item-meta{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:auto; min-height:16px;}
   .item-link{
-    font-size:12.5px; font-weight:600; color:var(--cobalt); text-decoration:none;
-    border-bottom:1px dotted var(--cobalt);
+    font-family:'Share Tech Mono',monospace; font-size:10.5px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--sigil); text-decoration:none;
+    border-bottom:1px solid var(--line-strong);
   }
-  .item-link:hover{color:var(--electric); border-color:var(--electric);}
+  .item-link:hover{color:var(--sigil-hot); border-color:var(--sigil-hot);}
 
-  .empty-state{ text-align:center; padding:70px 20px; color:var(--steel); }
-  .empty-state .em-icon{font-size:38px; margin-bottom:14px;}
-  .empty-state h3{font-family:'Anton',sans-serif; font-weight:400; font-size:24px; color:var(--navy); letter-spacing:.02em; margin:0 0 8px; text-transform:uppercase;}
-  .empty-state p{max-width:360px; margin:0 auto; font-size:14px; line-height:1.5;}
-
-  /* section divider — wave signature */
-  .section-header{padding:8px 0 18px;}
-  .section-header h2{
-    font-family:'Anton',sans-serif; font-weight:400; font-size:clamp(24px,4vw,34px);
-    color:var(--navy); text-transform:uppercase; letter-spacing:.01em; margin:0 0 4px;
-  }
-  .section-header p{color:var(--steel); font-size:13.5px; margin:0; max-width:480px;}
+  /* ---------- EMPTY ---------- */
+  .empty-state{text-align:center; padding:84px 20px; color:var(--chrome);}
+  .empty-state .em-sigil{width:66px; height:104px; color:var(--bone); opacity:.4; margin-bottom:20px;}
+  .empty-state h3{font-weight:300; font-size:30px; margin:0 0 10px; letter-spacing:.01em; color:var(--bone);}
+  .empty-state h3 em{font-style:italic; color:var(--sigil);}
+  .empty-state p{max-width:380px; margin:0 auto; font-size:17px; line-height:1.55; font-weight:300;}
 
   /* ---------- FOOTER ---------- */
-  footer{
-    border-top:1px solid var(--line); padding:28px 24px; position:relative; z-index:1;
-    display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between;
-    background:var(--navy); color:#fff;
+  footer{position:relative; z-index:1; border-top:1px solid var(--line); background:var(--ash);}
+  .spires{display:block; width:100%; height:74px; color:var(--bone); opacity:.16;}
+  .foot-inner{
+    max-width:1180px; margin:0 auto; padding:8px 24px 36px;
+    display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between;
   }
-  footer .foot-brand{font-family:'Anton',sans-serif; font-size:18px; letter-spacing:.03em; text-transform:uppercase;}
-  footer .foot-tiktok{
-    display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace;
-    font-size:13px; color:#b9c6ec; text-decoration:none;
+  .foot-brand{font-size:24px; font-weight:300; letter-spacing:.06em; text-transform:uppercase;}
+  .foot-brand em{font-style:italic; color:var(--sigil);}
+  .foot-note{
+    font-family:'Share Tech Mono',monospace; font-size:10.5px; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--chrome-dim);
   }
-  footer .foot-tiktok:hover{color:#fff;}
-  footer .foot-tiktok svg{width:15px;height:15px;}
+
+  @media (prefers-reduced-motion:reduce){ *{animation:none !important; transition:none !important;} }
 </style>
 </head>
 <body>
-<div class="grid-bg"></div>
+
+<div class="bloom"></div>
+<svg class="lattice" aria-hidden="true" preserveAspectRatio="none" viewBox="0 0 1200 900" fill="none">
+  <g stroke="currentColor" stroke-width="1" stroke-linecap="round">
+    <path d="M-20 150 C 200 90, 300 250, 560 190 S 960 70, 1220 210"/>
+    <path d="M120 130 l-16 -12 M120 130 l-16 12 M640 176 l18 -12 M640 176 l18 12"/>
+    <path d="M-20 700 C 240 780, 360 560, 620 640 S 1000 780, 1220 620"/>
+    <path d="M300 690 l-16 -12 M300 690 l-16 12 M900 706 l18 -12 M900 706 l18 12"/>
+    <path d="M170 -20 C 240 240, 110 400, 200 660 S 300 820, 250 920"/>
+    <path d="M1010 -20 C 1080 220, 960 420, 1050 680 S 1130 820, 1080 920"/>
+    <path d="M600 -20 V920 M580 240 h40 M584 236 l-10 -8 M584 244 l-10 8 M616 236 l10 -8 M616 244 l10 8"/>
+  </g>
+</svg>
+<div class="grain"></div>
 
 <header class="hero">
-  <svg class="hero-wave" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M10 140 C 40 100, 60 180, 90 130 S 140 90, 170 140 S 190 60, 190 20" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
-    <path d="M-10 170 C 20 130, 40 200, 70 160 S 120 120, 150 170 S 180 100, 210 60" stroke="currentColor" stroke-width="6" stroke-linecap="round" opacity=".6"/>
-  </svg>
-  <div class="eyebrow">Training log &amp; content vault</div>
-  <h1 class="wordmark">PROJ<span>.</span>ZERO</h1>
-  <p class="hero-sub">Everything I lift, film, and steal from Pinterest lives here — gym pics, form breakdowns, the apps I actually use, and the gear worth buying.</p>
-  <div class="hero-actions">
-    <a class="tiktok-btn" href="https://www.tiktok.com/@proj.zero1" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82a4.28 4.28 0 0 1-.34-.62A5 5 0 0 1 15.8 3h-3.4v13.5a2.7 2.7 0 1 1-2.16-2.65V9.9a6.24 6.24 0 1 0 5.56 6.2V9.14a7.7 7.7 0 0 0 4.5 1.43V7.13a4.29 4.29 0 0 1-3.7-1.31z"/></svg>
-      Follow on TikTok
-    </a>
-    <span class="handle-chip">@<b>proj.zero1</b></span>
+  <div class="hero-inner">
+
+    <!-- HERO SIGIL — thorned cross, ring, dagger -->
+    <svg class="sigil-mark" viewBox="0 0 260 430" fill="none" aria-hidden="true">
+      <g stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M130 16 V352"/>
+        <path d="M130 16 l-9 22 l9 -8 l9 8 z"/>
+        <path d="M130 352 C120 374, 125 400, 130 420 C135 400, 140 374, 130 352 Z"/>
+        <path d="M46 118 H214"/>
+        <path d="M46 118 C64 106, 72 92, 74 74 C80 94, 90 106, 106 114"/>
+        <path d="M214 118 C196 106, 188 92, 186 74 C180 94, 170 106, 154 114"/>
+        <path d="M70 118 l-16 -11 M70 118 l-16 11 M190 118 l16 -11 M190 118 l16 11"/>
+        <path d="M130 62 h-18 M130 62 h18 M112 62 l-7 -6 M112 62 l-7 6 M148 62 l7 -6 M148 62 l7 6"/>
+        <circle cx="130" cy="200" r="62"/>
+        <path d="M68 200 C90 152, 170 152, 192 200 C170 248, 90 248, 68 200"/>
+        <path d="M96 168 l-14 -8 M96 168 l-2 -16 M164 232 l14 8 M164 232 l2 16"/>
+        <path d="M130 268 C110 284, 101 304, 99 326 C108 306, 119 293, 130 286"/>
+        <path d="M130 268 C150 284, 159 304, 161 326 C152 306, 141 293, 130 286"/>
+        <path d="M130 306 C117 319, 111 334, 110 350 C116 336, 124 327, 130 322"/>
+        <path d="M130 306 C143 319, 149 334, 150 350 C144 336, 136 327, 130 322"/>
+      </g>
+      <g class="halo" stroke="currentColor" stroke-width="1" fill="none" opacity=".75">
+        <circle cx="130" cy="200" r="44"/>
+        <circle cx="130" cy="200" r="7"/>
+      </g>
+    </svg>
+
+    <div class="eyebrow">
+      <svg class="barb" viewBox="0 0 48 12" fill="none" aria-hidden="true">
+        <g stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+          <path d="M0 6 H48"/>
+          <path d="M10 6 L18 1 M10 6 L18 11 M30 6 L38 1 M30 6 L38 11"/>
+        </g>
+      </svg>
+      Training log &amp; content vault
+    </div>
+
+    <h1 class="wordmark">Proj<em>.</em>Zero</h1>
+
+    <!-- BARBED RULE -->
+    <svg class="hero-rule" viewBox="0 0 660 18" preserveAspectRatio="none" fill="none" aria-hidden="true">
+      <g stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+        <path d="M0 9 H660"/>
+        <path d="M110 9 C124 3, 138 2, 150 6 C138 7, 128 10, 121 15"/>
+        <path d="M550 9 C536 3, 522 2, 510 6 C522 7, 532 10, 539 15"/>
+        <path d="M330 0 V18 M314 6 h32 M318 2 l-9 -2 M318 10 l-9 3 M342 2 l9 -2 M342 10 l9 3"/>
+        <path d="M230 9 l-11 -6 M230 9 l-11 6 M430 9 l11 -6 M430 9 l11 6"/>
+      </g>
+    </svg>
+
+    <p class="hero-sub">Everything I lift, film, and steal from Pinterest lives here — <b>gym pics, form breakdowns</b>, the apps I actually use, and the gear worth buying.</p>
+
+    <div class="index-strip">
+      <div class="index-cell">Clips<b id="cntFeed">0</b></div>
+      <div class="index-cell">Apps<b id="cntApps">0</b></div>
+      <div class="index-cell">Gear<b id="cntGear">0</b></div>
+      <div class="index-cell">Fuel<b id="cntFuel">0</b></div>
+      <div class="index-cell">Recovery<b id="cntRecovery">0</b></div>
+    </div>
   </div>
 </header>
 
-<div class="plate-rack">
-  <div class="bar-label">Logged<b id="plateCount">0</b></div>
-  <div class="bar-track">
-    <div class="plates" id="plates"></div>
+<div class="rack">
+  <div class="rack-inner">
+    <div class="rack-label">Logged<b id="plateCount">0</b></div>
+    <div class="rack-track" id="plates"></div>
   </div>
 </div>
 
 <nav class="section-tabs">
-  <button class="tab-btn active" data-section="feed">Feed</button>
-  <button class="tab-btn" data-section="apps">Apps</button>
-  <button class="tab-btn" data-section="gear">Gear</button>
-  <button class="tab-btn" data-section="fuel">Fuel</button>
-  <button class="tab-btn" data-section="recovery">Recovery</button>
+  <div class="tabs-inner">
+    <button class="tab-btn active" data-section="feed"><span>01</span>Feed</button>
+    <button class="tab-btn" data-section="apps"><span>02</span>Apps</button>
+    <button class="tab-btn" data-section="gear"><span>03</span>Gear</button>
+    <button class="tab-btn" data-section="fuel"><span>04</span>Fuel</button>
+    <button class="tab-btn" data-section="recovery"><span>05</span>Recovery</button>
+    <button class="mode-toggle" id="modeToggle">Day</button>
+  </div>
 </nav>
 
 <!-- ===================== FEED PANEL ===================== -->
 <div class="panel active" data-panel="feed">
   <nav class="filters">
-    <button class="filter-btn active" data-filter="all">All</button>
-    <button class="filter-btn" data-filter="gym">Gym Pics</button>
-    <button class="filter-btn" data-filter="video">Videos</button>
-    <button class="filter-btn" data-filter="guide">Guides &amp; Tutorials</button>
-    <button class="filter-btn" data-filter="pinterest">Pinterest Finds</button>
+    <div class="filters-inner">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="gym">Gym Pics</button>
+      <button class="filter-btn" data-filter="video">Videos</button>
+      <button class="filter-btn" data-filter="guide">Guides &amp; Tutorials</button>
+      <button class="filter-btn" data-filter="pinterest">Pinterest Finds</button>
+    </div>
   </nav>
   <main>
+    <div class="section-header">
+      <span class="idx">
+        <svg class="glyph" viewBox="0 0 12 24" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M6 1 V23"/><path d="M1 7 H11"/><path d="M6 23 l-3 -6 l3 2 l3 -2 z"/></g></svg>
+        01 — Feed
+      </span>
+      <h2>The <em>log.</em></h2>
+      <p>Gym pics, form breakdowns, and Pinterest finds, newest first.</p>
+      <svg class="thorn-rule" viewBox="0 0 580 18" preserveAspectRatio="none" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M0 9 H580"/><path d="M120 9 C134 3, 146 2, 158 6 C146 7, 136 10, 129 15"/><path d="M460 9 C446 3, 434 2, 422 6 C434 7, 444 10, 451 15"/><path d="M290 1 V17 M278 6 h24 M282 3 l-8 -2 M282 9 l-8 3 M298 3 l8 -2 M298 9 l8 3"/></g></svg>
+    </div>
     <div class="feed" id="feed"></div>
     <div class="empty-state" id="emptyFeed" style="display:none;">
-      <div class="em-icon">🏋️</div>
-      <h3>Rack's empty</h3>
+      <svg class="em-sigil" viewBox="0 0 66 104" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M33 4 V82"/><path d="M33 4 l-6 14 l6 -5 l6 5 z"/><path d="M33 82 C29 90, 31 96, 33 102 C35 96, 37 90, 33 82 Z"/><path d="M12 30 H54"/><path d="M12 30 C21 24, 25 17, 26 8 C29 18, 34 24, 42 28"/><path d="M54 30 C45 24, 41 17, 40 8 C37 18, 32 24, 24 28"/><circle cx="33" cy="55" r="15"/><path d="M18 55 C24 44, 42 44, 48 55 C42 66, 24 66, 18 55"/></g></svg>
+      <h3>Rack's <em>empty</em></h3>
       <p>Add your first gym pic, video, or Pinterest find to start loading the bar.</p>
     </div>
   </main>
@@ -307,21 +466,28 @@
 <!-- ===================== APPS PANEL ===================== -->
 <div class="panel" data-panel="apps">
   <nav class="filters">
-    <button class="filter-btn active" data-filter="all">All</button>
-    <button class="filter-btn" data-filter="training">Training</button>
-    <button class="filter-btn" data-filter="nutrition">Nutrition</button>
-    <button class="filter-btn" data-filter="recovery">Recovery</button>
-    <button class="filter-btn" data-filter="mindset">Mindset</button>
+    <div class="filters-inner">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="training">Training</button>
+      <button class="filter-btn" data-filter="nutrition">Nutrition</button>
+      <button class="filter-btn" data-filter="recovery">Recovery</button>
+      <button class="filter-btn" data-filter="mindset">Mindset</button>
+    </div>
   </nav>
   <main>
     <div class="section-header">
-      <h2>App Recommendations</h2>
+      <span class="idx">
+        <svg class="glyph" viewBox="0 0 12 24" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M6 1 V23"/><path d="M1 7 H11"/><path d="M6 23 l-3 -6 l3 2 l3 -2 z"/></g></svg>
+        02 — Apps
+      </span>
+      <h2>App <em>recommendations.</em></h2>
       <p>What's actually on my phone — logging workouts, keeping food honest, and taking the edge off gym anxiety.</p>
+      <svg class="thorn-rule" viewBox="0 0 580 18" preserveAspectRatio="none" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M0 9 H580"/><path d="M120 9 C134 3, 146 2, 158 6 C146 7, 136 10, 129 15"/><path d="M460 9 C446 3, 434 2, 422 6 C434 7, 444 10, 451 15"/><path d="M290 1 V17 M278 6 h24 M282 3 l-8 -2 M282 9 l-8 3 M298 3 l8 -2 M298 9 l8 3"/></g></svg>
     </div>
     <div class="item-grid" id="appsGrid"></div>
     <div class="empty-state" id="emptyApps" style="display:none;">
-      <div class="em-icon">📱</div>
-      <h3>No apps saved yet</h3>
+      <svg class="em-sigil" viewBox="0 0 66 104" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M33 4 V82"/><path d="M33 4 l-6 14 l6 -5 l6 5 z"/><path d="M33 82 C29 90, 31 96, 33 102 C35 96, 37 90, 33 82 Z"/><path d="M12 30 H54"/><path d="M12 30 C21 24, 25 17, 26 8 C29 18, 34 24, 42 28"/><path d="M54 30 C45 24, 41 17, 40 8 C37 18, 32 24, 24 28"/><circle cx="33" cy="55" r="15"/><path d="M18 55 C24 44, 42 44, 48 55 C42 66, 24 66, 18 55"/></g></svg>
+      <h3>No apps <em>saved yet</em></h3>
       <p>Add the apps you actually use for training, food, or recovery.</p>
     </div>
   </main>
@@ -330,21 +496,28 @@
 <!-- ===================== GEAR PANEL ===================== -->
 <div class="panel" data-panel="gear">
   <nav class="filters">
-    <button class="filter-btn active" data-filter="all">All</button>
-    <button class="filter-btn" data-filter="home-gym">Home Gym</button>
-    <button class="filter-btn" data-filter="recovery">Recovery</button>
-    <button class="filter-btn" data-filter="apparel">Apparel</button>
-    <button class="filter-btn" data-filter="tech">Tech</button>
+    <div class="filters-inner">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="home-gym">Home Gym</button>
+      <button class="filter-btn" data-filter="recovery">Recovery</button>
+      <button class="filter-btn" data-filter="apparel">Apparel</button>
+      <button class="filter-btn" data-filter="tech">Tech</button>
+    </div>
   </nav>
   <main>
     <div class="section-header">
-      <h2>Equipment</h2>
+      <span class="idx">
+        <svg class="glyph" viewBox="0 0 12 24" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M6 1 V23"/><path d="M1 7 H11"/><path d="M6 23 l-3 -6 l3 2 l3 -2 z"/></g></svg>
+        03 — Gear
+      </span>
+      <h2><em>Equipment.</em></h2>
       <p>The stuff worth buying — low-anxiety home gym essentials up to what's on my actual wishlist.</p>
+      <svg class="thorn-rule" viewBox="0 0 580 18" preserveAspectRatio="none" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M0 9 H580"/><path d="M120 9 C134 3, 146 2, 158 6 C146 7, 136 10, 129 15"/><path d="M460 9 C446 3, 434 2, 422 6 C434 7, 444 10, 451 15"/><path d="M290 1 V17 M278 6 h24 M282 3 l-8 -2 M282 9 l-8 3 M298 3 l8 -2 M298 9 l8 3"/></g></svg>
     </div>
     <div class="item-grid" id="gearGrid"></div>
     <div class="empty-state" id="emptyGear" style="display:none;">
-      <div class="em-icon">🏋️‍♂️</div>
-      <h3>No gear saved yet</h3>
+      <svg class="em-sigil" viewBox="0 0 66 104" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M33 4 V82"/><path d="M33 4 l-6 14 l6 -5 l6 5 z"/><path d="M33 82 C29 90, 31 96, 33 102 C35 96, 37 90, 33 82 Z"/><path d="M12 30 H54"/><path d="M12 30 C21 24, 25 17, 26 8 C29 18, 34 24, 42 28"/><path d="M54 30 C45 24, 41 17, 40 8 C37 18, 32 24, 24 28"/><circle cx="33" cy="55" r="15"/><path d="M18 55 C24 44, 42 44, 48 55 C42 66, 24 66, 18 55"/></g></svg>
+      <h3>No gear <em>saved yet</em></h3>
       <p>Add the equipment or apparel you'd actually recommend.</p>
     </div>
   </main>
@@ -353,21 +526,28 @@
 <!-- ===================== FUEL PANEL ===================== -->
 <div class="panel" data-panel="fuel">
   <nav class="filters">
-    <button class="filter-btn active" data-filter="all">All</button>
-    <button class="filter-btn" data-filter="meal-prep">Meal Prep</button>
-    <button class="filter-btn" data-filter="recipe">Recipes</button>
-    <button class="filter-btn" data-filter="guide">Nutrition Guides</button>
-    <button class="filter-btn" data-filter="supplement">Supplements</button>
+    <div class="filters-inner">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="meal-prep">Meal Prep</button>
+      <button class="filter-btn" data-filter="recipe">Recipes</button>
+      <button class="filter-btn" data-filter="guide">Nutrition Guides</button>
+      <button class="filter-btn" data-filter="supplement">Supplements</button>
+    </div>
   </nav>
   <main>
     <div class="section-header">
-      <h2>Diet &amp; Fuel</h2>
+      <span class="idx">
+        <svg class="glyph" viewBox="0 0 12 24" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M6 1 V23"/><path d="M1 7 H11"/><path d="M6 23 l-3 -6 l3 2 l3 -2 z"/></g></svg>
+        04 — Fuel
+      </span>
+      <h2>Diet &amp; <em>fuel.</em></h2>
       <p>Meal prep that actually happens, nutrition guides worth reading twice, and the supplements that earned a spot in the cabinet.</p>
+      <svg class="thorn-rule" viewBox="0 0 580 18" preserveAspectRatio="none" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M0 9 H580"/><path d="M120 9 C134 3, 146 2, 158 6 C146 7, 136 10, 129 15"/><path d="M460 9 C446 3, 434 2, 422 6 C434 7, 444 10, 451 15"/><path d="M290 1 V17 M278 6 h24 M282 3 l-8 -2 M282 9 l-8 3 M298 3 l8 -2 M298 9 l8 3"/></g></svg>
     </div>
     <div class="item-grid" id="fuelGrid"></div>
     <div class="empty-state" id="emptyFuel" style="display:none;">
-      <div class="em-icon">🥗</div>
-      <h3>Kitchen's empty</h3>
+      <svg class="em-sigil" viewBox="0 0 66 104" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M33 4 V82"/><path d="M33 4 l-6 14 l6 -5 l6 5 z"/><path d="M33 82 C29 90, 31 96, 33 102 C35 96, 37 90, 33 82 Z"/><path d="M12 30 H54"/><path d="M12 30 C21 24, 25 17, 26 8 C29 18, 34 24, 42 28"/><path d="M54 30 C45 24, 41 17, 40 8 C37 18, 32 24, 24 28"/><circle cx="33" cy="55" r="15"/><path d="M18 55 C24 44, 42 44, 48 55 C42 66, 24 66, 18 55"/></g></svg>
+      <h3>Kitchen's <em>empty</em></h3>
       <p>Add a meal prep routine, recipe, nutrition guide, or supplement worth recommending.</p>
     </div>
   </main>
@@ -376,32 +556,53 @@
 <!-- ===================== RECOVERY PANEL ===================== -->
 <div class="panel" data-panel="recovery">
   <nav class="filters">
-    <button class="filter-btn active" data-filter="all">All</button>
-    <button class="filter-btn" data-filter="yoga">Yoga</button>
-    <button class="filter-btn" data-filter="mobility">Stretching &amp; Mobility</button>
-    <button class="filter-btn" data-filter="sleep">Sleep</button>
-    <button class="filter-btn" data-filter="active">Active Recovery</button>
+    <div class="filters-inner">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="yoga">Yoga</button>
+      <button class="filter-btn" data-filter="mobility">Stretching &amp; Mobility</button>
+      <button class="filter-btn" data-filter="sleep">Sleep</button>
+      <button class="filter-btn" data-filter="active">Active Recovery</button>
+    </div>
   </nav>
   <main>
     <div class="section-header">
-      <h2>Recovery Process</h2>
+      <span class="idx">
+        <svg class="glyph" viewBox="0 0 12 24" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M6 1 V23"/><path d="M1 7 H11"/><path d="M6 23 l-3 -6 l3 2 l3 -2 z"/></g></svg>
+        05 — Recovery
+      </span>
+      <h2>Recovery <em>process.</em></h2>
       <p>The unglamorous half of training — yoga flows, mobility work, sleep habits, and easy-day movement that actually lets the gains happen.</p>
+      <svg class="thorn-rule" viewBox="0 0 580 18" preserveAspectRatio="none" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M0 9 H580"/><path d="M120 9 C134 3, 146 2, 158 6 C146 7, 136 10, 129 15"/><path d="M460 9 C446 3, 434 2, 422 6 C434 7, 444 10, 451 15"/><path d="M290 1 V17 M278 6 h24 M282 3 l-8 -2 M282 9 l-8 3 M298 3 l8 -2 M298 9 l8 3"/></g></svg>
     </div>
     <div class="item-grid" id="recoveryGrid"></div>
     <div class="empty-state" id="emptyRecovery" style="display:none;">
-      <div class="em-icon">🧘</div>
-      <h3>Nothing logged yet</h3>
+      <svg class="em-sigil" viewBox="0 0 66 104" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M33 4 V82"/><path d="M33 4 l-6 14 l6 -5 l6 5 z"/><path d="M33 82 C29 90, 31 96, 33 102 C35 96, 37 90, 33 82 Z"/><path d="M12 30 H54"/><path d="M12 30 C21 24, 25 17, 26 8 C29 18, 34 24, 42 28"/><path d="M54 30 C45 24, 41 17, 40 8 C37 18, 32 24, 24 28"/><circle cx="33" cy="55" r="15"/><path d="M18 55 C24 44, 42 44, 48 55 C42 66, 24 66, 18 55"/></g></svg>
+      <h3>Nothing <em>logged yet</em></h3>
       <p>Add a yoga flow, mobility routine, sleep habit, or active recovery idea worth sharing.</p>
     </div>
   </main>
 </div>
 
 <footer>
-  <div class="foot-brand">PROJ<span style="color:#7d95ff">.</span>ZERO</div>
-  <a class="foot-tiktok" href="https://www.tiktok.com/@proj.zero1" target="_blank" rel="noopener">
-    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82a4.28 4.28 0 0 1-.34-.62A5 5 0 0 1 15.8 3h-3.4v13.5a2.7 2.7 0 1 1-2.16-2.65V9.9a6.24 6.24 0 1 0 5.56 6.2V9.14a7.7 7.7 0 0 0 4.5 1.43V7.13a4.29 4.29 0 0 1-3.7-1.31z"/></svg>
-    @proj.zero1
-  </a>
+  <svg class="spires" viewBox="0 0 1200 74" preserveAspectRatio="none" fill="none" aria-hidden="true">
+    <g stroke="currentColor" stroke-width="1" stroke-linecap="round">
+      <path d="M0 73 H1200"/>
+      <path d="M100 73 V26 l-7 -8 M100 26 l7 -8 M100 18 V6 M94 12 h12"/>
+      <path d="M180 73 V40 l-6 -7 M180 40 l6 -7 M180 33 V24 M175 28 h10"/>
+      <path d="M340 73 V16 l-9 -10 M340 16 l9 -10 M340 6 V-2"/>
+      <path d="M420 73 V44 l-6 -6 M420 44 l6 -6"/>
+      <path d="M600 73 V10 l-10 -10 M600 10 l10 -10 M588 22 h24"/>
+      <path d="M700 73 V36 l-7 -8 M700 36 l7 -8 M700 28 V18 M694 23 h12"/>
+      <path d="M860 73 V22 l-8 -9 M860 22 l8 -9 M860 13 V3"/>
+      <path d="M950 73 V48 l-6 -7 M950 48 l6 -7"/>
+      <path d="M1090 73 V30 l-8 -9 M1090 30 l8 -9 M1090 21 V10 M1083 15 h14"/>
+      <path d="M260 73 V52 M500 73 V56 M780 73 V50 M1010 73 V58 M40 73 V60 M1160 73 V54"/>
+    </g>
+  </svg>
+  <div class="foot-inner">
+    <div class="foot-brand">Proj<em>.</em>Zero</div>
+    <div class="foot-note">Filed by hand — training log &amp; content vault</div>
+  </div>
 </footer>
 
 <script>
@@ -461,6 +662,9 @@
   const fuel  = FUEL;
   const recovery = RECOVERY;
 
+  // small barbed glyph used on every category tag
+  const TAG_GLYPH = '<svg class="glyph" viewBox="0 0 10 10" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M5 0 V10"/><path d="M0 3 H10"/></g></svg>';
+
   let activeFilter = { feed:'all', apps:'all', gear:'all', fuel:'all', recovery:'all' };
   let activeSection = 'feed';
 
@@ -469,6 +673,15 @@
     d.innerText = str == null ? '' : str;
     return d.innerHTML;
   }
+
+  /* ---------- DAY / NIGHT ---------- */
+  const modeToggle = document.getElementById('modeToggle');
+  modeToggle.addEventListener('click', ()=>{
+    const day = document.body.classList.toggle('day');
+    modeToggle.textContent = day ? 'Night' : 'Day';
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if(meta) meta.setAttribute('content', day ? '#e9e7ee' : '#0a0910');
+  });
 
   /* ---------- SECTION TABS ---------- */
   document.querySelectorAll('.tab-btn').forEach(btn=>{
@@ -541,7 +754,7 @@
       card.innerHTML = `
         ${mediaHtml}
         <div class="card-body">
-          <span class="card-tag">${tagLabel(p.category, p.type)}</span>
+          <span class="card-tag">${TAG_GLYPH}${tagLabel(p.category, p.type)}</span>
           ${p.caption ? `<div class="card-caption">${escapeHtml(p.caption)}</div>` : ''}
           <div class="card-meta">
             ${sourceHtml}
@@ -560,16 +773,19 @@
     platesEl.innerHTML = '';
     const shown = Math.min(count, 24);
     for(let i=0;i<shown;i++){
-      const p = document.createElement('div');
-      p.className = 'plate';
-      const h = 24 + (i % 3) * 4;
-      p.style.width = '7px';
-      p.style.height = h + 'px';
-      platesEl.appendChild(p);
+      const h = 14 + (i % 3) * 5;
+      const t = document.createElement('span');
+      t.className = 'tooth';
+      t.style.height = h + 'px';
+      t.innerHTML = `<svg viewBox="0 0 10 ${h}" preserveAspectRatio="none" fill="none" style="display:block;width:10px;height:${h}px">
+        <g stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+          <path d="M5 0 V${h}"/><path d="M5 ${h*0.4} L0.5 ${h*0.75}"/><path d="M5 ${h*0.4} L9.5 ${h*0.75}"/>
+        </g></svg>`;
+      platesEl.appendChild(t);
     }
     if(count > 24){
       const overflow = document.createElement('div');
-      overflow.style.cssText = 'font-family:JetBrains Mono,monospace;font-size:11px;color:var(--steel);margin-left:8px;white-space:nowrap;';
+      overflow.className = 'rack-over';
       overflow.textContent = '+' + (count - 24) + ' more';
       platesEl.appendChild(overflow);
     }
@@ -597,7 +813,7 @@
           <div class="item-icon">${escapeHtml(a.icon || '📱')}</div>
           <div>
             <div class="item-name">${escapeHtml(a.name)}</div>
-            <span class="item-tag">${appTagLabels[a.category] || a.category}</span>
+            <span class="item-tag">${TAG_GLYPH}${appTagLabels[a.category] || a.category}</span>
           </div>
         </div>
         ${a.desc ? `<div class="item-desc">${escapeHtml(a.desc)}</div>` : ''}
@@ -634,7 +850,7 @@
         <div class="item-top">
           <div>
             <div class="item-name">${escapeHtml(g.name)}</div>
-            <span class="item-tag">${gearTagLabels[g.category] || g.category}</span>
+            <span class="item-tag">${TAG_GLYPH}${gearTagLabels[g.category] || g.category}</span>
           </div>
         </div>
         ${g.desc ? `<div class="item-desc">${escapeHtml(g.desc)}</div>` : ''}
@@ -671,7 +887,7 @@
         <div class="item-top">
           <div>
             <div class="item-name">${escapeHtml(x.name)}</div>
-            <span class="item-tag">${fuelTagLabels[x.category] || x.category}</span>
+            <span class="item-tag">${TAG_GLYPH}${fuelTagLabels[x.category] || x.category}</span>
           </div>
         </div>
         ${x.desc ? `<div class="item-desc">${escapeHtml(x.desc)}</div>` : ''}
@@ -708,7 +924,7 @@
         <div class="item-top">
           <div>
             <div class="item-name">${escapeHtml(x.name)}</div>
-            <span class="item-tag">${recoveryTagLabels[x.category] || x.category}</span>
+            <span class="item-tag">${TAG_GLYPH}${recoveryTagLabels[x.category] || x.category}</span>
           </div>
         </div>
         ${x.desc ? `<div class="item-desc">${escapeHtml(x.desc)}</div>` : ''}
@@ -720,11 +936,22 @@
     });
   }
 
+  /* ---------- INDEX COUNTS ---------- */
+  function pad(n){ return n < 10 ? '0' + n : String(n); }
+  function renderCounts(){
+    document.getElementById('cntFeed').textContent = pad(posts.length);
+    document.getElementById('cntApps').textContent = pad(apps.length);
+    document.getElementById('cntGear').textContent = pad(gear.length);
+    document.getElementById('cntFuel').textContent = pad(fuel.length);
+    document.getElementById('cntRecovery').textContent = pad(recovery.length);
+  }
+
   renderFeed();
   renderApps();
   renderGear();
   renderFuel();
   renderRecovery();
+  renderCounts();
 })();
 </script>
 </body>
