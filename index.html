@@ -4,46 +4,48 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Zjim — training log & content vault. Gym pics, form breakdowns, the apps I actually use, and the gear worth buying.">
-<meta name="theme-color" content="#0a0910">
+<meta name="theme-color" content="#000000">
 <title>Zjim</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Pirata+One&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   /* =========================================================
-     PROJ.ZERO
-     Palette : OBSIDIAN / BONE / CHROME / PLASMA
-     Type    : Cormorant Garamond (display) + Share Tech Mono (data)
-     Graphics: hand-drawn cyber-sigilism line work (inline SVG)
+     PROJ.ZERO — MONOCHROME REVISION
+     Palette : VOID (#000) / BONE (#f5f5f5) / CHROME (grays) — no color
+     Type    : Pirata One (blackletter wordmark) + Cormorant Garamond
+               (display) + Share Tech Mono (data)
+     Graphics: hand-drawn cyber-sigilism line work (inline SVG),
+               xerox grain + CRT scanline overlay, winged thorn sigil
      ========================================================= */
   :root{
-    --void:#0a0910;
-    --ash:#12101c;
-    --ash-2:#191625;
-    --bone:#ece9f4;
-    --chrome:#8b88a4;
-    --chrome-dim:#5e5b78;
-    --sigil:#a97bff;
-    --sigil-hot:#c9a4ff;
-    --line:rgba(236,233,244,.13);
-    --line-strong:rgba(236,233,244,.30);
-    --glow:rgba(169,123,255,.20);
-    --shadow:rgba(0,0,0,.6);
+    --void:#000000;
+    --ash:#0a0a0a;
+    --ash-2:#141414;
+    --bone:#f5f5f5;
+    --chrome:#a8a8a8;
+    --chrome-dim:#6c6c6c;
+    --sigil:#ffffff;
+    --sigil-hot:#ffffff;
+    --line:rgba(245,245,245,.14);
+    --line-strong:rgba(245,245,245,.34);
+    --glow:rgba(255,255,255,.20);
+    --shadow:rgba(0,0,0,.78);
     --ink:var(--bone);
   }
   body.day{
-    --void:#e9e7ee;
-    --ash:#f7f6fa;
-    --ash-2:#efedf4;
-    --bone:#120f1b;
-    --chrome:#57546d;
-    --chrome-dim:#8a879f;
-    --sigil:#5c2fd6;
-    --sigil-hot:#7c4dff;
-    --line:rgba(18,15,27,.15);
-    --line-strong:rgba(18,15,27,.34);
-    --glow:rgba(92,47,214,.12);
-    --shadow:rgba(30,20,60,.12);
+    --void:#f2f2f2;
+    --ash:#fbfbfb;
+    --ash-2:#ececec;
+    --bone:#0a0a0a;
+    --chrome:#454545;
+    --chrome-dim:#8d8d8d;
+    --sigil:#000000;
+    --sigil-hot:#000000;
+    --line:rgba(10,10,10,.14);
+    --line-strong:rgba(10,10,10,.34);
+    --glow:rgba(0,0,0,.14);
+    --shadow:rgba(0,0,0,.14);
   }
 
   *{box-sizing:border-box;}
@@ -66,8 +68,28 @@
   /* ---------- ATMOSPHERE ---------- */
   .grain{
     position:fixed; inset:0; z-index:0; pointer-events:none;
-    opacity:.32; mix-blend-mode:overlay;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity:.4; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .scan{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    opacity:.5; mix-blend-mode:overlay;
+    background-image:repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,.09) 0px,
+      rgba(255,255,255,.09) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  }
+  body.day .scan{
+    background-image:repeating-linear-gradient(
+      to bottom,
+      rgba(0,0,0,.06) 0px,
+      rgba(0,0,0,.06) 1px,
+      transparent 1px,
+      transparent 3px
+    );
   }
   .bloom{
     position:fixed; inset:0; z-index:0; pointer-events:none;
@@ -75,7 +97,7 @@
   }
   .lattice{
     position:fixed; inset:0; z-index:0; pointer-events:none;
-    color:var(--bone); opacity:.07;
+    color:var(--bone); opacity:.08;
   }
 
   /* ---------- HERO ---------- */
@@ -88,20 +110,22 @@
   .eyebrow{
     font-family:'Share Tech Mono',monospace;
     font-size:11.5px; letter-spacing:.3em; text-transform:uppercase;
-    color:var(--sigil); margin-bottom:28px;
+    color:var(--bone); margin-bottom:28px;
     display:flex; align-items:center; gap:12px;
   }
-  .eyebrow .barb{width:44px; height:12px; flex-shrink:0;}
+  .eyebrow .barb{width:54px; height:14px; flex-shrink:0; color:var(--chrome);}
   h1.wordmark{
-    font-weight:300;
-    font-size:clamp(60px,15vw,152px);
-    line-height:.82; letter-spacing:.02em;
-    margin:0; text-transform:uppercase;
+    font-family:'Pirata One',serif;
+    font-weight:400;
+    font-size:clamp(58px,15vw,148px);
+    line-height:.86; letter-spacing:0;
+    margin:0; text-transform:none;
   }
   h1.wordmark em{
-    font-style:italic; font-weight:400; color:var(--sigil);
-    text-shadow:0 0 34px var(--glow);
+    font-style:normal; font-weight:400; color:var(--sigil);
+    text-shadow:0 0 34px var(--glow), 2px 0 0 rgba(255,255,255,.06), -2px 0 0 rgba(255,255,255,.06);
   }
+  body.day h1.wordmark em{ text-shadow:0 0 24px var(--glow); }
   .hero-rule{display:block; width:100%; max-width:660px; height:18px; color:var(--line-strong); margin:24px 0 24px;}
   .hero-sub{
     max-width:560px; color:var(--chrome);
@@ -125,21 +149,29 @@
     font-size:24px; letter-spacing:0; color:var(--bone); line-height:1;
   }
 
-  /* hero sigil */
+  /* hero sigil — winged thorned cross */
   .sigil-mark{
     position:absolute; right:0; top:-30px;
-    width:min(280px,40vw); height:auto; color:var(--bone);
-    opacity:.5; pointer-events:none;
+    width:min(300px,42vw); height:auto; color:var(--bone);
+    opacity:.55; pointer-events:none;
     animation:breathe 11s ease-in-out infinite;
   }
   .sigil-mark .halo{color:var(--sigil);}
+  .sigil-mark .wing{color:var(--chrome);}
   @keyframes breathe{
-    0%,100%{opacity:.42; transform:scale(1);}
-    50%{opacity:.6; transform:scale(1.03);}
+    0%,100%{opacity:.46; transform:scale(1);}
+    50%{opacity:.66; transform:scale(1.03);}
   }
   @media (max-width:820px){
-    .sigil-mark{width:210px; right:-46px; top:auto; bottom:-40px; opacity:.16;}
+    .sigil-mark{width:230px; right:-52px; top:auto; bottom:-40px; opacity:.18;}
   }
+
+  /* corner spiderweb accent */
+  .web-corner{
+    position:absolute; left:-10px; top:-10px; width:120px; height:120px;
+    color:var(--bone); opacity:.22; pointer-events:none;
+  }
+  @media (max-width:820px){ .web-corner{display:none;} }
 
   /* ---------- LOAD RACK ---------- */
   .rack{position:relative; z-index:1; background:var(--ash); border-bottom:1px solid var(--line);}
@@ -149,7 +181,7 @@
     letter-spacing:.24em; text-transform:uppercase; white-space:nowrap; line-height:1.8;
   }
   .rack-label b{
-    color:var(--sigil); font-family:'Cormorant Garamond',serif;
+    color:var(--bone); font-family:'Cormorant Garamond',serif;
     font-size:27px; font-weight:600; letter-spacing:0; display:block; line-height:1;
   }
   .rack-track{
@@ -157,7 +189,7 @@
     border-top:1px solid var(--line); border-bottom:1px solid var(--line);
     padding:4px 0; overflow:hidden;
   }
-  .tooth{width:10px; color:var(--sigil); flex-shrink:0;}
+  .tooth{width:10px; color:var(--bone); flex-shrink:0;}
   .rack-over{font-family:'Share Tech Mono',monospace; font-size:10px; color:var(--chrome-dim); white-space:nowrap; letter-spacing:.14em;}
 
   /* ---------- SECTION TABS ---------- */
@@ -217,15 +249,14 @@
     transition:all .18s ease;
   }
   .filter-btn:hover{color:var(--bone); border-color:var(--sigil);}
-  .filter-btn.active{background:var(--sigil); color:#0a0910; border-color:var(--sigil);}
-  body.day .filter-btn.active{color:#f7f6fa;}
+  .filter-btn.active{background:var(--sigil); color:var(--void); border-color:var(--sigil);}
 
   /* ---------- LAYOUT ---------- */
   main{max-width:1180px; margin:0 auto; padding:36px 24px 96px; position:relative; z-index:1;}
   .section-header{margin:0 0 28px;}
   .section-header .idx{
     font-family:'Share Tech Mono',monospace; font-size:11px; letter-spacing:.26em;
-    text-transform:uppercase; color:var(--sigil);
+    text-transform:uppercase; color:var(--bone);
     display:flex; align-items:center; gap:10px; margin-bottom:12px;
   }
   .section-header .idx .glyph{width:11px; height:22px; flex-shrink:0;}
@@ -247,14 +278,14 @@
   }
   .card:hover{border-color:var(--line-strong); box-shadow:0 12px 36px var(--shadow), 0 0 0 1px var(--glow); transform:translateY(-2px);}
   .card-media{width:100%; aspect-ratio:9/16; overflow:hidden; background:var(--ash-2);}
-  .card-media img,.card-media video{width:100%; height:100%; display:block; object-fit:cover;}
+  .card-media img,.card-media video{width:100%; height:100%; display:block; object-fit:cover; filter:grayscale(1) contrast(1.15) brightness(.94);}
   .card-body{padding:16px 18px 18px;}
   .card-tag{
     font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:.2em;
-    text-transform:uppercase; color:var(--sigil);
+    text-transform:uppercase; color:var(--bone);
     display:flex; align-items:center; gap:7px; margin-bottom:9px;
   }
-  .card-tag .glyph, .item-tag .glyph{width:9px; height:9px; flex-shrink:0;}
+  .card-tag .glyph, .item-tag .glyph{width:9px; height:9px; flex-shrink:0; color:var(--sigil);}
   .card-caption{font-size:19px; line-height:1.35; font-weight:400; margin-bottom:10px;}
   .card-meta{display:flex; justify-content:space-between; align-items:center; gap:10px; min-height:16px;}
   .card-source{
@@ -289,6 +320,7 @@
   .item-thumb{
     width:100%; max-height:170px; object-fit:cover; margin-bottom:16px;
     background:var(--ash-2); display:block; border:1px solid var(--line);
+    filter:grayscale(1) contrast(1.15) brightness(.94);
   }
   .item-top{display:flex; align-items:flex-start; gap:14px; margin-bottom:12px;}
   .item-icon{
@@ -296,38 +328,39 @@
     display:flex; align-items:center; justify-content:center;
     background:var(--ash-2); border:1px solid var(--line-strong);
     clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
+    filter:grayscale(1) contrast(1.3) brightness(1.15);
   }
   .item-name{font-size:23px; font-weight:400; line-height:1.15; letter-spacing:.01em;}
   .item-tag{
     font-family:'Share Tech Mono',monospace; font-size:9.5px; letter-spacing:.2em;
-    text-transform:uppercase; color:var(--sigil);
+    text-transform:uppercase; color:var(--bone);
     display:flex; align-items:center; gap:7px; margin-top:7px;
   }
   .item-desc{font-size:17px; line-height:1.55; color:var(--chrome); font-weight:300; margin-bottom:16px;}
   .item-meta{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:auto; min-height:16px;}
   .item-link{
     font-family:'Share Tech Mono',monospace; font-size:10.5px; letter-spacing:.14em;
-    text-transform:uppercase; color:var(--sigil); text-decoration:none;
+    text-transform:uppercase; color:var(--bone); text-decoration:none;
     border-bottom:1px solid var(--line-strong);
   }
   .item-link:hover{color:var(--sigil-hot); border-color:var(--sigil-hot);}
 
   /* ---------- EMPTY ---------- */
   .empty-state{text-align:center; padding:84px 20px; color:var(--chrome);}
-  .empty-state .em-sigil{width:66px; height:104px; color:var(--bone); opacity:.4; margin-bottom:20px;}
+  .empty-state .em-sigil{width:52px; height:112px; color:var(--bone); opacity:.45; margin-bottom:20px;}
   .empty-state h3{font-weight:300; font-size:30px; margin:0 0 10px; letter-spacing:.01em; color:var(--bone);}
   .empty-state h3 em{font-style:italic; color:var(--sigil);}
   .empty-state p{max-width:380px; margin:0 auto; font-size:17px; line-height:1.55; font-weight:300;}
 
   /* ---------- FOOTER ---------- */
   footer{position:relative; z-index:1; border-top:1px solid var(--line); background:var(--ash);}
-  .spires{display:block; width:100%; height:74px; color:var(--bone); opacity:.16;}
+  .spires{display:block; width:100%; height:74px; color:var(--bone); opacity:.2;}
   .foot-inner{
     max-width:1180px; margin:0 auto; padding:8px 24px 36px;
     display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between;
   }
-  .foot-brand{font-size:24px; font-weight:300; letter-spacing:.06em; text-transform:uppercase;}
-  .foot-brand em{font-style:italic; color:var(--sigil);}
+  .foot-brand{font-family:'Pirata One',serif; font-size:26px; font-weight:400; letter-spacing:.02em; text-transform:none;}
+  .foot-brand em{font-style:normal; color:var(--sigil);}
   .foot-note{
     font-family:'Share Tech Mono',monospace; font-size:10.5px; letter-spacing:.2em;
     text-transform:uppercase; color:var(--chrome-dim);
@@ -348,43 +381,75 @@
     <path d="M170 -20 C 240 240, 110 400, 200 660 S 300 820, 250 920"/>
     <path d="M1010 -20 C 1080 220, 960 420, 1050 680 S 1130 820, 1080 920"/>
     <path d="M600 -20 V920 M580 240 h40 M584 236 l-10 -8 M584 244 l-10 8 M616 236 l10 -8 M616 244 l10 8"/>
+    <!-- chain link strand -->
+    <g>
+      <ellipse cx="900" cy="120" rx="14" ry="9" transform="rotate(30 900 120)"/>
+      <ellipse cx="922" cy="134" rx="14" ry="9" transform="rotate(-25 922 134)"/>
+      <ellipse cx="944" cy="120" rx="14" ry="9" transform="rotate(30 944 120)"/>
+      <ellipse cx="966" cy="134" rx="14" ry="9" transform="rotate(-25 966 134)"/>
+    </g>
+    <!-- spiderweb fragment -->
+    <g>
+      <path d="M60 480 L60 560 M60 480 L110 500 M60 480 L20 512 M60 480 L96 540 M60 480 L28 548"/>
+      <path d="M40 496 Q60 500 78 494 M32 520 Q60 528 90 518 M40 545 Q60 540 82 536"/>
+    </g>
   </g>
 </svg>
+<div class="scan"></div>
 <div class="grain"></div>
 
 <header class="hero">
   <div class="hero-inner">
 
-    <!-- HERO SIGIL — thorned cross, ring, dagger -->
-    <svg class="sigil-mark" viewBox="0 0 260 430" fill="none" aria-hidden="true">
-      <g stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M130 16 V352"/>
-        <path d="M130 16 l-9 22 l9 -8 l9 8 z"/>
-        <path d="M130 352 C120 374, 125 400, 130 420 C135 400, 140 374, 130 352 Z"/>
-        <path d="M46 118 H214"/>
-        <path d="M46 118 C64 106, 72 92, 74 74 C80 94, 90 106, 106 114"/>
-        <path d="M214 118 C196 106, 188 92, 186 74 C180 94, 170 106, 154 114"/>
-        <path d="M70 118 l-16 -11 M70 118 l-16 11 M190 118 l16 -11 M190 118 l16 11"/>
-        <path d="M130 62 h-18 M130 62 h18 M112 62 l-7 -6 M112 62 l-7 6 M148 62 l7 -6 M148 62 l7 6"/>
-        <circle cx="130" cy="200" r="62"/>
-        <path d="M68 200 C90 152, 170 152, 192 200 C170 248, 90 248, 68 200"/>
-        <path d="M96 168 l-14 -8 M96 168 l-2 -16 M164 232 l14 8 M164 232 l2 16"/>
-        <path d="M130 268 C110 284, 101 304, 99 326 C108 306, 119 293, 130 286"/>
-        <path d="M130 268 C150 284, 159 304, 161 326 C152 306, 141 293, 130 286"/>
-        <path d="M130 306 C117 319, 111 334, 110 350 C116 336, 124 327, 130 322"/>
-        <path d="M130 306 C143 319, 149 334, 150 350 C144 336, 136 327, 130 322"/>
+    <!-- corner spiderweb -->
+    <svg class="web-corner" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+      <g stroke="currentColor" stroke-width="1" stroke-linecap="round">
+        <path d="M0 0 L120 0 M0 0 L0 120 M0 0 L120 120 M0 0 L80 8 M0 0 L8 80 M0 0 L120 46 M0 0 L46 120"/>
+        <path d="M10 4 Q30 20 8 46" />
+        <path d="M22 8 Q46 30 20 78" />
+        <path d="M40 12 Q66 44 34 104" />
+        <path d="M60 14 Q90 56 50 118" />
       </g>
-      <g class="halo" stroke="currentColor" stroke-width="1" fill="none" opacity=".75">
-        <circle cx="130" cy="200" r="44"/>
-        <circle cx="130" cy="200" r="7"/>
+    </svg>
+
+    <!-- HERO SIGIL — winged thorned cross with halo & dagger -->
+    <svg class="sigil-mark" viewBox="0 0 320 430" fill="none" aria-hidden="true">
+      <g class="wing" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M160 200 C118 178, 78 176, 30 196 C64 184, 92 186, 116 198"/>
+        <path d="M108 184 l-14 -6 M92 190 l-14 -3 M78 197 l-13 -1 M64 204 l-13 1"/>
+        <path d="M160 200 C202 178, 242 176, 290 196 C256 184, 228 186, 204 198"/>
+        <path d="M212 184 l14 -6 M228 190 l14 -3 M242 197 l13 -1 M256 204 l13 1"/>
+      </g>
+      <g stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M160 16 V352"/>
+        <path d="M160 16 l-9 22 l9 -8 l9 8 z"/>
+        <path d="M160 352 C150 374, 155 400, 160 420 C165 400, 170 374, 160 352 Z"/>
+        <path d="M76 118 H244"/>
+        <path d="M76 118 C94 106, 102 92, 104 74 C110 94, 120 106, 136 114"/>
+        <path d="M244 118 C226 106, 218 92, 216 74 C210 94, 200 106, 184 114"/>
+        <path d="M100 118 l-16 -11 M100 118 l-16 11 M220 118 l16 -11 M220 118 l16 11"/>
+        <path d="M160 62 h-18 M160 62 h18 M142 62 l-7 -6 M142 62 l-7 6 M178 62 l7 -6 M178 62 l7 6"/>
+        <circle cx="160" cy="200" r="62"/>
+        <path d="M98 200 C120 152, 200 152, 222 200 C200 248, 120 248, 98 200"/>
+        <path d="M126 168 l-14 -8 M126 168 l-2 -16 M194 232 l14 8 M194 232 l2 16"/>
+        <path d="M160 268 C140 284, 131 304, 129 326 C138 306, 149 293, 160 286"/>
+        <path d="M160 268 C180 284, 189 304, 191 326 C182 306, 171 293, 160 286"/>
+        <path d="M160 306 C147 319, 141 334, 140 350 C146 336, 154 327, 160 322"/>
+        <path d="M160 306 C173 319, 179 334, 180 350 C174 336, 166 327, 160 322"/>
+      </g>
+      <g class="halo" stroke="currentColor" stroke-width="1" fill="none" opacity=".8">
+        <circle cx="160" cy="200" r="44"/>
+        <circle cx="160" cy="200" r="7"/>
       </g>
     </svg>
 
     <div class="eyebrow">
-      <svg class="barb" viewBox="0 0 48 12" fill="none" aria-hidden="true">
-        <g stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
-          <path d="M0 6 H48"/>
-          <path d="M10 6 L18 1 M10 6 L18 11 M30 6 L38 1 M30 6 L38 11"/>
+      <svg class="barb" viewBox="0 0 60 14" fill="none" aria-hidden="true">
+        <g stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+          <path d="M0 7 H60"/>
+          <path d="M12 7 L20 2 M12 7 L20 12 M38 7 L46 2 M38 7 L46 12"/>
+          <ellipse cx="6" cy="7" rx="5" ry="3.4"/>
+          <ellipse cx="54" cy="7" rx="5" ry="3.4"/>
         </g>
       </svg>
       Training log &amp; content vault
@@ -456,7 +521,14 @@
     </div>
     <div class="feed" id="feed"></div>
     <div class="empty-state" id="emptyFeed" style="display:none;">
-      <svg class="em-sigil" viewBox="0 0 66 104" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M33 4 V82"/><path d="M33 4 l-6 14 l6 -5 l6 5 z"/><path d="M33 82 C29 90, 31 96, 33 102 C35 96, 37 90, 33 82 Z"/><path d="M12 30 H54"/><path d="M12 30 C21 24, 25 17, 26 8 C29 18, 34 24, 42 28"/><path d="M54 30 C45 24, 41 17, 40 8 C37 18, 32 24, 24 28"/><circle cx="33" cy="55" r="15"/><path d="M18 55 C24 44, 42 44, 48 55 C42 66, 24 66, 18 55"/></g></svg>
+      <svg class="em-sigil" viewBox="0 0 52 112" fill="none" aria-hidden="true">
+        <g stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+          <path d="M26 4 V70"/>
+          <ellipse cx="26" cy="16" rx="9" ry="12"/>
+          <path d="M26 70 C20 78, 20 92, 26 100 C32 92, 32 78, 26 70"/>
+          <path d="M26 100 C22 104, 22 108, 26 110 C30 108, 30 104, 26 100"/>
+        </g>
+      </svg>
       <h3>Rack's <em>empty</em></h3>
       <p>Add your first gym pic, video, or Pinterest find to start loading the bar.</p>
     </div>
@@ -486,7 +558,14 @@
     </div>
     <div class="item-grid" id="appsGrid"></div>
     <div class="empty-state" id="emptyApps" style="display:none;">
-      <svg class="em-sigil" viewBox="0 0 66 104" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M33 4 V82"/><path d="M33 4 l-6 14 l6 -5 l6 5 z"/><path d="M33 82 C29 90, 31 96, 33 102 C35 96, 37 90, 33 82 Z"/><path d="M12 30 H54"/><path d="M12 30 C21 24, 25 17, 26 8 C29 18, 34 24, 42 28"/><path d="M54 30 C45 24, 41 17, 40 8 C37 18, 32 24, 24 28"/><circle cx="33" cy="55" r="15"/><path d="M18 55 C24 44, 42 44, 48 55 C42 66, 24 66, 18 55"/></g></svg>
+      <svg class="em-sigil" viewBox="0 0 52 112" fill="none" aria-hidden="true">
+        <g stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+          <path d="M26 4 V70"/>
+          <ellipse cx="26" cy="16" rx="9" ry="12"/>
+          <path d="M26 70 C20 78, 20 92, 26 100 C32 92, 32 78, 26 70"/>
+          <path d="M26 100 C22 104, 22 108, 26 110 C30 108, 30 104, 26 100"/>
+        </g>
+      </svg>
       <h3>No apps <em>saved yet</em></h3>
       <p>Add the apps you actually use for training, food, or recovery.</p>
     </div>
@@ -516,7 +595,14 @@
     </div>
     <div class="item-grid" id="gearGrid"></div>
     <div class="empty-state" id="emptyGear" style="display:none;">
-      <svg class="em-sigil" viewBox="0 0 66 104" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M33 4 V82"/><path d="M33 4 l-6 14 l6 -5 l6 5 z"/><path d="M33 82 C29 90, 31 96, 33 102 C35 96, 37 90, 33 82 Z"/><path d="M12 30 H54"/><path d="M12 30 C21 24, 25 17, 26 8 C29 18, 34 24, 42 28"/><path d="M54 30 C45 24, 41 17, 40 8 C37 18, 32 24, 24 28"/><circle cx="33" cy="55" r="15"/><path d="M18 55 C24 44, 42 44, 48 55 C42 66, 24 66, 18 55"/></g></svg>
+      <svg class="em-sigil" viewBox="0 0 52 112" fill="none" aria-hidden="true">
+        <g stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+          <path d="M26 4 V70"/>
+          <ellipse cx="26" cy="16" rx="9" ry="12"/>
+          <path d="M26 70 C20 78, 20 92, 26 100 C32 92, 32 78, 26 70"/>
+          <path d="M26 100 C22 104, 22 108, 26 110 C30 108, 30 104, 26 100"/>
+        </g>
+      </svg>
       <h3>No gear <em>saved yet</em></h3>
       <p>Add the equipment or apparel you'd actually recommend.</p>
     </div>
@@ -546,7 +632,14 @@
     </div>
     <div class="item-grid" id="fuelGrid"></div>
     <div class="empty-state" id="emptyFuel" style="display:none;">
-      <svg class="em-sigil" viewBox="0 0 66 104" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M33 4 V82"/><path d="M33 4 l-6 14 l6 -5 l6 5 z"/><path d="M33 82 C29 90, 31 96, 33 102 C35 96, 37 90, 33 82 Z"/><path d="M12 30 H54"/><path d="M12 30 C21 24, 25 17, 26 8 C29 18, 34 24, 42 28"/><path d="M54 30 C45 24, 41 17, 40 8 C37 18, 32 24, 24 28"/><circle cx="33" cy="55" r="15"/><path d="M18 55 C24 44, 42 44, 48 55 C42 66, 24 66, 18 55"/></g></svg>
+      <svg class="em-sigil" viewBox="0 0 52 112" fill="none" aria-hidden="true">
+        <g stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+          <path d="M26 4 V70"/>
+          <ellipse cx="26" cy="16" rx="9" ry="12"/>
+          <path d="M26 70 C20 78, 20 92, 26 100 C32 92, 32 78, 26 70"/>
+          <path d="M26 100 C22 104, 22 108, 26 110 C30 108, 30 104, 26 100"/>
+        </g>
+      </svg>
       <h3>Kitchen's <em>empty</em></h3>
       <p>Add a meal prep routine, recipe, nutrition guide, or supplement worth recommending.</p>
     </div>
@@ -576,7 +669,14 @@
     </div>
     <div class="item-grid" id="recoveryGrid"></div>
     <div class="empty-state" id="emptyRecovery" style="display:none;">
-      <svg class="em-sigil" viewBox="0 0 66 104" fill="none" aria-hidden="true"><g stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M33 4 V82"/><path d="M33 4 l-6 14 l6 -5 l6 5 z"/><path d="M33 82 C29 90, 31 96, 33 102 C35 96, 37 90, 33 82 Z"/><path d="M12 30 H54"/><path d="M12 30 C21 24, 25 17, 26 8 C29 18, 34 24, 42 28"/><path d="M54 30 C45 24, 41 17, 40 8 C37 18, 32 24, 24 28"/><circle cx="33" cy="55" r="15"/><path d="M18 55 C24 44, 42 44, 48 55 C42 66, 24 66, 18 55"/></g></svg>
+      <svg class="em-sigil" viewBox="0 0 52 112" fill="none" aria-hidden="true">
+        <g stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+          <path d="M26 4 V70"/>
+          <ellipse cx="26" cy="16" rx="9" ry="12"/>
+          <path d="M26 70 C20 78, 20 92, 26 100 C32 92, 32 78, 26 70"/>
+          <path d="M26 100 C22 104, 22 108, 26 110 C30 108, 30 104, 26 100"/>
+        </g>
+      </svg>
       <h3>Nothing <em>logged yet</em></h3>
       <p>Add a yoga flow, mobility routine, sleep habit, or active recovery idea worth sharing.</p>
     </div>
@@ -680,7 +780,7 @@
     const day = document.body.classList.toggle('day');
     modeToggle.textContent = day ? 'Night' : 'Day';
     const meta = document.querySelector('meta[name="theme-color"]');
-    if(meta) meta.setAttribute('content', day ? '#e9e7ee' : '#0a0910');
+    if(meta) meta.setAttribute('content', day ? '#f2f2f2' : '#000000');
   });
 
   /* ---------- SECTION TABS ---------- */
