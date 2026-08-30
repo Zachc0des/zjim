@@ -1,1 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loosen. Move. Heal.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,450;0,9..144,600;1,9..144,450&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #EEEAE0;
+    --bg-soft: #E4E9DD;
+    --ink: #26302B;
+    --ink-soft: #57614F;
+    --sage: #6B8068;
+    --sage-deep: #435041;
+    --gold: #C99A3E;
+    --blue: #6E8CA0;
+    --line: rgba(38,48,43,0.14);
+    --card: #F7F5EE;
+    --display: 'Fraunces', serif;
+    --body: 'Work Sans', sans-serif;
+  }
 
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+
+  a{color:inherit;}
+
+  .wrap{max-width:1040px; margin:0 auto; padding:0 32px;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:92vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:120px 32px 80px;
+    overflow:hidden;
+  }
+
+  .hero-eyebrow{
+    font-family:var(--body);
+    font-size:13px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--sage-deep);
+    font-weight:600;
+    margin-bottom:22px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .hero-eyebrow::before{
+    content:'';
+    width:28px; height:1px; background:var(--sage-deep);
+    display:inline-block;
+  }
+
+  .hero h1{
+    font-family:var(--display);
+    font-weight:450;
+    font-size:clamp(48px, 9vw, 108px);
+    line-height:0.98;
+    letter-spacing:-0.01em;
+    max-width:820px;
+  }
+  .hero h1 em{
+    font-style:italic;
+    font-weight:300;
+    color:var(--sage-deep);
+  }
+
+  .hero-sub{
+    max-width:520px;
+    margin-top:28px;
+    font-size:18px;
+    color:var(--ink-soft);
+    font-weight:400;
+  }
+
+  .hero-line-svg{
+    position:absolute;
+    right:-6%;
+    top:8%;
+    width:60%;
+    max-width:640px;
+    opacity:0.9;
+    z-index:0;
+  }
+
+  .hero-inner{position:relative; z-index:1;}
+
+  .hero-path{
+    fill:none;
+    stroke:var(--sage);
+    stroke-width:2.5;
+    stroke-linecap:round;
+    stroke-dasharray:1400;
+    stroke-dashoffset:1400;
+    animation:draw 3.2s ease forwards 0.3s;
+  }
+  .hero-path.two{ stroke:var(--gold); stroke-width:1.6; opacity:0.6; animation-delay:0.7s;}
+  @keyframes draw{ to{ stroke-dashoffset:0; } }
+
+  .scroll-cue{
+    margin-top:56px;
+    font-size:12px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .scroll-cue span.dot{
+    width:6px; height:6px; border-radius:50%;
+    background:var(--sage);
+    animation:pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse{ 0%,100%{opacity:0.3;} 50%{opacity:1;} }
+
+  /* ---------- SECTION SHARED ---------- */
+  section{ padding:96px 0; position:relative; }
+  section + section{ border-top:1px solid var(--line); }
+
+  .section-head{ max-width:640px; margin-bottom:56px; }
+  .kicker{
+    font-size:13px; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--sage-deep); font-weight:600; margin-bottom:14px;
+  }
+  h2{
+    font-family:var(--display);
+    font-weight:450;
+    font-size:clamp(30px, 4vw, 44px);
+    letter-spacing:-0.01em;
+  }
+  .section-head p{
+    margin-top:16px;
+    color:var(--ink-soft);
+    font-size:16.5px;
+    max-width:560px;
+  }
+
+  /* ---------- BENEFITS GRID ---------- */
+  .benefits-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .benefit-card{
+    background:var(--card);
+    padding:36px 30px;
+    transition:background 0.35s ease, transform 0.35s ease;
+  }
+  .benefit-card:hover{
+    background:var(--bg-soft);
+    transform:translateY(-2px);
+  }
+  .benefit-num{
+    font-family:var(--display);
+    font-size:14px;
+    color:var(--gold);
+    font-weight:600;
+    letter-spacing:0.05em;
+    margin-bottom:18px;
+    display:block;
+  }
+  .benefit-card h3{
+    font-family:var(--display);
+    font-weight:500;
+    font-size:21px;
+    margin-bottom:10px;
+    letter-spacing:-0.01em;
+  }
+  .benefit-card p{
+    font-size:14.5px;
+    color:var(--ink-soft);
+  }
+
+  @media (max-width:760px){
+    .benefits-grid{ grid-template-columns:1fr; }
+  }
+
+  /* ---------- JOINT HEALING PANEL ---------- */
+  .joint-panel{
+    background:var(--sage-deep);
+    color:#F2F0E6;
+    border-radius:2px;
+    padding:64px 56px;
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:48px;
+    align-items:center;
+  }
+  .joint-panel h2{ color:#FBFAF4; }
+  .joint-panel .kicker{ color:#C7D6C0; }
+  .joint-panel p{ color:#DCE3D4; font-size:15.5px; margin-top:16px; }
+
+  .joint-visual{ display:flex; align-items:center; justify-content:center; }
+  .joint-visual svg{ width:100%; max-width:280px; height:auto; }
+
+  .caution{
+    margin-top:28px;
+    padding:16px 18px;
+    border:1px solid rgba(255,255,255,0.22);
+    border-radius:2px;
+    font-size:13.5px;
+    color:#E7ECDF;
+    background:rgba(255,255,255,0.05);
+  }
+  .caution strong{ color:#FBFAF4; }
+
+  @media (max-width:760px){
+    .joint-panel{ grid-template-columns:1fr; padding:44px 28px; }
+  }
+
+  /* ---------- ROUTINE STEPS ---------- */
+  .steps{
+    display:flex;
+    flex-direction:column;
+  }
+  .step{
+    display:grid;
+    grid-template-columns:90px 1fr;
+    gap:28px;
+    padding:32px 0;
+    border-top:1px solid var(--line);
+    align-items:start;
+  }
+  .step:last-child{ border-bottom:1px solid var(--line); }
+
+  .step-num{
+    font-family:var(--display);
+    font-style:italic;
+    font-weight:300;
+    font-size:40px;
+    color:var(--sage);
+    line-height:1;
+  }
+  .step-body h3{
+    font-family:var(--display);
+    font-weight:500;
+    font-size:22px;
+    margin-bottom:8px;
+  }
+  .step-body p{ color:var(--ink-soft); font-size:15.5px; max-width:600px; }
+  .step-tag{
+    display:inline-block;
+    margin-top:12px;
+    font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--blue);
+    font-weight:600;
+    background:rgba(110,140,160,0.12);
+    padding:5px 10px;
+    border-radius:2px;
+  }
+
+  /* ---------- WEEKLY TABLE ---------- */
+  .table-wrap{
+    overflow-x:auto;
+    border:1px solid var(--line);
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:640px;
+    font-size:14.5px;
+  }
+  th{
+    text-align:left;
+    font-family:var(--body);
+    font-weight:600;
+    font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--sage-deep);
+    padding:16px 20px;
+    background:var(--bg-soft);
+    border-bottom:1px solid var(--line);
+  }
+  td{
+    padding:16px 20px;
+    border-bottom:1px solid var(--line);
+    color:var(--ink-soft);
+    vertical-align:top;
+  }
+  tr td:first-child{ color:var(--ink); font-weight:600; }
+  tbody tr:hover{ background:var(--card); }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    padding:64px 0 80px;
+  }
+  .footer-note{
+    font-size:13.5px;
+    color:var(--ink-soft);
+    max-width:600px;
+    padding-top:24px;
+    border-top:1px solid var(--line);
+  }
+  .footer-mark{
+    font-family:var(--display);
+    font-style:italic;
+    font-size:20px;
+    color:var(--sage-deep);
+    margin-bottom:18px;
+  }
+
+  ::selection{ background:var(--gold); color:#26200C; }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <svg class="hero-line-svg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path class="hero-path" d="M60,440 C150,440 120,320 200,300 C280,280 260,180 340,160 C400,145 400,80 460,60"/>
+    <path class="hero-path two" d="M40,380 C120,400 140,300 220,290 C300,280 300,160 380,120"/>
+  </svg>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">A guide to feeling looser, longer</div>
+    <h1>Loosen the body.<br><em>Heal</em> the joints.</h1>
+    <p class="hero-sub">Stretching and yoga aren't extras bolted onto a workout — they're the maintenance work that keeps muscles supple, joints fed, and movement pain-free for years, not weeks.</p>
+    <div class="scroll-cue"><span class="dot"></span> Scroll to explore the benefits and the routine</div>
+  </div>
+</section>
+
+<section id="benefits">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Why it works</div>
+      <h2>Six things a consistent stretch practice actually does</h2>
+      <p>None of these require an hour a day. Small, regular doses compound — this is what's happening under the surface each time you stretch.</p>
+    </div>
+
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <span class="benefit-num">01</span>
+        <h3>Longer, more elastic muscle</h3>
+        <p>Regular stretching gradually increases the range a muscle can move through before it resists, so everyday movement asks less of it.</p>
+      </div>
+      <div class="benefit-card">
+        <span class="benefit-num">02</span>
+        <h3>Blood flow to tired tissue</h3>
+        <p>Movement through a stretch pushes blood into muscle and connective tissue, carrying oxygen in and metabolic waste out.</p>
+      </div>
+      <div class="benefit-card">
+        <span class="benefit-num">03</span>
+        <h3>Looser fascia, fewer knots</h3>
+        <p>The connective webbing around muscle tends to stiffen with disuse. Slow, sustained stretches encourage it to glide again.</p>
+      </div>
+      <div class="benefit-card">
+        <span class="benefit-num">04</span>
+        <h3>Fewer strain injuries</h3>
+        <p>A muscle that moves through its full range under control is less likely to tear when it's suddenly asked to do so under load.</p>
+      </div>
+      <div class="benefit-card">
+        <span class="benefit-num">05</span>
+        <h3>A calmer nervous system</h3>
+        <p>Slow breathing paired with sustained holds shifts the body toward rest-and-digest mode, lowering everyday tension.</p>
+      </div>
+      <div class="benefit-card">
+        <span class="benefit-num">06</span>
+        <h3>Posture that holds itself</h3>
+        <p>Loosening chronically tight areas — hips, chest, shoulders — lets the skeleton stack more naturally, with less muscular effort.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="joints">
+  <div class="wrap">
+    <div class="joint-panel">
+      <div>
+        <div class="kicker">The joint connection</div>
+        <h2>How gentle movement supports joint recovery</h2>
+        <p>Joints don't have their own blood supply feeding the cartilage directly — they rely on synovial fluid, which is worked into the joint through movement. Slow, controlled stretching and yoga poses take a joint through its available range, helping circulate that fluid and keep surrounding muscles from bracing around the area.</p>
+        <p>Over time, this can ease stiffness, support mobility around a previously injured joint, and reduce the compensations that put strain elsewhere in the body.</p>
+        <div class="caution"><strong>Worth knowing:</strong> stretching supports recovery — it doesn't reverse structural damage. For an actual injury, sharp pain, or swelling, work with a physical therapist or doctor before adding movement.</div>
+      </div>
+      <div class="joint-visual">
+        <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="120" cy="120" r="92" fill="none" stroke="#8FA688" stroke-width="1" opacity="0.35"/>
+          <circle cx="120" cy="120" r="66" fill="none" stroke="#C99A3E" stroke-width="1" opacity="0.5" stroke-dasharray="4 6"/>
+          <circle cx="120" cy="120" r="40" fill="none" stroke="#F2F0E6" stroke-width="1.4"/>
+          <path d="M120,80 C140,90 150,110 140,130 C132,146 106,146 100,128 C94,110 100,90 120,80 Z" fill="none" stroke="#E7ECDF" stroke-width="1.6"/>
+          <circle cx="120" cy="120" r="4" fill="#C99A3E"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="routine">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Building the habit</div>
+      <h2>Adding it into a real routine, step by step</h2>
+      <p>The order below is designed to layer on gradually — each step is small enough to start this week, and builds on the one before it.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Anchor five minutes to something you already do</h3>
+          <p>Attach a short stretch sequence to an existing habit — right after you wake up, or right after brushing your teeth. Neck rolls, cat-cow, a standing forward fold. The goal is consistency, not intensity.</p>
+          <span class="step-tag">Daily · 5 min</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Add a cooldown to the end of every workout</h3>
+          <p>Muscles are warmest and most receptive right after training. Spend 8–10 minutes stretching whatever you just worked — this is where most flexibility gains actually happen.</p>
+          <span class="step-tag">Post-workout · 8–10 min</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Block two dedicated yoga sessions a week</h3>
+          <p>Separate from training days if possible. A slower, full-body practice (hatha or gentle vinyasa) gives connective tissue time under sustained tension that quick stretches don't.</p>
+          <span class="step-tag">2× weekly · 25–40 min</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>Target the joints that talk to you</h3>
+          <p>Notice which joint feels stiff or cranky by mid-afternoon — knees, shoulders, low back — and give it 3–4 minutes of slow, pain-free circles or controlled range-of-motion drills daily.</p>
+          <span class="step-tag">Daily · 3–4 min</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h3>Let discomfort set the ceiling, not the floor</h3>
+          <p>A good stretch feels like tension easing, never sharp or shaking. If a pose or stretch hurts, back off the range rather than pushing through — pain is information, not a target.</p>
+          <span class="step-tag">Every session</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <h3>Recheck your range every few weeks</h3>
+          <p>Pick two or three simple markers — touching your toes, a deep squat, reaching behind your back — and note how they feel monthly. Progress here is slow, so the check-in is what keeps it visible.</p>
+          <span class="step-tag">Monthly</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="week">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Put it on the calendar</div>
+      <h2>A sample week</h2>
+      <p>One way to lay this out — adjust the days to fit your own training schedule.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Day</th><th>Morning (5 min)</th><th>Main session</th><th>Joint focus</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Monday</td><td>Neck &amp; shoulder rolls</td><td>Strength training + 10 min cooldown</td><td>Shoulders</td></tr>
+          <tr><td>Tuesday</td><td>Cat-cow, hip circles</td><td>Gentle yoga flow — 30 min</td><td>Hips</td></tr>
+          <tr><td>Wednesday</td><td>Standing forward fold</td><td>Cardio + 10 min cooldown</td><td>Knees</td></tr>
+          <tr><td>Thursday</td><td>Ankle &amp; wrist circles</td><td>Rest or light walk</td><td>Ankles</td></tr>
+          <tr><td>Friday</td><td>Neck &amp; shoulder rolls</td><td>Strength training + 10 min cooldown</td><td>Low back</td></tr>
+          <tr><td>Saturday</td><td>Hip circles</td><td>Yoga session — 40 min</td><td>Full body</td></tr>
+          <tr><td>Sunday</td><td>Slow breathing + gentle fold</td><td>Rest</td><td>Whatever feels tight</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-mark">Move slowly. Move often.</div>
+    <p class="footer-note">This is general movement guidance, not medical advice. If you're recovering from a joint injury, surgery, or have a diagnosed condition, check with a physical therapist or doctor before starting a new stretching or yoga routine.</p>
+  </div>
+</footer>
+
+</body>
+</html>
