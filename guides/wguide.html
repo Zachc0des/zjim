@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Routine — Build Your Own Workout Program</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#eef0ee;
+    --charcoal:#15171a;
+    --panel:#1c1f24;
+    --panel-line:#2b2f36;
+    --steel:#8b909c;
+    --steel-dim:#565c66;
+    --power:#e8432f;
+    --power-dim:#7a2519;
+    --amber:#f2b537;
+    --chalk:#f4f1e8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--charcoal);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.55;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--power);color:var(--chalk);}
+
+  h1,h2,h3{font-family:'Anton',sans-serif;font-weight:400;letter-spacing:0.01em;text-transform:uppercase;color:var(--chalk);}
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px;}
+  section{padding:96px 0;position:relative;}
+  section + section{border-top:1px solid var(--panel-line);}
+
+  /* ---------- reveal ---------- */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1;transform:none;transition:none;}
+    html{scroll-behavior:auto;}
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:92vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    position:relative;
+    padding-top:64px;
+  }
+  .hero-eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--power);
+    font-size:13px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    margin-bottom:22px;
+    display:flex;align-items:center;gap:12px;
+  }
+  .hero-eyebrow::before{content:"";width:28px;height:2px;background:var(--power);display:inline-block;}
+  .hero h1{
+    font-size:clamp(52px,10vw,128px);
+    line-height:0.92;
+    color:var(--chalk);
+  }
+  .hero h1 span{color:var(--power);}
+  .hero p.sub{
+    max-width:560px;
+    color:var(--steel);
+    font-size:18px;
+    margin-top:28px;
+  }
+  .plate-rack{
+    display:flex;
+    align-items:flex-end;
+    gap:6px;
+    margin-top:56px;
+    height:120px;
+  }
+  .plate{
+    background:linear-gradient(180deg,#2b2f36,#191b1e);
+    border:1px solid var(--panel-line);
+    border-radius:6px;
+    width:34px;
+    display:flex;align-items:flex-end;justify-content:center;
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;color:var(--steel-dim);
+    padding-bottom:6px;
+    transform-origin:bottom;
+    animation:rack-in .6s ease backwards;
+  }
+  .plate.hi{background:linear-gradient(180deg,var(--power),#a52d1d);color:var(--chalk);border-color:var(--power);}
+  @keyframes rack-in{from{transform:scaleY(0);}to{transform:scaleY(1);}}
+
+  /* ---------- section headers ---------- */
+  .kicker{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--power);
+    margin-bottom:14px;
+  }
+  .sec-title{font-size:clamp(30px,5vw,52px);margin-bottom:18px;}
+  .sec-lede{color:var(--steel);max-width:640px;font-size:16.5px;margin-bottom:48px;}
+
+  /* ---------- framework table ---------- */
+  .goal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--panel-line);border:1px solid var(--panel-line);border-radius:10px;overflow:hidden;}
+  .goal-cell{background:var(--panel);padding:26px 22px;}
+  .goal-cell h4{font-family:'JetBrains Mono',monospace;color:var(--amber);font-size:13px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;}
+  .goal-cell .big{font-family:'JetBrains Mono',monospace;font-size:30px;color:var(--chalk);font-weight:700;}
+  .goal-cell .lbl{color:var(--steel);font-size:13px;margin-top:2px;margin-bottom:16px;}
+  .goal-cell p{color:var(--steel);font-size:14.5px;}
+  @media (max-width:760px){.goal-grid{grid-template-columns:1fr;}}
+
+  /* ---------- lift cards ---------- */
+  .lift-list{display:flex;flex-direction:column;border-top:1px solid var(--panel-line);}
+  .lift-row{
+    display:grid;
+    grid-template-columns:90px 1.1fr 1.6fr;
+    gap:28px;
+    padding:30px 0;
+    border-bottom:1px solid var(--panel-line);
+    align-items:start;
+    transition:background .3s ease;
+  }
+  .lift-row:hover{background:rgba(232,67,47,0.04);}
+  .lift-num{font-family:'JetBrains Mono',monospace;font-size:34px;color:var(--panel-line);font-weight:700;}
+  .lift-row:hover .lift-num{color:var(--power-dim);}
+  .lift-name h3{font-size:26px;color:var(--chalk);margin-bottom:8px;}
+  .lift-name .targets{display:flex;flex-wrap:wrap;gap:6px;}
+  .tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--power);border:1px solid var(--power-dim);padding:3px 9px;border-radius:20px;}
+  .lift-cue p{color:var(--steel);font-size:15px;}
+  .lift-cue .cue-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--amber);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+  @media (max-width:720px){.lift-row{grid-template-columns:44px 1fr;}.lift-cue{grid-column:1/-1;}}
+
+  /* ---------- home workout ---------- */
+  .swap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;}
+  .swap-card{background:var(--panel);border:1px solid var(--panel-line);border-radius:10px;padding:22px;}
+  .swap-arrow{color:var(--steel-dim);font-size:12px;font-family:'JetBrains Mono',monospace;margin:10px 0;letter-spacing:.1em;}
+  .swap-card .gym{color:var(--steel);font-size:14px;text-decoration:line-through;text-decoration-color:var(--steel-dim);}
+  .swap-card .home{color:var(--chalk);font-size:19px;font-weight:700;font-family:'Inter',sans-serif;}
+  .swap-card .detail{color:var(--steel);font-size:13.5px;margin-top:10px;}
+
+  /* ---------- cardio ---------- */
+  .cardio-split{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--panel-line);border:1px solid var(--panel-line);border-radius:10px;overflow:hidden;}
+  .cardio-cell{background:var(--panel);padding:32px;}
+  .cardio-cell h4{font-size:22px;color:var(--chalk);margin-bottom:6px;}
+  .cardio-cell .mono-tag{color:var(--amber);font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;}
+  .cardio-cell ul{margin:16px 0 0 0;list-style:none;}
+  .cardio-cell li{color:var(--steel);font-size:14.5px;padding:7px 0;border-top:1px solid var(--panel-line);}
+  .cardio-cell li:first-child{border-top:none;}
+  @media (max-width:720px){.cardio-split{grid-template-columns:1fr;}}
+
+  /* ---------- weekly board ---------- */
+  .board{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:8px;}
+  .day{
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:8px;
+    padding:16px 10px;
+    text-align:center;
+    min-height:132px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    transition:transform .25s ease, border-color .25s ease;
+  }
+  .day:hover{transform:translateY(-4px);border-color:var(--power-dim);}
+  .day .d{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--steel-dim);text-transform:uppercase;letter-spacing:.08em;}
+  .day .w{font-size:14px;color:var(--chalk);font-weight:700;margin-top:10px;}
+  .day.rest .w{color:var(--steel);font-weight:500;}
+  .day.hit{border-color:var(--power);}
+  .day.hit .d{color:var(--power);}
+  @media (max-width:720px){.board{grid-template-columns:repeat(2,1fr);}}
+
+  /* ---------- warmup steps ---------- */
+  .steps{counter-reset:step;margin-top:10px;}
+  .step{display:flex;gap:20px;padding:20px 0;border-top:1px solid var(--panel-line);}
+  .step:first-child{border-top:none;}
+  .step::before{
+    counter-increment:step;
+    content:counter(step,decimal-leading-zero);
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;
+    color:var(--power);
+    padding-top:2px;
+    flex-shrink:0;
+    width:26px;
+  }
+  .step h4{color:var(--chalk);font-size:16px;font-family:'Inter',sans-serif;font-weight:700;margin-bottom:4px;}
+  .step p{color:var(--steel);font-size:14.5px;}
+
+  /* ---------- mistakes ---------- */
+  .mistake-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  .mistake{background:var(--panel);border:1px solid var(--panel-line);border-left:3px solid var(--power);border-radius:6px;padding:18px 20px;}
+  .mistake h4{font-size:15.5px;color:var(--chalk);font-family:'Inter',sans-serif;font-weight:700;margin-bottom:4px;}
+  .mistake p{color:var(--steel);font-size:14px;}
+  @media (max-width:720px){.mistake-grid{grid-template-columns:1fr;}}
+
+  footer{padding:56px 0 80px;}
+  footer .note{color:var(--steel-dim);font-size:13px;max-width:600px;line-height:1.7;}
+  footer .brand{font-family:'Anton',sans-serif;text-transform:uppercase;color:var(--panel-line);font-size:15vw;line-height:0.8;letter-spacing:-0.01em;margin-top:40px;user-select:none;}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-eyebrow mono">a field guide to programming yourself</div>
+    <h1 class="reveal in">BUILD THE<br><span>ROUTINE</span></h1>
+    <p class="sub reveal in">Not a workout. A system: the lifts that matter, what to do when you have zero equipment, how much cardio to run alongside it, and the framework for putting it all on a weekly board.</p>
+    <div class="plate-rack" aria-hidden="true">
+      <div class="plate" style="height:44px;animation-delay:.05s">5</div>
+      <div class="plate" style="height:60px;animation-delay:.1s">10</div>
+      <div class="plate" style="height:78px;animation-delay:.15s">15</div>
+      <div class="plate hi" style="height:100px;animation-delay:.2s">25</div>
+      <div class="plate" style="height:78px;animation-delay:.25s">15</div>
+      <div class="plate" style="height:60px;animation-delay:.3s">10</div>
+      <div class="plate" style="height:44px;animation-delay:.35s">5</div>
+    </div>
+  </div>
+</section>
+
+<section id="framework">
+  <div class="wrap">
+    <div class="kicker reveal">01 — the framework</div>
+    <h2 class="sec-title reveal">Pick a goal, then let the numbers follow</h2>
+    <p class="sec-lede reveal">Every rep range trains a different quality. Decide what you're chasing before you decide what to do — the sets and reps are just the delivery mechanism.</p>
+    <div class="goal-grid reveal">
+      <div class="goal-cell">
+        <h4>Strength</h4>
+        <div class="big mono">3–5</div>
+        <div class="lbl">reps · 3–5 sets · rest 3–5 min</div>
+        <p>Heavy loads, near-maximal effort, long rests so you can move real weight again next set. Best for getting numbers up on the big lifts.</p>
+      </div>
+      <div class="goal-cell">
+        <h4>Muscle (hypertrophy)</h4>
+        <div class="big mono">8–12</div>
+        <div class="lbl">reps · 3–4 sets · rest 60–90s</div>
+        <p>Moderate load, enough volume to fatigue the muscle, shorter rest to keep tension high across the session.</p>
+      </div>
+      <div class="goal-cell">
+        <h4>Endurance</h4>
+        <div class="big mono">15–20+</div>
+        <div class="lbl">reps · 2–3 sets · rest 30–45s</div>
+        <p>Lighter load, higher output, minimal rest. Builds the muscular stamina that supports everything above it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="lifts">
+  <div class="wrap">
+    <div class="kicker reveal">02 — the big lifts</div>
+    <h2 class="sec-title reveal">Five compound movements, one whole body</h2>
+    <p class="sec-lede reveal">Compound lifts move more than one joint at a time, so they recruit the most muscle for the least time spent. Build your sessions around these first — everything else is an accessory to them.</p>
+    <div class="lift-list reveal">
+      <div class="lift-row">
+        <div class="lift-num">01</div>
+        <div class="lift-name"><h3>Squat</h3><div class="targets"><span class="tag">Quads</span><span class="tag">Glutes</span><span class="tag">Core</span></div></div>
+        <div class="lift-cue"><div class="cue-label">Form cue</div><p>Sit back and down like reaching for a low chair. Keep your chest tall and drive through the whole foot, not just the toes, on the way up.</p></div>
+      </div>
+      <div class="lift-row">
+        <div class="lift-num">02</div>
+        <div class="lift-name"><h3>Deadlift</h3><div class="targets"><span class="tag">Hamstrings</span><span class="tag">Glutes</span><span class="tag">Back</span></div></div>
+        <div class="lift-cue"><div class="cue-label">Form cue</div><p>Push the floor away with your legs while keeping the bar brushing your shins. Flat back, braced core, hips and shoulders rise together.</p></div>
+      </div>
+      <div class="lift-row">
+        <div class="lift-num">03</div>
+        <div class="lift-name"><h3>Bench Press</h3><div class="targets"><span class="tag">Chest</span><span class="tag">Shoulders</span><span class="tag">Triceps</span></div></div>
+        <div class="lift-cue"><div class="cue-label">Form cue</div><p>Shoulder blades pinched and pinned to the bench. Lower the bar to mid-chest under control, then press it back in a slight arc, not straight up.</p></div>
+      </div>
+      <div class="lift-row">
+        <div class="lift-num">04</div>
+        <div class="lift-name"><h3>Overhead Press</h3><div class="targets"><span class="tag">Shoulders</span><span class="tag">Triceps</span><span class="tag">Core</span></div></div>
+        <div class="lift-cue"><div class="cue-label">Form cue</div><p>Brace your core like you're about to be punched, then press straight up and slightly back so the bar finishes over your ears, not your face.</p></div>
+      </div>
+      <div class="lift-row">
+        <div class="lift-num">05</div>
+        <div class="lift-name"><h3>Row / Pull-up</h3><div class="targets"><span class="tag">Back</span><span class="tag">Biceps</span><span class="tag">Rear Delts</span></div></div>
+        <div class="lift-cue"><div class="cue-label">Form cue</div><p>Pull with your elbows, not your hands — imagine dragging them straight down past your ribs. Squeeze your shoulder blades together at the top.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="home">
+  <div class="wrap">
+    <div class="kicker reveal">03 — no gym, no problem</div>
+    <h2 class="sec-title reveal">Same movement patterns, zero equipment</h2>
+    <p class="sec-lede reveal">You don't need a barbell to train a pattern — you need resistance and a full range of motion. Bodyweight covers you until you can add load with a backpack, bands, or dumbbells.</p>
+    <div class="swap-grid reveal">
+      <div class="swap-card">
+        <div class="gym">Bench Press</div>
+        <div class="swap-arrow">↓ becomes</div>
+        <div class="home">Push-ups</div>
+        <div class="detail">Elevate your hands on a couch for an easier version, or your feet for a harder one. Chest should touch (near) the floor.</div>
+      </div>
+      <div class="swap-card">
+        <div class="gym">Squat</div>
+        <div class="swap-arrow">↓ becomes</div>
+        <div class="home">Bodyweight / Jump Squats</div>
+        <div class="detail">Slow the descent to 3 seconds to add difficulty, or add a jump at the top to build power.</div>
+      </div>
+      <div class="swap-card">
+        <div class="gym">Deadlift</div>
+        <div class="swap-arrow">↓ becomes</div>
+        <div class="home">Single-Leg Glute Bridge</div>
+        <div class="detail">Drive one heel into the floor and lift your hips. Trains the same hip-hinge without any load at all.</div>
+      </div>
+      <div class="swap-card">
+        <div class="gym">Overhead Press</div>
+        <div class="swap-arrow">↓ becomes</div>
+        <div class="home">Pike Push-ups</div>
+        <div class="detail">Hips high, hands and feet on the floor, lower your head toward the ground between your hands.</div>
+      </div>
+      <div class="swap-card">
+        <div class="gym">Row</div>
+        <div class="swap-arrow">↓ becomes</div>
+        <div class="home">Doorway / Table Row</div>
+        <div class="detail">Grip a sturdy table edge or towel wrapped around a door, lean back, and pull your chest to your hands.</div>
+      </div>
+      <div class="swap-card">
+        <div class="gym">Core Work</div>
+        <div class="swap-arrow">↓ becomes</div>
+        <div class="home">Plank + Dead Bug</div>
+        <div class="detail">Plank for total-body bracing, dead bug for control — reach opposite arm and leg out slowly without your back arching.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cardio">
+  <div class="wrap">
+    <div class="kicker reveal">04 — engine work</div>
+    <h2 class="sec-title reveal">Two speeds of cardio, two different jobs</h2>
+    <p class="sec-lede reveal">Cardio isn't one thing. Slow and steady builds your base and speeds recovery; short and hard builds capacity and burns time efficiently. Most routines want both.</p>
+    <div class="cardio-split reveal">
+      <div class="cardio-cell">
+        <span class="mono-tag">Zone 2 · LISS</span>
+        <h4>Low intensity, steady state</h4>
+        <p style="color:var(--steel);font-size:14.5px;margin-top:8px;">Pace where you can hold a conversation. 30–60 minutes, 2–4x a week.</p>
+        <ul>
+          <li>Brisk walking or hiking</li>
+          <li>Easy-pace cycling</li>
+          <li>Light jogging or swimming</li>
+        </ul>
+      </div>
+      <div class="cardio-cell">
+        <span class="mono-tag">HIIT</span>
+        <h4>Short, hard intervals</h4>
+        <p style="color:var(--steel);font-size:14.5px;margin-top:8px;">Near-max effort for 20–40s, rest, repeat. 10–20 minutes total, 1–2x a week.</p>
+        <ul>
+          <li>Sprint intervals</li>
+          <li>Jump rope rounds</li>
+          <li>Burpee or bike sprints</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="week">
+  <div class="wrap">
+    <div class="kicker reveal">05 — put it on the board</div>
+    <h2 class="sec-title reveal">A full-body starter week</h2>
+    <p class="sec-lede reveal">Three lifting days, two engine days, two off. Rotate the lift emphasis so no muscle group goes untouched or overcooked.</p>
+    <div class="board reveal">
+      <div class="day hit"><span class="d">Mon</span><span class="w">Full Body A<br><span class="mono" style="color:var(--steel);font-size:11px;">squat·press·row</span></span></div>
+      <div class="day"><span class="d">Tue</span><span class="w">Zone 2 Cardio<br><span class="mono" style="color:var(--steel);font-size:11px;">30–40 min</span></span></div>
+      <div class="day hit"><span class="d">Wed</span><span class="w">Full Body B<br><span class="mono" style="color:var(--steel);font-size:11px;">deadlift·bench·pull</span></span></div>
+      <div class="day rest"><span class="d">Thu</span><span class="w">Rest</span></div>
+      <div class="day hit"><span class="d">Fri</span><span class="w">Full Body C<br><span class="mono" style="color:var(--steel);font-size:11px;">squat·ohp·row</span></span></div>
+      <div class="day"><span class="d">Sat</span><span class="w">HIIT<br><span class="mono" style="color:var(--steel);font-size:11px;">15–20 min</span></span></div>
+      <div class="day rest"><span class="d">Sun</span><span class="w">Rest</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="warmup">
+  <div class="wrap">
+    <div class="kicker reveal">06 — before you load the bar</div>
+    <h2 class="sec-title reveal">A five-minute warm-up sequence</h2>
+    <p class="sec-lede reveal">Do this in order — it moves from general blood flow to the exact pattern you're about to load.</p>
+    <div class="steps reveal">
+      <div class="step"><h4>Raise your heart rate</h4><p>60–90 seconds of light cardio — jumping jacks, a brisk walk, or rowing — to get blood moving to your muscles.</p></div>
+      <div class="step"><h4>Move your joints through range</h4><p>Arm circles, leg swings, hip openers, and torso twists — dynamic, not static holds.</p></div>
+      <div class="step"><h4>Rehearse the pattern</h4><p>A couple of bodyweight reps of whatever you're about to load — bodyweight squats before barbell squats, empty-bar presses before loaded ones.</p></div>
+      <div class="step"><h4>Ramp the load</h4><p>Work up in 2–3 warm-up sets toward your working weight so the first working set isn't your heaviest jump of the day.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="mistakes">
+  <div class="wrap">
+    <div class="kicker reveal">07 — common mistakes</div>
+    <h2 class="sec-title reveal">What derails most routines</h2>
+    <div class="mistake-grid reveal">
+      <div class="mistake"><h4>Skipping the warm-up</h4><p>Cold muscles under load is how minor tweaks become weeks off.</p></div>
+      <div class="mistake"><h4>Chasing weight over form</h4><p>A lighter, clean rep builds more than a heavy, sloppy one — and it keeps you training.</p></div>
+      <div class="mistake"><h4>No progression plan</h4><p>If you're not adding a little weight, a rep, or a set over time, your body has no reason to adapt.</p></div>
+      <div class="mistake"><h4>Training through fatigue</h4><p>Recovery is where the adaptation actually happens. Sleep and rest days are part of the program, not a break from it.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="note">This guide is educational, not medical advice. If you're new to exercise, pregnant, or managing an injury or health condition, check with a doctor or physical therapist before starting a new routine.</p>
+    <div class="brand">Load. Move. Repeat.</div>
+  </div>
+</footer>
+
+<script>
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  els.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
