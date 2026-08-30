@@ -277,8 +277,22 @@
     transition:border-color .2s ease, box-shadow .2s ease, transform .2s ease;
   }
   .card:hover{border-color:var(--line-strong); box-shadow:0 12px 36px var(--shadow), 0 0 0 1px var(--glow); transform:translateY(-2px);}
-  .card-media{width:100%; aspect-ratio:9/16; overflow:hidden; background:var(--ash-2);}
+  .card-media{width:100%; aspect-ratio:9/16; overflow:hidden; background:var(--ash-2); position:relative;}
+  .card-media.is-preview{aspect-ratio:16/10;}
   .card-media img,.card-media video{width:100%; height:100%; display:block; object-fit:cover; filter:grayscale(1) contrast(1.15) brightness(.94);}
+  .card-media iframe{
+    position:absolute; top:0; left:0; border:0; transform-origin:top left;
+    pointer-events:none; background:var(--bone);
+    filter:grayscale(1) contrast(1.08) brightness(.98);
+  }
+  .card-media .preview-badge{
+    position:absolute; top:8px; right:8px; z-index:2;
+    background:var(--void); color:var(--bone);
+    border:1px solid var(--line-strong);
+    font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:.16em; text-transform:uppercase;
+    padding:4px 8px; pointer-events:none;
+  }
+  body.day .card-media .preview-badge{ background:var(--void); color:var(--bone); }
   .card-body{padding:16px 18px 18px;}
   .card-tag{
     font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:.2em;
@@ -351,6 +365,27 @@
   .empty-state h3{font-weight:300; font-size:30px; margin:0 0 10px; letter-spacing:.01em; color:var(--bone);}
   .empty-state h3 em{font-style:italic; color:var(--sigil);}
   .empty-state p{max-width:380px; margin:0 auto; font-size:17px; line-height:1.55; font-weight:300;}
+
+  /* ---------- LIGHTBOX (full guide preview) ---------- */
+  .lightbox{
+    position:fixed; inset:0; z-index:50; background:color-mix(in srgb, var(--void) 88%, transparent);
+    backdrop-filter:blur(6px);
+    display:none; align-items:center; justify-content:center; padding:28px;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox-frame{
+    width:min(1100px,100%); height:min(80vh,780px); background:var(--bone);
+    border:1px solid var(--line-strong); position:relative;
+    box-shadow:0 24px 80px var(--shadow);
+  }
+  .lightbox-frame iframe{width:100%; height:100%; border:0; display:block;}
+  .lightbox-close{
+    position:absolute; top:-42px; right:0;
+    font-family:'Share Tech Mono',monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+    background:none; border:1px solid var(--line-strong); color:var(--bone);
+    padding:8px 14px; cursor:pointer;
+  }
+  .lightbox-close:hover{border-color:var(--sigil); color:var(--sigil);}
 
   /* ---------- FOOTER ---------- */
   footer{position:relative; z-index:1; border-top:1px solid var(--line); background:var(--ash);}
@@ -705,6 +740,14 @@
   </div>
 </footer>
 
+<!-- Lightbox for full-size guide previews -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-frame">
+    <button class="lightbox-close" id="lightboxClose" type="button">Close ✕</button>
+    <iframe id="lightboxFrame" src="about:blank" title="Guide preview"></iframe>
+  </div>
+</div>
+
 <script>
 (function(){
   /* =================================================================
@@ -715,15 +758,23 @@
      ================================================================= */
 
   // FEED — gym pics, videos, guides, Pinterest finds
+  //
+  // type can be: 'image' | 'video' | 'html'
+  //   'html' renders a live scaled-down preview of the .html file at `url`
+  //   (same technique Z Vault uses) and opens full-size in a lightbox on click.
+  //   Point `url` at any .html file you've uploaded next to this page
+  //   (e.g. 'guides/progressive-overload.html').
   const POSTS = [
     { id:1, url:'videos/JULY27CRUNCH smaller siZe.mp4', type:'video', caption:'Full Body Circuit.', category:'Videos', source:'' },
     { id:1, url:'videos/jul28jim.mp4', type:'video', caption:'Full Body Circuit.', category:'Videos', source:'' },
     { id:1, url:'videos/august1crunchsmall.mp4', type:'video', caption:'Full Body Circuit.', category:'Videos', source:'' },
     { id:1, url:'pinterst/1.mp4', type:'video', caption:'Find Number One', category:'pinterest', source:'' },
     { id:1, url:'pinterst/2.mp4', type:'video', caption:'Find Number Two', category:'pinterest', source:'' },
-     { id:1, url:'pinterst/3.mp4', type:'video', caption:'Find Number Three', category:'pinterest', source:'' },
+    { id:1, url:'pinterst/3.mp4', type:'video', caption:'Find Number Three', category:'pinterest', source:'' },
+    { id:1, url:'guides/ppl.html', type:'html', caption:'ppl', category:'guide', source:'' },
     // { id:1, url:'https://...jpg', type:'image', caption:'Leg day.', category:'gym', source:'' },
     // { id:2, url:'https://...mp4', type:'video', caption:'Form check.', category:'guide', source:'' },
+    // { id:3, url:'guides/progressive-overload.html', type:'html', caption:'Progressive overload, explained.', category:'guide', source:'' },
   ];
 
   // APPS — category: training | nutrition | recovery | mindset
@@ -823,6 +874,7 @@
 
   function tagLabel(cat, type){
     if(type === 'video') return 'Video';
+    if(type === 'html') return 'Guide';
     if(cat === 'guide') return 'Guide';
     if(cat === 'pinterest') return 'Pinterest Find';
     return 'Gym Pic';
@@ -833,6 +885,7 @@
     const filtered = posts.filter(p=>{
       if(f === 'all') return true;
       if(f === 'video') return p.type === 'video';
+      if(f === 'guide') return p.category === 'guide' || p.type === 'html';
       return p.category === f;
     });
 
@@ -846,13 +899,21 @@
       let mediaHtml = '';
       if(p.type === 'video'){
         mediaHtml = `<div class="card-media"><video src="${escapeHtml(p.url)}" controls playsinline></video></div>`;
+      }else if(p.type === 'html'){
+        // live scaled-down preview of the uploaded .html file, same technique as Z Vault
+        mediaHtml = `<div class="card-media is-preview">
+          <iframe class="preview-frame" data-scale data-preview-url="${escapeHtml(p.url)}" src="${escapeHtml(p.url)}" loading="lazy" tabindex="-1" title="${escapeHtml(p.caption||'HTML guide preview')}"></iframe>
+          <span class="preview-badge">Preview</span>
+        </div>`;
       }else{
         mediaHtml = `<div class="card-media"><img src="${escapeHtml(p.url)}" alt="" loading="lazy" onerror="this.parentElement.style.display='none'"></div>`;
       }
 
       const sourceHtml = p.source
         ? `<a class="card-source" href="${escapeHtml(p.source)}" target="_blank" rel="noopener">source ↗</a>`
-        : `<span></span>`;
+        : (p.type === 'html'
+            ? `<a class="card-source" href="${escapeHtml(p.url)}" target="_blank" rel="noopener">open full guide ↗</a>`
+            : `<span></span>`);
 
       card.innerHTML = `
         ${mediaHtml}
@@ -864,11 +925,62 @@
           </div>
         </div>
       `;
+
+      // clicking anywhere on an html-preview card opens the full guide in the lightbox
+      if(p.type === 'html'){
+        const mediaBox = card.querySelector('.card-media');
+        mediaBox.style.cursor = 'zoom-in';
+        mediaBox.addEventListener('click', ()=> openLightbox(p.url, p.caption));
+      }
+
       feedEl.appendChild(card);
     });
 
+    scalePreviewFrames();
     renderPlates();
   }
+
+  /* scale each live .html preview iframe down to fit its thumbnail box,
+     same approach Z Vault uses for its category thumbnails */
+  function scalePreviewFrames(){
+    const BASE_W = 1280, BASE_H = 800;
+    document.querySelectorAll('.card-media iframe[data-scale]').forEach(f=>{
+      const box = f.parentElement;
+      const fit = () => {
+        const w = box.clientWidth || 1;
+        const s = w / BASE_W;
+        f.style.width = BASE_W + 'px';
+        f.style.height = BASE_H + 'px';
+        f.style.transform = 'scale(' + s + ')';
+      };
+      fit();
+      if(window.ResizeObserver){
+        new ResizeObserver(fit).observe(box);
+      }else{
+        window.addEventListener('resize', fit);
+      }
+    });
+  }
+
+  /* ---------- LIGHTBOX (full-size guide preview) ---------- */
+  const lightboxEl = document.getElementById('lightbox');
+  const lightboxFrameEl = document.getElementById('lightboxFrame');
+  const lightboxCloseEl = document.getElementById('lightboxClose');
+
+  function openLightbox(url, title){
+    lightboxFrameEl.src = url;
+    lightboxFrameEl.title = title || 'Guide preview';
+    lightboxEl.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox(){
+    lightboxEl.classList.remove('open');
+    lightboxFrameEl.src = 'about:blank';
+    document.body.style.overflow = '';
+  }
+  lightboxCloseEl.addEventListener('click', closeLightbox);
+  lightboxEl.addEventListener('click', (e)=>{ if(e.target === lightboxEl) closeLightbox(); });
+  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeLightbox(); });
 
   function renderPlates(){
     const count = posts.length;
