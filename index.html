@@ -764,20 +764,29 @@
   //   (same technique Z Vault uses) and opens full-size in a lightbox on click.
   //   Point `url` at any .html file you've uploaded next to this page
   //   (e.g. 'guides/progressive-overload.html').
+  //
+  // IMPORTANT — keeping Videos / Guides / Pinterest Finds isolated:
+  //   The Videos filter is reserved for YOUR OWN workout clips only. A
+  //   video is pulled OUT of Videos and into a different filter based on
+  //   its category:
+  //     category:'guide'      -> shows under Guides & Tutorials instead
+  //     category:'pinterest'  -> shows under Pinterest Finds instead
+  //     anything else (e.g. 'Videos') -> shows under Videos (your own clips)
+  //   This applies even though all three are type:'video' under the hood.
   const POSTS = [
     { id:1, url:'videos/JULY27CRUNCH smaller siZe.mp4', type:'video', caption:'Full Body Circuit.', category:'Videos', source:'' },
-    { id:1, url:'videos/jul28jim.mp4', type:'video', caption:'Full Body Circuit.', category:'Videos', source:'' },
-    { id:1, url:'videos/august1crunchsmall.mp4', type:'video', caption:'Full Body Circuit.', category:'Videos', source:'' },
-    { id:1, url:'pinterst/1.mp4', type:'video', caption:'Find Number One', category:'pinterest', source:'' },
-    { id:1, url:'pinterst/2.mp4', type:'video', caption:'Find Number Two', category:'pinterest', source:'' },
-    { id:1, url:'pinterst/3.mp4', type:'video', caption:'Find Number Three', category:'pinterest', source:'' },
-    { id:1, url:'guides/ppl.html', type:'html', caption:'ppl', category:'guide', source:'' },
-    { id:1, url:'guides/wguide.html', type:'html', caption:'routine', category:'guide', source:'' },
-    { id:1, url:'guides/wsy.html', type:'html', caption:'post workout stretch', category:'guide', source:'' },
-    { id:1, url:'pics/red.jpg', type:'image', caption:'pump one', category:'gym', source:'' },
-    // { id:1, url:'https://...jpg', type:'image', caption:'Leg day.', category:'gym', source:'' },
-    // { id:2, url:'https://...mp4', type:'video', caption:'Form check.', category:'guide', source:'' },
-    // { id:3, url:'guides/progressive-overload.html', type:'html', caption:'Progressive overload, explained.', category:'guide', source:'' },
+    { id:2, url:'videos/jul28jim.mp4', type:'video', caption:'Full Body Circuit.', category:'Videos', source:'' },
+    { id:3, url:'videos/august1crunchsmall.mp4', type:'video', caption:'Full Body Circuit.', category:'Videos', source:'' },
+    { id:4, url:'pinterst/1.mp4', type:'video', caption:'Find Number One', category:'pinterest', source:'' },
+    { id:5, url:'pinterst/2.mp4', type:'video', caption:'Find Number Two', category:'pinterest', source:'' },
+    { id:6, url:'pinterst/3.mp4', type:'video', caption:'Find Number Three', category:'pinterest', source:'' },
+    { id:7, url:'guides/ppl.html', type:'html', caption:'ppl', category:'guide', source:'' },
+    { id:8, url:'guides/wguide.html', type:'html', caption:'routine', category:'guide', source:'' },
+    { id:9, url:'guides/wsy.html', type:'html', caption:'post workout stretch', category:'guide', source:'' },
+    { id:10, url:'pics/red.jpg', type:'image', caption:'pump one', category:'gym', source:'' },
+    // { id:11, url:'https://...jpg', type:'image', caption:'Leg day.', category:'gym', source:'' },
+    // { id:12, url:'https://...mp4', type:'video', caption:'Form check.', category:'guide', source:'' },  <-- video that should live under Guides, not Videos
+    // { id:13, url:'guides/progressive-overload.html', type:'html', caption:'Progressive overload, explained.', category:'guide', source:'' },
   ];
 
   // APPS — category: training | nutrition | recovery | mindset
@@ -875,11 +884,17 @@
   const plateCountEl = document.getElementById('plateCount');
   const platesEl = document.getElementById('plates');
 
-  function tagLabel(cat, type){
-    if(type === 'video') return 'Video';
-    if(type === 'html') return 'Guide';
-    if(cat === 'guide') return 'Guide';
-    if(cat === 'pinterest') return 'Pinterest Find';
+  // A post is a "guide" if it's an .html preview OR explicitly tagged category:'guide'
+  // — this includes tutorial/form-breakdown videos, which is what keeps them out of
+  // the plain Videos filter below.
+  function isGuidePost(p){
+    return p.type === 'html' || p.category === 'guide';
+  }
+
+  function tagLabel(p){
+    if(isGuidePost(p)) return 'Guide';
+    if(p.type === 'video') return 'Video';
+    if(p.category === 'pinterest') return 'Pinterest Find';
     return 'Gym Pic';
   }
 
@@ -887,8 +902,14 @@
     const f = activeFilter.feed;
     const filtered = posts.filter(p=>{
       if(f === 'all') return true;
-      if(f === 'video') return p.type === 'video';
-      if(f === 'guide') return p.category === 'guide' || p.type === 'html';
+      // Videos filter: MY OWN workout videos only — excludes anything tagged
+      // as a guide AND excludes Pinterest finds, which get their own filter below.
+      if(f === 'video') return p.type === 'video' && !isGuidePost(p) && p.category !== 'pinterest';
+      // Guides & Tutorials filter: html guides AND any video explicitly tagged
+      // category:'guide' (e.g. a filmed walkthrough of a routine).
+      if(f === 'guide') return isGuidePost(p);
+      // Pinterest Finds filter: isolated to category:'pinterest' only — these
+      // never bleed into the Videos filter above, even though type is 'video'.
       return p.category === f;
     });
 
@@ -921,7 +942,7 @@
       card.innerHTML = `
         ${mediaHtml}
         <div class="card-body">
-          <span class="card-tag">${TAG_GLYPH}${tagLabel(p.category, p.type)}</span>
+          <span class="card-tag">${TAG_GLYPH}${tagLabel(p)}</span>
           ${p.caption ? `<div class="card-caption">${escapeHtml(p.caption)}</div>` : ''}
           <div class="card-meta">
             ${sourceHtml}
