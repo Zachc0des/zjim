@@ -45,10 +45,12 @@
     padding:9px 0; font-size:15px; color:var(--mute); text-align:left;
     border-bottom:1px solid transparent; transition:color .2s;
   }
-  .tab-btn em{font-style:normal; font-size:12px; font-variant-numeric:tabular-nums;}
+  .tab-btn,.panel{--c:var(--lc);}
+  body.night .tab-btn,body.night .panel{--c:var(--dc);}
+  .tab-btn em{font-style:normal; font-size:12px; font-variant-numeric:tabular-nums; padding:1px 9px; border-radius:99px; transition:background .2s, color .2s;}
   .tab-btn:hover{color:var(--ink);}
   .tab-btn.active{color:var(--ink); font-weight:400;}
-  .tab-btn.active em{color:var(--acc);}
+  .tab-btn.active em{color:var(--c); background:color-mix(in srgb, var(--c) 16%, transparent);}
   .side-foot{margin-top:auto; display:flex; flex-direction:column; gap:14px; font-size:13px; color:var(--mute);}
   .mode-toggle{
     align-self:flex-start; border:1px solid var(--line); padding:7px 16px; border-radius:99px;
@@ -66,13 +68,13 @@
   .filters{display:flex; gap:22px; flex-wrap:wrap; padding:14px 0; margin-bottom:30px; border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
   .filter-btn{font-size:14px; color:var(--mute); padding:2px 0; border-bottom:1px solid transparent; transition:color .2s, border-color .2s;}
   .filter-btn:hover{color:var(--ink);}
-  .filter-btn.active{color:var(--ink); border-color:var(--acc);}
+  .filter-btn.active{color:var(--ink); border-color:var(--c);}
 
   /* ---------- FEED ---------- */
-  .feed{columns:5 160px; column-gap:16px;}
-  .card{break-inside:avoid; margin-bottom:24px;}
-  .media{position:relative; width:100%; aspect-ratio:4/5; overflow:hidden; background:var(--dim);}
-  .media.is-preview{aspect-ratio:16/11; cursor:zoom-in;}
+  .feed{columns:7 110px; column-gap:12px;}
+  .card{break-inside:avoid; margin-bottom:16px;}
+  .media{position:relative; width:100%; aspect-ratio:1/1; overflow:hidden; background:var(--dim);}
+  .media.is-preview{aspect-ratio:1/1; cursor:zoom-in;}
   .media img,.media video{width:100%; height:100%; display:block; object-fit:cover; filter:grayscale(.9) contrast(1.05); transition:filter .4s;}
   .card:hover .media img,.card:hover .media video{filter:none;}
   .media iframe{position:absolute; top:0; left:0; border:0; transform-origin:top left; pointer-events:none; background:#fff;}
@@ -83,27 +85,27 @@
   .media::before{top:10px; left:10px; border-top:1px solid #fff; border-left:1px solid #fff;}
   .media::after{bottom:10px; right:10px; border-bottom:1px solid #fff; border-right:1px solid #fff;}
   .card:hover .media::before,.card:hover .media::after{opacity:1;}
-  .cap{display:flex; justify-content:space-between; align-items:baseline; gap:12px; padding-top:12px;}
-  .cap b{font-weight:400; font-size:13.5px;}
-  .cap span,.cap a{font-size:11.5px; color:var(--mute); text-decoration:none; white-space:nowrap;}
+  .cap{display:flex; justify-content:space-between; align-items:baseline; gap:8px; padding-top:8px;}
+  .cap b{font-weight:400; font-size:12px;}
+  .cap span,.cap a{font-size:10.5px; color:var(--mute); text-decoration:none; white-space:nowrap;}
   .cap a{border-bottom:1px solid var(--line);}
-  .cap a:hover{color:var(--acc); border-color:var(--acc);}
+  .cap a:hover{color:var(--c); border-color:var(--c);}
 
   /* ---------- ITEMS ---------- */
   .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line);}
   .item{background:var(--bg); padding:26px; display:flex; flex-direction:column; min-height:200px; transition:background .25s;}
   .item:hover{background:var(--panel);}
-  .item .thumb{width:100%; max-height:110px; object-fit:cover; margin-bottom:14px; filter:grayscale(.9);}
+  .item .thumb{width:100%; max-height:80px; object-fit:cover; margin-bottom:12px; filter:grayscale(.9);}
   .item .top{display:flex; gap:14px; align-items:center; margin-bottom:12px;}
   .mono{
     width:38px; height:38px; flex-shrink:0; display:grid; place-items:center;
-    border:1px solid var(--line); border-radius:50%; font-weight:200; font-size:17px; color:var(--acc);
+    border:1px solid var(--line); border-radius:50%; font-weight:200; font-size:17px; color:var(--c);
   }
   .item h3{font-weight:400; font-size:18px; line-height:1.25; margin:0;}
   .item small{display:block; color:var(--mute); font-size:12.5px; margin-top:2px;}
   .item p{color:var(--mute); margin:0 0 18px;}
   .item .go{margin-top:auto; font-size:13px; text-decoration:none; align-self:flex-start; border-bottom:1px solid var(--line);}
-  .item .go:hover{color:var(--acc); border-color:var(--acc);}
+  .item .go:hover{color:var(--c); border-color:var(--c);}
 
   .empty{padding:72px 0; max-width:380px;}
   .empty h3{font-weight:200; font-size:30px; margin:0 0 8px;}
@@ -129,7 +131,7 @@
     .side-foot{margin:0;}
     main{padding:30px 18px 72px;}
   }
-  @media (max-width:700px){ .feed{columns:2;} }
+  @media (max-width:700px){ .feed{columns:3 90px;} }
   @media (prefers-reduced-motion:reduce){ *{transition:none !important;} }
 </style>
 </head>
@@ -214,19 +216,19 @@
   ];
 
   const SECTIONS = [
-    { k:'feed', t:'Feed', h:'Gym pics, form breakdowns and Pinterest finds, newest first.', d:POSTS,
+    { k:'feed', c:['#2b3cff','#8fa2ff'], t:'Feed', h:'Gym pics, form breakdowns and Pinterest finds, newest first.', d:POSTS,
       f:[['all','All'],['gym','Gym pics'],['video','Videos'],['guide','Guides & tutorials'],['pinterest','Pinterest finds']],
       e:['Nothing posted yet','Add a gym pic, video or Pinterest find to start the feed.'] },
-    { k:'apps', t:'Apps', h:'What\'s on my phone: logging workouts, keeping food honest, and easing gym nerves.', d:APPS,
+    { k:'apps', c:['#d6247a','#ff7ab8'], t:'Apps', h:'What\'s on my phone: logging workouts, keeping food honest, and easing gym nerves.', d:APPS,
       f:[['all','All'],['training','Training'],['nutrition','Nutrition'],['recovery','Recovery'],['mindset','Mindset']],
       e:['No apps saved yet','Add the apps you use for training, food or recovery.'] },
-    { k:'gear', t:'Gear', h:'Equipment worth buying, from home gym basics to the wishlist.', d:GEAR, cta:'Where to get it',
+    { k:'gear', c:['#0a8f6a','#4be0b0'], t:'Gear', h:'Equipment worth buying, from home gym basics to the wishlist.', d:GEAR, cta:'Where to get it',
       f:[['all','All'],['home-gym','Home gym'],['recovery','Recovery'],['apparel','Apparel'],['tech','Tech']],
       e:['No gear saved yet','Add equipment or apparel you would recommend.'] },
-    { k:'fuel', t:'Fuel', h:'Meal prep that happens, nutrition guides worth rereading, and supplements that earned a spot.', d:FUEL, cta:'Open',
+    { k:'fuel', c:['#d97706','#ffb24a'], t:'Fuel', h:'Meal prep that happens, nutrition guides worth rereading, and supplements that earned a spot.', d:FUEL, cta:'Open',
       f:[['all','All'],['meal-prep','Meal prep'],['recipe','Recipes'],['guide','Nutrition guides'],['supplement','Supplements']],
       e:['No fuel saved yet','Add a meal prep routine, recipe, guide or supplement.'] },
-    { k:'recovery', t:'Recovery', h:'Yoga, mobility, sleep and easy-day movement that lets the gains happen.', d:RECOVERY, cta:'Open',
+    { k:'recovery', c:['#7c3aed','#b794ff'], t:'Recovery', h:'Yoga, mobility, sleep and easy-day movement that lets the gains happen.', d:RECOVERY, cta:'Open',
       f:[['all','All'],['yoga','Yoga'],['mobility','Stretching & mobility'],['sleep','Sleep'],['active','Active recovery']],
       e:['Nothing logged yet','Add a yoga flow, mobility routine, sleep habit or active recovery idea.'] }
   ];
@@ -243,12 +245,14 @@
     const b = document.createElement('button');
     b.className = 'tab-btn' + (i === 0 ? ' active' : '');
     b.dataset.section = s.k;
+    b.style.setProperty('--lc', s.c[0]); b.style.setProperty('--dc', s.c[1]);
     b.innerHTML = `${s.t}<em>${s.d.length}</em>`;
     tabsEl.appendChild(b);
 
     const p = document.createElement('section');
     p.className = 'panel' + (i === 0 ? ' active' : '');
     p.dataset.panel = s.k;
+    p.style.setProperty('--lc', s.c[0]); p.style.setProperty('--dc', s.c[1]);
     p.innerHTML = `
       <div class="head"><h2>${s.t}</h2><p>${esc(s.h)}</p></div>
       <div class="filters">${s.f.map((f, j) => `<button class="filter-btn${j === 0 ? ' active' : ''}" data-filter="${f[0]}">${esc(f[1])}</button>`).join('')}</div>
