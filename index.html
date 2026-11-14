@@ -69,10 +69,10 @@
   .filter-btn.active{color:var(--ink); border-color:var(--acc);}
 
   /* ---------- FEED ---------- */
-  .feed{columns:3 240px; column-gap:22px;}
-  .card{break-inside:avoid; margin-bottom:34px;}
-  .media{position:relative; width:100%; aspect-ratio:9/16; overflow:hidden; background:var(--dim);}
-  .media.is-preview{aspect-ratio:16/10; cursor:zoom-in;}
+  .feed{columns:5 160px; column-gap:16px;}
+  .card{break-inside:avoid; margin-bottom:24px;}
+  .media{position:relative; width:100%; aspect-ratio:4/5; overflow:hidden; background:var(--dim);}
+  .media.is-preview{aspect-ratio:16/11; cursor:zoom-in;}
   .media img,.media video{width:100%; height:100%; display:block; object-fit:cover; filter:grayscale(.9) contrast(1.05); transition:filter .4s;}
   .card:hover .media img,.card:hover .media video{filter:none;}
   .media iframe{position:absolute; top:0; left:0; border:0; transform-origin:top left; pointer-events:none; background:#fff;}
@@ -84,8 +84,8 @@
   .media::after{bottom:10px; right:10px; border-bottom:1px solid #fff; border-right:1px solid #fff;}
   .card:hover .media::before,.card:hover .media::after{opacity:1;}
   .cap{display:flex; justify-content:space-between; align-items:baseline; gap:12px; padding-top:12px;}
-  .cap b{font-weight:400; font-size:15px;}
-  .cap span,.cap a{font-size:12.5px; color:var(--mute); text-decoration:none; white-space:nowrap;}
+  .cap b{font-weight:400; font-size:13.5px;}
+  .cap span,.cap a{font-size:11.5px; color:var(--mute); text-decoration:none; white-space:nowrap;}
   .cap a{border-bottom:1px solid var(--line);}
   .cap a:hover{color:var(--acc); border-color:var(--acc);}
 
@@ -93,7 +93,7 @@
   .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line);}
   .item{background:var(--bg); padding:26px; display:flex; flex-direction:column; min-height:200px; transition:background .25s;}
   .item:hover{background:var(--panel);}
-  .item .thumb{width:100%; max-height:170px; object-fit:cover; margin-bottom:18px; filter:grayscale(.9);}
+  .item .thumb{width:100%; max-height:110px; object-fit:cover; margin-bottom:14px; filter:grayscale(.9);}
   .item .top{display:flex; gap:14px; align-items:center; margin-bottom:12px;}
   .mono{
     width:38px; height:38px; flex-shrink:0; display:grid; place-items:center;
@@ -129,7 +129,7 @@
     .side-foot{margin:0;}
     main{padding:30px 18px 72px;}
   }
-  @media (max-width:560px){ .feed{columns:1;} }
+  @media (max-width:700px){ .feed{columns:2;} }
   @media (prefers-reduced-motion:reduce){ *{transition:none !important;} }
 </style>
 </head>
